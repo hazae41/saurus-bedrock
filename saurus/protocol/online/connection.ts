@@ -91,7 +91,7 @@ export class NewIncomingConnection extends ProtocolPacket {
   async to(buffer: Buffer) {}
 }
 
-export class Disconnection extends ProtocolPacket {
+export class DisconnectNotification extends ProtocolPacket {
   static id = 0x15;
 
   static from(buffer: Buffer) {

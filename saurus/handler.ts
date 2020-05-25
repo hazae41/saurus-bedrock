@@ -1,7 +1,9 @@
 import { EventEmitter } from "./events.ts";
 import { Session } from "./session.ts";
+import { info } from "./saurus.ts";
 
 export type Listener = Deno.DatagramConn;
+export type Origin = "client" | "server";
 
 export interface Address {
   hostname: string;
@@ -28,16 +30,24 @@ function send(proxy: Listener, data: Uint8Array, address: Address) {
 }
 
 export class Handler extends EventEmitter<"error" | "data" | "packet"> {
+  public timeout = 5000;
+
   readonly listener: Listener;
   readonly sessions = new Map<string, Session>();
 
-  constructor(readonly port: number, readonly target: Address) {
+  constructor(
+    readonly port: number,
+    public target: Address,
+  ) {
     super();
+
     this.listener = listen(port);
+
     this.listen();
+    this.taskFree();
   }
 
-  sessionOf(address: Address) {
+  public sessionOf(address: Address) {
     const { hostname, port } = address;
     const name = `${hostname}:${port}`;
 
@@ -45,14 +55,14 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     if (got) return got;
 
     const proxy = tryListen(50139);
-    const session = new Session(address, proxy);
+    const session = new Session(address, this.target, proxy);
 
-    session.on(["data"], (data, type) => {
-      return this.emit("data", data, session, type);
+    session.on(["data"], (data, from) => {
+      return this.emit("data", data, session, from);
     });
 
-    session.on(["packet"], (packet, type) => {
-      return this.emit("packet", packet, session, type);
+    session.on(["packet"], (packet, from) => {
+      return this.emit("packet", packet, session, from);
     });
 
     this.sessions.set(name, session);
@@ -61,20 +71,22 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     return session;
   }
 
-  async listen() {
-    const { listener, target } = this;
-
+  private async listen() {
     try {
-      for await (const [data, from] of listener) {
+      for await (const [data, from] of this.listener) {
         try {
           const client = from as Address;
-          const session = this.sessionOf(client);
 
-          const result = await session.emit("data", data, "input");
+          const local = client.hostname === "127.0.0.1";
+          if (local && client.port === this.port) continue;
+
+          const session = this.sessionOf(client);
+          session.time = Date.now();
+
+          const result = await session.emit("data", data, "client");
           if (result === "cancelled") continue;
           const [modified] = result as [Uint8Array];
-
-          send(session.listener, modified, target);
+          send(session.listener, modified, session.target);
         } catch (e) {
           this.emit("error", e);
         }
@@ -84,23 +96,34 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     }
   }
 
-  async redirect(session: Session) {
-    const { listener, address } = session;
-
+  private async redirect(session: Session) {
     try {
-      for await (const [data, from] of listener) {
+      for await (const [data, from] of session.listener) {
         try {
-          const result = await session.emit("data", data, "output");
+          const result = await session.emit("data", data, "server");
           if (result === "cancelled") continue;
           const [modified] = result as [Uint8Array];
-
-          send(this.listener, modified, address);
+          send(this.listener, modified, session.address);
         } catch (e) {
           this.emit("error", e);
         }
       }
     } catch (e) {
       this.emit("error", e);
+    }
+  }
+
+  private taskFree() {
+    const i = setInterval(this.free.bind(this), 5000);
+    return () => clearInterval(i);
+  }
+
+  public async free() {
+    for (const [name, session] of this.sessions.entries()) {
+      if (Date.now() - session.time < this.timeout) continue;
+      session.state = "offline";
+      session.listener.close();
+      this.sessions.delete(name);
     }
   }
 }

@@ -1,5 +1,5 @@
 import { EventEmitter } from "./events.ts";
-import { Address, Listener } from "./handler.ts";
+import { Address, Listener, Origin } from "./handler.ts";
 import { Buffer } from "./protocol/buffer.ts";
 import { BatchPacket } from "./protocol/bedrock/batch.ts";
 import { Open2Reply } from "./protocol/offline/opening.ts";
@@ -11,7 +11,10 @@ import {
   inRange,
 } from "./protocol/online/encapsulation.ts";
 import { LoginPacket } from "./protocol/bedrock/login.ts";
-import { ConnectionRequestAccepted } from "./protocol/online/connection.ts";
+import {
+  ConnectionRequestAccepted,
+  DisconnectNotification,
+} from "./protocol/online/connection.ts";
 import { ServerToClientHandshakePacket } from "./protocol/bedrock/handshake.ts";
 
 function datagramOf(buffer: Buffer) {
@@ -32,26 +35,25 @@ function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
 }
 
+export interface SplitMemory {
+  id: number;
+  packets: EncapsulatedPacket[];
+}
+
 export type SessionEvent =
   | "state"
   | "data"
   | "packet"
   | "bedrock";
 
-export type SessionState = "offline" | "open" | "accepted";
-
-export interface SplitMemory {
-  id: number;
-  packets: EncapsulatedPacket[];
-}
-
 export class Session extends EventEmitter<SessionEvent> {
-  _state: SessionState = "offline";
+  time = 0;
+  _state: "offline" | "open" | "accepted" | "handshake" = "offline";
   _splits = new Array<SplitMemory>(4);
-  _encrypted = false;
 
   constructor(
-    readonly address: Address,
+    public address: Address,
+    public target: Address,
     readonly listener: Listener,
   ) {
     super();
@@ -70,7 +72,11 @@ export class Session extends EventEmitter<SessionEvent> {
     this._state = value;
   }
 
-  getSplitMemory(id: number): [number, SplitMemory] {
+  disconnect() {
+    this.state = "offline";
+  }
+
+  memoryOf(id: number): [number, SplitMemory] {
     let slot = this._splits.findIndex((m) => m?.id === id);
     if (slot !== -1) return [slot, this._splits[slot]];
 
@@ -82,7 +88,39 @@ export class Session extends EventEmitter<SessionEvent> {
     return [slot, memory];
   }
 
-  async ondata(data: Uint8Array, type: "input" | "output") {
+  unsplit(packet: EncapsulatedPacket) {
+    const { split } = packet;
+    if (!split) return packet;
+
+    if (!inRange(split.count, [0, 127])) {
+      throw Error("Invalid split count");
+    }
+
+    if (!inRange(split.index, [0, split.count - 1])) {
+      throw Error("Invalid split index");
+    }
+
+    const [slot, { packets }] = this.memoryOf(split.id);
+
+    insert(packets, split.index, packet);
+    if (packets.length !== split.count) return;
+
+    const { reliability, index, order } = packet;
+
+    const buffer = Buffer.empty(0);
+    for (const packet of packets) {
+      buffer.expand(packet.sub.length);
+      buffer.writeArray(packet.sub);
+    }
+
+    const final = new EncapsulatedPacket(reliability, buffer.array);
+    Object.assign(final, { reliability, index, order });
+
+    delete this._splits[slot];
+    return final;
+  }
+
+  private async ondata(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
 
     if (this.state === "offline") {
@@ -104,7 +142,7 @@ export class Session extends EventEmitter<SessionEvent> {
       const packets = [];
 
       for (const packet of datagram.packets) {
-        const result = await this.emit("packet", packet, type);
+        const result = await this.emit("packet", packet, from);
         if (result === "cancelled") continue;
         const [modified] = result as [EncapsulatedPacket];
         packets.push(modified);
@@ -117,70 +155,45 @@ export class Session extends EventEmitter<SessionEvent> {
     return [data];
   }
 
-  unsplit(packet: EncapsulatedPacket) {
-    const { split } = packet;
-    if (!split) return packet;
-
-    if (!inRange(split.count, [0, 127])) {
-      throw Error("Invalid split count");
-    }
-
-    if (!inRange(split.index, [0, split.count - 1])) {
-      throw Error("Invalid split index");
-    }
-
-    const [slot, { packets }] = this.getSplitMemory(split.id);
-
-    insert(packets, split.index, packet);
-    if (packets.length !== split.count) return;
-
-    const { reliability, index, order } = packet;
-
-    const buffer = Buffer.empty(0);
-    for (const packet of packets) {
-      buffer.expand(packet.sub.length);
-      buffer.writeArray(packet.sub);
-    }
-
-    const final = new EncapsulatedPacket(reliability, buffer.array);
-    Object.assign(final, { reliability, index, order });
-
-    delete this._splits[slot];
-    return final;
-  }
-
-  async onpacket(packet: EncapsulatedPacket, type: "input" | "output") {
+  private async onpacket(packet: EncapsulatedPacket, from: Origin) {
     if (packet.split) return;
-    if (this._encrypted) return;
     const buffer = new Buffer(packet.sub);
+    console.log("packet", buffer.header);
 
     if (buffer.header === ConnectionRequestAccepted.id) {
       this.state = "accepted";
     }
 
+    if (buffer.header === DisconnectNotification.id) {
+      this.state = "offline";
+    }
+
     if (buffer.header === BatchPacket.id) {
       const batch = await BatchPacket.from(buffer);
+      if (!batch.packets.length) return;
+
       const packets = [];
 
       for (const data of batch.packets) {
-        const result = await this.emit("bedrock", data, type);
+        const result = await this.emit("bedrock", data, from);
         if (result === "cancelled") continue;
         const [modified] = result;
         packets.push(modified);
       }
 
-      //packet.sub = new Buffer(await batch.export());
+      batch.packets = packets;
+      packet.sub = await batch.export();
     }
   }
 
-  async onbedrock(data: Uint8Array, type: "input" | "output") {
+  private async onbedrock(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
     console.log("mcpe", buffer.header);
 
     if (buffer.header === ServerToClientHandshakePacket.id) {
-      const handshake = ServerToClientHandshakePacket.from(buffer);
       console.log("handshake");
-      this._encrypted = true;
+      const handshake = ServerToClientHandshakePacket.from(buffer);
+      this.state = "handshake";
     }
 
     if (buffer.header === LoginPacket.id) {

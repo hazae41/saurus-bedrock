@@ -1,6 +1,6 @@
 import { Packet, ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import { zipper } from "../../zipper.ts";
+import { node } from "../../node.ts";
 
 const log = await Deno.open(
   "log.txt",
@@ -35,7 +35,7 @@ export class BatchPacket extends ProtocolPacket {
     super.from(buffer);
 
     const remaining = buffer.remaining;
-    const unzipped = await zipper.unzip(remaining);
+    const unzipped = await node.unzip(remaining);
 
     const payload = new Buffer(unzipped);
 
@@ -57,7 +57,7 @@ export class BatchPacket extends ProtocolPacket {
     }
 
     const array = payload.export();
-    const zipped = await zipper.zip(array);
+    const zipped = await node.zip(array);
     buffer.writeArray(zipped);
   }
 }

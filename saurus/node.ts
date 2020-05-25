@@ -1,14 +1,16 @@
-export class Zipper {
+import { encode, decode } from "./saurus.ts";
+
+export class Node {
   readonly process: Deno.Process;
 
   constructor(readonly port: number) {
     const options: any = { stdin: "piped" };
-    const cmd = `node saurus/zipper.mjs ${port}`.split(" ");
+    const cmd = `node saurus/node/node.mjs ${port}`.split(" ");
     this.process = Deno.run({ cmd, ...options });
   }
 
   async kill() {
-    this.process.kill(9)
+    this.process.kill(9);
   }
 
   async zip(data: Uint8Array) {
@@ -28,12 +30,10 @@ export class Zipper {
   }
 
   async test(text: string) {
-    const encoded = new TextEncoder().encode(text);
-    const zipped = await zipper.zip(encoded);
-    const unzipped = await zipper.unzip(zipped);
-    const decoded = new TextDecoder().decode(unzipped);
-    return decoded;
+    const zipped = await node.zip(encode(text));
+    const unzipped = decode(await node.unzip(zipped));
+    return unzipped;
   }
 }
 
-export const zipper = new Zipper(8005);
+export const node = new Node(8005);
