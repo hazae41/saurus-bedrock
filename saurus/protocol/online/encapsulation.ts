@@ -71,7 +71,7 @@ export class EncapsulatedPacket extends Packet {
       split = { count, id, index };
     }
 
-    const sub = buffer.sub(length);
+    const sub = buffer.readArray(length);
     const packet = new this(reliability, sub);
     packet.index = index;
     packet.sequence = sequence;

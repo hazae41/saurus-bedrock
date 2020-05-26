@@ -8,8 +8,14 @@ const _mojang = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX8
 const args = process.argv.slice(2)
 const port = Number(args[0])
 
-const b64 = (it) => Buffer.from(it, "base64")
-const mojang = crypto.createPublicKey({ key: b64(_mojang), format: "der", type: "spki" })
+const mojang = crypto.createPublicKey({
+    key: Buffer.from(_mojang, "base64"),
+    format: "der",
+    type: "spki"
+})
+
+const encode = (text) => new TextEncoder().encode(text)
+const decode = (buffer) => new TextDecoder().decode(text)
 
 const zip = (buffer) => zlib.deflateSync(buffer)
 const unzip = (buffer) => zlib.inflateSync(buffer);
@@ -18,9 +24,9 @@ const gen = (buffer) => {
     const options = { namedCurve: "secp384r1" }
     const keypair = crypto.generateKeyPairSync("ec", options)
     const { publicKey, privateKey } = keypair
-    const pub = publicKey.export({ type: "spki", format: "der" })
-    const priv = privateKey.export({ type: "pkcs8", format: "der" })
-    return new UInt8Array([...pub, ...priv])
+    const pub = publicKey.export({ type: "spki", format: "pem" })
+    const priv = privateKey.export({ type: "pkcs8", format: "pem" })
+    return new UInt8Array([...encode(pub), ...encode(priv)])
 }
 
 function handle(method, buffer) {

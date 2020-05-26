@@ -34,7 +34,7 @@ export class BatchPacket extends ProtocolPacket {
   static async from(buffer: Buffer) {
     super.from(buffer);
 
-    const remaining = buffer.remaining;
+    const remaining = buffer.readArray(buffer.remaining);
     const unzipped = await node.unzip(remaining);
 
     const payload = new Buffer(unzipped);

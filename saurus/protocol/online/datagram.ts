@@ -17,7 +17,7 @@ export class Datagram extends Packet {
     it.headerFlags = buffer.readByte();
     it.seqNumber = buffer.readLTriad();
 
-    while (buffer.offset < buffer.length) {
+    while (buffer.remaining) {
       const encap = EncapsulatedPacket.from(buffer);
       it.packets.push(encap);
     }

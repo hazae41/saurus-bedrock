@@ -16,6 +16,7 @@ import {
   DisconnectNotification,
 } from "./protocol/online/connection.ts";
 import { ServerToClientHandshakePacket } from "./protocol/bedrock/handshake.ts";
+import { decode } from "./saurus.ts";
 
 function datagramOf(buffer: Buffer) {
   const { header } = buffer;
@@ -193,6 +194,7 @@ export class Session extends EventEmitter<SessionEvent> {
     if (buffer.header === ServerToClientHandshakePacket.id) {
       console.log("handshake");
       const handshake = ServerToClientHandshakePacket.from(buffer);
+      console.log(handshake.jwt);
       this.state = "handshake";
     }
 

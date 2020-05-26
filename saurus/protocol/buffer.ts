@@ -48,15 +48,11 @@ export class Buffer {
   }
 
   get remaining() {
-    return this.array.slice(this.offset, this.length);
+    return this.length - this.offset;
   }
 
   export(): Uint8Array {
     return this.array.slice(0, this.offset);
-  }
-
-  sub(length: number): Uint8Array {
-    return this.array.slice(this.off(length), this.offset);
   }
 
   expand(length: number) {
