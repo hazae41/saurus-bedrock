@@ -1,6 +1,11 @@
-import { AsyncEventResult, EventResult } from "../saurus/events.ts";
-import { Minecraft } from "../saurus/minecraft.ts";
-import { info, Saurus } from "../saurus/saurus.ts";
+import {
+  Saurus,
+  Minecraft,
+  Logger,
+  AsyncEventResult,
+} from "../start.ts";
+
+const { info } = Logger;
 
 export class Banhammer {
   constructor(

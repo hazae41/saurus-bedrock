@@ -1,6 +1,5 @@
-import { EventEmitter } from "./events.ts";
 import { Session } from "./session.ts";
-import { info } from "./saurus.ts";
+import { EventEmitter } from "./mod.ts";
 
 export type Listener = Deno.DatagramConn;
 export type Origin = "client" | "server";

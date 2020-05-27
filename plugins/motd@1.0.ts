@@ -1,7 +1,13 @@
-import { AsyncEventResult } from "../saurus/events.ts";
-import { Buffer } from "../saurus/protocol/buffer.ts";
-import { OfflinePong } from "../saurus/protocol/offline/pings.ts";
-import { Saurus } from "../saurus/saurus.ts";
+import {
+  Saurus,
+  AsyncEventResult,
+  Protocol,
+} from "../start.ts";
+
+const {
+  Buffer,
+  OfflinePong,
+} = Protocol;
 
 export class MOTD {
   constructor(readonly saurus: Saurus, readonly motd: string) {

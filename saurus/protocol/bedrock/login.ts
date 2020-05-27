@@ -1,7 +1,7 @@
 import { Buffer } from "../buffer.ts";
 import { DataPacket } from "./batch.ts";
 
-export function decode(token: string): any {
+function decodeJWT(token: string): any {
   const [head, payload, sig] = token.split(".");
   const translated = payload.split("-_").join("+/");
   const decoded = atob(translated);
@@ -35,7 +35,7 @@ export class LoginPacket extends DataPacket {
     const data = JSON.parse(sub.readLIntString());
     let extra = false;
     for (const chain of data.chain) {
-      const token = decode(chain);
+      const token = decodeJWT(chain);
 
       if (token.extraData) {
         if (extra) throw Error("Multiple extra data");
@@ -51,7 +51,7 @@ export class LoginPacket extends DataPacket {
       }
     }
 
-    const clientData = decode(sub.readLIntString());
+    const clientData = decodeJWT(sub.readLIntString());
 
     packet.clientData = clientData;
     packet.clientID = clientData.ClientRandomId;

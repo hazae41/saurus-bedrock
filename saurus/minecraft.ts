@@ -1,5 +1,5 @@
 import { read, encode } from "./saurus.ts";
-import { EventEmitter, AsyncEventResult } from "./events.ts";
+import { EventEmitter } from "./mod.ts";
 
 export type MinecraftEvent =
   | "log"

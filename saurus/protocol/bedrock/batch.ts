@@ -2,11 +2,6 @@ import { Packet, ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
 import { node } from "../../node.ts";
 
-const log = await Deno.open(
-  "log.txt",
-  { write: true, create: true, truncate: true },
-);
-
 export abstract class DataPacket extends Packet {
   static from(buffer: Buffer) {
     const id = buffer.readUVInt();

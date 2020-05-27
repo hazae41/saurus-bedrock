@@ -1,12 +1,10 @@
 import { DataPacket } from "./batch.ts";
 import { Buffer } from "../buffer.ts";
 
-export type B64 = string;
-
 export class JWT {
   public header: any;
   public payload: any;
-  public signature: B64;
+  public signature: string;
 
   constructor(jwt: string) {
     const { parse } = JSON;
@@ -36,7 +34,7 @@ export class ServerToClientHandshakePacket extends DataPacket {
 
   static from(buffer: Buffer) {
     super.from(buffer);
-    const compact = buffer.readUVIntString()
+    const compact = buffer.readUVIntString();
     const jwt = new JWT(compact);
     return new this(jwt);
   }

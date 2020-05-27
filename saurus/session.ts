@@ -1,22 +1,21 @@
-import { EventEmitter } from "./events.ts";
-import { Address, Listener, Origin } from "./handler.ts";
-import { Buffer } from "./protocol/buffer.ts";
-import { BatchPacket } from "./protocol/bedrock/batch.ts";
-import { Open2Reply } from "./protocol/offline/opening.ts";
-import { OfflinePong } from "./protocol/offline/pings.ts";
-import { ACK, NACK } from "./protocol/online/ack.ts";
-import { Datagram } from "./protocol/online/datagram.ts";
 import {
+  Buffer,
+  Datagram,
+  ACK,
+  NACK,
   EncapsulatedPacket,
   inRange,
-} from "./protocol/online/encapsulation.ts";
-import { LoginPacket } from "./protocol/bedrock/login.ts";
-import {
-  ConnectionRequestAccepted,
+  OfflinePong,
+  Open2Reply,
+  BatchPacket,
   DisconnectNotification,
-} from "./protocol/online/connection.ts";
-import { ServerToClientHandshakePacket } from "./protocol/bedrock/handshake.ts";
-import { decode } from "./saurus.ts";
+  ConnectionRequestAccepted,
+  ServerToClientHandshakePacket,
+  LoginPacket,
+} from "./protocol/mod.ts";
+
+import { EventEmitter } from "./mod.ts";
+import { Address, Listener, Origin } from "./handler.ts";
 
 function datagramOf(buffer: Buffer) {
   const { header } = buffer;

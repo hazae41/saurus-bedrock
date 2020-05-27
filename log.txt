@@ -1,0 +1,52 @@
+NO LOG FILE! - setting up server logging...
+[2020-05-27 16:17:32 INFO] Starting Server
+[2020-05-27 16:17:32 INFO] Version 1.14.60.5
+[2020-05-27 16:17:32 INFO] Session ID 60856dab-e570-4422-a8f2-c362df7f521a
+[2020-05-27 16:17:32 INFO] Level Name: Bedrock level
+[2020-05-27 16:17:32 INFO] Game mode: 0 Survival
+[2020-05-27 16:17:32 INFO] Difficulty: 1 EASY
+[2020-05-27 16:17:32 INFO] opening worlds/Bedrock level/db
+[2020-05-27 16:17:33 INFO] IPv4 supported, port: 19134
+[2020-05-27 16:17:33 INFO] IPv6 supported, port: 19133
+[2020-05-27 16:17:33 INFO] IPv4 supported, port: 19132
+[2020-05-27 16:17:33 INFO] IPv6 supported, port: 65286
+[2020-04-27 16:17:33 INFO] Banhammer started
+[2020-05-27 16:17:33 INFO] Server started.
+Unknown command: hello. Please check that the command exists and that you have permission to use it.
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-05-27 16:19:27 INFO] Starting Server
+[2020-05-27 16:19:27 INFO] Version 1.14.60.5
+[2020-05-27 16:19:27 INFO] Session ID 81212b69-b082-4ebc-b432-526d559673a4
+[2020-05-27 16:19:27 INFO] Level Name: Bedrock level
+[2020-05-27 16:19:27 INFO] Game mode: 0 Survival
+[2020-05-27 16:19:27 INFO] Difficulty: 1 EASY
+[2020-05-27 16:19:27 INFO] opening worlds/Bedrock level/db
+[2020-05-27 16:19:28 INFO] IPv4 supported, port: 19134
+[2020-05-27 16:19:28 INFO] IPv6 supported, port: 19133
+[2020-05-27 16:19:28 INFO] IPv4 supported, port: 19132
+[2020-05-27 16:19:28 INFO] IPv6 supported, port: 50309
+[2020-04-27 16:19:28 INFO] Banhammer started
+[2020-05-27 16:19:28 INFO] Server started.
+hello
+Unknown command: hello. Please check that the command exists and that you have permission to use it.
+stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-05-27 16:20:08 INFO] Starting Server
+[2020-05-27 16:20:08 INFO] Version 1.14.60.5
+[2020-05-27 16:20:08 INFO] Session ID c66f95dc-3712-4c27-bd88-0bcb1a951c19
+[2020-05-27 16:20:08 INFO] Level Name: Bedrock level
+[2020-05-27 16:20:08 INFO] Game mode: 0 Survival
+[2020-05-27 16:20:08 INFO] Difficulty: 1 EASY
+[2020-05-27 16:20:08 INFO] opening worlds/Bedrock level/db
+[2020-05-27 16:20:09 INFO] IPv4 supported, port: 19134
+[2020-05-27 16:20:09 INFO] IPv6 supported, port: 19133
+[2020-05-27 16:20:09 INFO] IPv4 supported, port: 19132
+[2020-05-27 16:20:09 INFO] IPv6 supported, port: 63132
+[2020-04-27 16:20:10 INFO] Banhammer started
+[2020-05-27 16:20:10 INFO] Server started.
+> test
+Unknown command: test. Please check that the command exists and that you have permission to use it.
+> stop
+Quit correctly
