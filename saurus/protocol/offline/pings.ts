@@ -12,15 +12,18 @@ export class OfflinePing extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     const time = buffer.readLong();
     buffer.checkMagic();
     const clientID = buffer.readLong();
+
     return new this(time, clientID);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeLong(this.time);
     buffer.writeMagic();
     buffer.writeLong(this.clientID);
@@ -51,37 +54,39 @@ export class OfflinePong extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     const time = buffer.readLong();
     const serverID = buffer.readLong();
     buffer.checkMagic();
 
-    const infostr = buffer.readShortString().split(";");
+    const raw = buffer.readShortString().split(";");
 
     const infos = {
-      game: infostr[0],
-      name: infostr[1],
-      protocol: Number(infostr[2]),
-      version: infostr[3],
-      onlinePlayers: Number(infostr[4]),
-      maxPlayers: Number(infostr[5]),
-      serverID: Number(infostr[6]),
-      software: infostr[7],
-      gamemode: infostr[8],
+      game: raw[0],
+      name: raw[1],
+      protocol: Number(raw[2]),
+      version: raw[3],
+      onlinePlayers: Number(raw[4]),
+      maxPlayers: Number(raw[5]),
+      serverID: Number(raw[6]),
+      software: raw[7],
+      gamemode: raw[8],
     };
 
     return new this(time, serverID, infos);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeLong(this.time);
     buffer.writeLong(this.serverID);
     buffer.writeMagic();
 
     const { infos } = this;
 
-    const infostr = [
+    const raw = [
       infos.game,
       infos.name,
       infos.protocol.toString(),
@@ -93,7 +98,7 @@ export class OfflinePong extends ProtocolPacket {
       infos.gamemode,
     ].join(";");
 
-    buffer.writeShortString(infostr);
+    buffer.writeShortString(raw);
   }
 }
 
@@ -108,15 +113,18 @@ export class IncompatibleProtocol extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     const protocol = buffer.readByte();
     buffer.checkMagic();
     const serverID = buffer.readLong();
+
     return new this(protocol, serverID);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeByte(this.protocol);
     buffer.writeMagic();
     buffer.writeLong(this.serverID);

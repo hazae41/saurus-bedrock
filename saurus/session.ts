@@ -4,7 +4,6 @@ import {
   ACK,
   NACK,
   EncapsulatedPacket,
-  inRange,
   OfflinePong,
   Open2Reply,
   BatchPacket,
@@ -14,7 +13,15 @@ import {
   LoginPacket,
 } from "./protocol/mod.ts";
 
-import { EventEmitter } from "./mod.ts";
+import {
+  EventEmitter,
+  inRange,
+  node,
+  DiffieHellman,
+  encode,
+  decode,
+  KeyPair,
+} from "./mod.ts";
 import { Address, Listener, Origin } from "./handler.ts";
 
 function datagramOf(buffer: Buffer) {
@@ -46,10 +53,13 @@ export type SessionEvent =
   | "packet"
   | "bedrock";
 
+function origin(from: Origin) {
+  if (from === "client") return "->";
+  if (from === "server") return "<-";
+}
+
 export class Session extends EventEmitter<SessionEvent> {
   time = 0;
-  _state: "offline" | "open" | "accepted" | "handshake" = "offline";
-  _splits = new Array<SplitMemory>(4);
 
   constructor(
     public address: Address,
@@ -63,6 +73,8 @@ export class Session extends EventEmitter<SessionEvent> {
     this.on(["bedrock"], this.onbedrock.bind(this));
   }
 
+  _state: "offline" | "open" | "accepted" | "handshake" = "offline";
+
   get state() {
     return this._state;
   }
@@ -75,6 +87,8 @@ export class Session extends EventEmitter<SessionEvent> {
   disconnect() {
     this.state = "offline";
   }
+
+  _splits = new Array<SplitMemory>(4);
 
   memoryOf(id: number): [number, SplitMemory] {
     let slot = this._splits.findIndex((m) => m?.id === id);
@@ -157,8 +171,13 @@ export class Session extends EventEmitter<SessionEvent> {
 
   private async onpacket(packet: EncapsulatedPacket, from: Origin) {
     if (packet.split) return;
+
     const buffer = new Buffer(packet.sub);
-    console.log("packet", buffer.header);
+    console.log(origin(from), "packet", buffer.header);
+
+    const { clientKey, serverKey } = this;
+    const key = from === "server" ? serverKey : clientKey;
+    const Batch = BatchPacket(key);
 
     if (buffer.header === ConnectionRequestAccepted.id) {
       this.state = "accepted";
@@ -168,8 +187,8 @@ export class Session extends EventEmitter<SessionEvent> {
       this.state = "offline";
     }
 
-    if (buffer.header === BatchPacket.id) {
-      const batch = await BatchPacket.from(buffer);
+    if (buffer.header === Batch.id) {
+      const batch = await Batch.from(buffer);
       if (!batch.packets.length) return;
 
       const packets = [];
@@ -186,14 +205,34 @@ export class Session extends EventEmitter<SessionEvent> {
     }
   }
 
+  keyPair?: KeyPair;
+  serverKey?: Uint8Array;
+  clientKey?: Uint8Array;
+
   private async onbedrock(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
-    console.log("mcpe", buffer.header);
+    console.log(origin(from), "mcpe", buffer.header);
 
     if (buffer.header === ServerToClientHandshakePacket.id) {
       console.log("handshake");
+
       const handshake = ServerToClientHandshakePacket.from(buffer);
-      console.log(handshake.jwt);
+
+      const { jwt } = handshake;
+      const keyPair = await node.gen();
+
+      const dh: DiffieHellman = {
+        publicKey: jwt.header.x5u,
+        privateKey: keyPair.privateKey,
+        salt: jwt.payload.salt,
+      };
+
+      this.serverKey = await node.key(dh);
+      this.keyPair = keyPair;
+
+      handshake.jwt.header.x5u = keyPair.publicKey;
+      data = await handshake.export();
+
       this.state = "handshake";
     }
 

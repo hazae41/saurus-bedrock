@@ -9,7 +9,8 @@ export class AcknowledgePacket extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     const packets = [];
     const count = buffer.readShort();
     for (let i = 0; i < count; i++) {
@@ -34,10 +35,12 @@ export class AcknowledgePacket extends ProtocolPacket {
     return new this(packets);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeShort(this.packets.length);
     this.packets.sort((a, b) => a - b);
+
     for (const seq of this.packets) {
       buffer.writeBool(true);
       buffer.writeLTriad(seq);

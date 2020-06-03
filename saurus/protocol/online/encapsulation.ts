@@ -2,16 +2,6 @@ import { Packet } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
 import { isReliable, isOrdered, isSequenced } from "./reliability.ts";
 
-export function inRange(n: number, [start, end]: number[]) {
-  return n >= start && n <= end;
-}
-
-export class OrderChannel {
-  constructor(readonly x: number) {
-    if (!inRange(x, [0, 32])) throw Error("Invalid order channel");
-  }
-}
-
 export class EncapsulatedPacket extends Packet {
   static reliability_shift = 5;
   static reliability_flags = 0b111 << EncapsulatedPacket.reliability_shift;
@@ -20,29 +10,19 @@ export class EncapsulatedPacket extends Packet {
   constructor(
     public reliability: number,
     public sub: Uint8Array,
+    public index?: number,
+    public sequence?: number,
+    public order?: { index: number; channel: number },
+    public split?: { count: number; id: number; index: number },
   ) {
     super();
   }
 
-  index?: number;
-  sequence?: number;
-
-  order?: {
-    index: number;
-    channel: OrderChannel;
-  };
-
-  split?: {
-    count: number;
-    id: number;
-    index: number;
-  };
-
   static from(buffer: Buffer) {
     const flags = buffer.readByte();
 
-    const reliability = (flags & this.reliability_flags) >>
-      this.reliability_shift;
+    const { reliability_shift, reliability_flags } = this;
+    const reliability = (flags & reliability_flags) >> reliability_shift;
     const splitted = (flags & this.split_flag) > 0;
 
     const length = Math.ceil(buffer.readShort() / 8);
@@ -60,7 +40,7 @@ export class EncapsulatedPacket extends Packet {
 
     if (isSequenced(reliability) || isOrdered(reliability)) {
       const index = buffer.readLTriad();
-      const channel = new OrderChannel(buffer.readByte());
+      const channel = buffer.readByte();
       order = { index, channel };
     }
 
@@ -72,15 +52,11 @@ export class EncapsulatedPacket extends Packet {
     }
 
     const sub = buffer.readArray(length);
-    const packet = new this(reliability, sub);
-    packet.index = index;
-    packet.sequence = sequence;
-    packet.order = order;
-    packet.split = split;
-    return packet;
+
+    return new this(reliability, sub, index, sequence, order, split);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     const { reliability, split, order, sub } = this;
 
     const rflag = reliability << EncapsulatedPacket.reliability_shift;
@@ -98,7 +74,7 @@ export class EncapsulatedPacket extends Packet {
 
     if (isSequenced(reliability) || isOrdered(reliability)) {
       buffer.writeLTriad(order!!.index);
-      buffer.writeByte(order!!.channel.x);
+      buffer.writeByte(order!!.channel);
     }
 
     if (split) {

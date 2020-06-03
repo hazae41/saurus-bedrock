@@ -1,5 +1,5 @@
-import { DataPacket } from "./batch.ts";
 import { Buffer } from "../buffer.ts";
+import { BedrockPacket } from "../mod.ts";
 
 export class JWT {
   public header: any;
@@ -23,7 +23,7 @@ export class JWT {
   }
 }
 
-export class ServerToClientHandshakePacket extends DataPacket {
+export class ServerToClientHandshakePacket extends BedrockPacket {
   static id = 0x03;
 
   constructor(
@@ -33,13 +33,13 @@ export class ServerToClientHandshakePacket extends DataPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const compact = buffer.readUVIntString();
     const jwt = new JWT(compact);
     return new this(jwt);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeUVIntString(this.jwt.export());
   }

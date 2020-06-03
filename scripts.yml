@@ -1,0 +1,3 @@
+scripts:
+  start: deno run --unstable -A start.ts
+  reload: deno cache --unstable -r start.ts

@@ -18,8 +18,7 @@ export class Datagram extends Packet {
     it.seqNumber = buffer.readLTriad();
 
     while (buffer.remaining) {
-      const encap = EncapsulatedPacket.from(buffer);
-      it.packets.push(encap);
+      it.packets.push(EncapsulatedPacket.from(buffer));
     }
 
     return it;
@@ -28,6 +27,9 @@ export class Datagram extends Packet {
   async to(buffer: Buffer) {
     buffer.writeByte(Datagram.flag_valid | this.headerFlags);
     buffer.writeLTriad(this.seqNumber!!);
-    for (const packet of this.packets) packet.to(buffer);
+
+    for (const packet of this.packets) {
+      packet.to(buffer);
+    }
   }
 }

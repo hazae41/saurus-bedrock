@@ -1,11 +1,23 @@
 import { encode, decode } from "./saurus.ts";
+import { JWT } from "./protocol/mod.ts";
+
+export interface DiffieHellman {
+  privateKey: string;
+  publicKey: string;
+  salt: string;
+}
+
+export interface KeyPair {
+  privateKey: string;
+  publicKey: string;
+}
 
 export class Node {
   readonly process: Deno.Process;
 
   constructor(readonly port: number) {
     const options: any = { stdin: "piped" };
-    const cmd = `node saurus/node/node.mjs ${port}`.split(" ");
+    const cmd = `node node/node.js ${port}`.split(" ");
     this.process = Deno.run({ cmd, ...options });
   }
 
@@ -13,20 +25,36 @@ export class Node {
     this.process.kill(9);
   }
 
-  async zip(data: Uint8Array) {
+  async call(method: number, data?: Uint8Array) {
     const { port } = this;
     const conn = await Deno.connect({ port });
-    const concat = [0, ...Array.from(data)];
+    const concat = [method, ...Array.from(data ?? [])];
     await conn.write(new Uint8Array(concat));
     return await Deno.readAll(conn);
   }
 
+  async zip(data: Uint8Array) {
+    return await this.call(0, data);
+  }
+
   async unzip(data: Uint8Array) {
-    const { port } = this;
-    const conn = await Deno.connect({ port });
-    const concat = [1, ...Array.from(data)];
-    await conn.write(new Uint8Array(concat));
-    return await Deno.readAll(conn);
+    return await this.call(1, data);
+  }
+
+  async gen(): Promise<KeyPair> {
+    const result = await this.call(2);
+    return JSON.parse(decode(result));
+  }
+
+  async key(dh: DiffieHellman) {
+    const request = encode(JSON.stringify(dh));
+    return await this.call(3, request);
+  }
+
+  async decrypt(data: Uint8Array, key: Uint8Array) {
+    const array = [data, key].map((it) => Array.from(it));
+    const request = encode(JSON.stringify(array));
+    return await this.call(4, request);
   }
 
   async test(text: string) {

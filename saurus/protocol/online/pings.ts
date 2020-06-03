@@ -11,12 +11,12 @@ export class OnlinePing extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const sendPingTime = buffer.readLong();
     return new this(sendPingTime);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeLong(this.sendPingTime);
   }
@@ -33,13 +33,13 @@ export class OnlinePong extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const sendPingTime = buffer.readLong();
     const sendPongTime = buffer.readLong();
     return new this(sendPingTime, sendPongTime);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeLong(this.sendPingTime);
     buffer.writeLong(this.sendPongTime);

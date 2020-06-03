@@ -8,23 +8,40 @@ export interface VersionedAddress extends Address {
 export abstract class Packet {
   static id: number;
 
-  abstract async to(buffer: Buffer): Promise<void>;
+  get id() {
+    const type = <typeof Packet> this.constructor;
+    return type.id;
+  }
+
+  static check(buffer: Buffer) {}
+
+  to(buffer: Buffer): Promise<void> | void {}
 
   async export(): Promise<Uint8Array> {
-    const output = Buffer.empty();
-    await this.to(output);
-    return output.export();
+    const buffer = Buffer.empty();
+    await this.to(buffer);
+    return buffer.export();
   }
 }
 
 export abstract class ProtocolPacket extends Packet {
-  static from(buffer: Buffer) {
+  static check(buffer: Buffer) {
     if (this.id === buffer.readByte()) return;
-    throw new Error("Could not check packet ID");
+    throw new Error("Invalid ID");
   }
 
-  async to(buffer: Buffer) {
-    const { id } = <typeof Packet> this.constructor;
-    buffer.writeByte(id);
+  to(buffer: Buffer) {
+    buffer.writeByte(this.id);
+  }
+}
+
+export abstract class BedrockPacket extends Packet {
+  static check(buffer: Buffer) {
+    if (this.id === buffer.readUVInt()) return;
+    throw new Error("Invalid ID");
+  }
+
+  to(buffer: Buffer) {
+    buffer.writeUVInt(this.id);
   }
 }

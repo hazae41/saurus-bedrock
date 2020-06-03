@@ -15,6 +15,10 @@ export async function* read(reader: Deno.Reader) {
   }
 }
 
+export function inRange(n: number, [start, end]: number[]) {
+  return n >= start && n <= end;
+}
+
 export interface SaurusOptions {
   handlers: Handler[];
 }

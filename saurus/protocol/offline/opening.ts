@@ -12,17 +12,21 @@ export class Open1Request extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     buffer.checkMagic();
     const protocol = buffer.readByte();
     const mtuSize = buffer.length - buffer.offset;
+
     return new this(protocol, mtuSize);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeMagic();
     buffer.writeByte(this.protocol);
+
     for (let i = 0; i < this.mtuSize; i++) {
       buffer.writeByte(0);
     }
@@ -41,16 +45,19 @@ export class Open1Reply extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     buffer.checkMagic();
     const serverID = buffer.readLong();
     const mtuSize = buffer.readShort();
     const security = buffer.readBool();
+
     return new this(mtuSize, serverID, security);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeMagic();
     buffer.writeLong(this.serverID);
     buffer.writeBool(this.security);
@@ -70,16 +77,19 @@ export class Open2Request extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     buffer.checkMagic();
     const serverAddress = buffer.readAddress();
     const mtuSize = buffer.readShort();
     const clientID = buffer.readLong();
+
     return new this(serverAddress, mtuSize, clientID);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeMagic();
     buffer.writeAddress(this.serverAddress);
     buffer.writeShort(this.mtuSize);
@@ -100,17 +110,20 @@ export class Open2Reply extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
+
     buffer.checkMagic();
     const serverID = buffer.readLong();
     const clientAddress = buffer.readAddress();
     const mtuSize = buffer.readShort();
     const security = buffer.readBool();
+
     return new this(serverID, clientAddress, mtuSize, security);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
+
     buffer.writeMagic();
     buffer.writeLong(this.serverID);
     buffer.writeAddress(this.clientAddress);

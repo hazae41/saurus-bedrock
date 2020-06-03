@@ -1,5 +1,5 @@
 import { Buffer } from "../buffer.ts";
-import { DataPacket } from "./batch.ts";
+import { BedrockPacket } from "../mod.ts";
 
 function decodeJWT(token: string): any {
   const [head, payload, sig] = token.split(".");
@@ -8,7 +8,7 @@ function decodeJWT(token: string): any {
   return JSON.parse(decoded);
 }
 
-export class LoginPacket extends DataPacket {
+export class LoginPacket extends BedrockPacket {
   static id = 0x01;
 
   name?: string;
@@ -26,7 +26,7 @@ export class LoginPacket extends DataPacket {
   }
 
   static from(buffer: Buffer): LoginPacket {
-    super.from(buffer);
+    super.check(buffer);
     const protocol = buffer.readInt();
     const packet = new this(protocol);
 
@@ -61,7 +61,7 @@ export class LoginPacket extends DataPacket {
   }
 }
 
-export class DisconnectPacket extends DataPacket {
+export class DisconnectPacket extends BedrockPacket {
   static id = 0x05;
 
   constructor(
@@ -71,13 +71,13 @@ export class DisconnectPacket extends DataPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const hidden = buffer.readBool();
     const message = hidden ? "" : buffer.readUVIntString();
     return new this(message);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     const hidden = !this.message;
     buffer.writeBool(hidden);
@@ -86,7 +86,7 @@ export class DisconnectPacket extends DataPacket {
   }
 }
 
-export class PlayStatusPacket extends DataPacket {
+export class PlayStatusPacket extends BedrockPacket {
   static id = 0x02;
 
   static LOGIN_SUCCESS = 0;
@@ -105,11 +105,11 @@ export class PlayStatusPacket extends DataPacket {
   }
 
   static from(buffer: Buffer): PlayStatusPacket {
-    super.from(buffer);
+    super.check(buffer);
     return new this(buffer.readInt());
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeInt(this.status);
   }

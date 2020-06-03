@@ -50,3 +50,1118 @@ NO LOG FILE! - setting up server logging...
 Unknown command: test. Please check that the command exists and that you have permission to use it.
 > stop
 Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:40:55 INFO] Starting Server
+[2020-06-03 15:40:55 INFO] Version 1.14.60.5
+[2020-06-03 15:40:55 INFO] Session ID 10fc9661-9c26-45b7-9195-9d1b60ec872c
+[2020-06-03 15:40:55 INFO] Level Name: Bedrock level
+[2020-06-03 15:40:55 INFO] Game mode: 0 Survival
+[2020-06-03 15:40:55 INFO] Difficulty: 1 EASY
+[2020-06-03 15:40:55 INFO] opening worlds/Bedrock level/db
+> 
+> 
+> 
+> dd
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:42:13 INFO] Starting Server
+[2020-06-03 15:42:13 INFO] Version 1.14.60.5
+[2020-06-03 15:42:13 INFO] Session ID 1a02154b-34aa-41a9-a1ca-97473e3887c3
+[2020-06-03 15:42:13 INFO] Level Name: Bedrock level
+[2020-06-03 15:42:13 INFO] Game mode: 0 Survival
+[2020-06-03 15:42:13 INFO] Difficulty: 1 EASY
+[2020-06-03 15:42:13 INFO] opening worlds/Bedrock level/db
+[2020-06-03 15:42:18 INFO] IPv4 supported, port: 19134
+[2020-06-03 15:42:18 INFO] IPv6 supported, port: 19133
+[2020-06-03 15:42:18 INFO] IPv4 supported, port: 19132
+[2020-06-03 15:42:18 INFO] IPv6 supported, port: 54381
+[2020-05-03 15:42:19 INFO] Banhammer started
+[2020-06-03 15:42:19 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:42:24 INFO] Starting Server
+[2020-06-03 15:42:24 INFO] Version 1.14.60.5
+[2020-06-03 15:42:24 INFO] Session ID d5c57a58-6765-4f38-bf37-e6ba4a2ba06b
+[2020-06-03 15:42:24 INFO] Level Name: Bedrock level
+[2020-06-03 15:42:24 INFO] Game mode: 0 Survival
+[2020-06-03 15:42:24 INFO] Difficulty: 1 EASY
+[2020-06-03 15:42:24 INFO] opening worlds/Bedrock level/db
+[2020-06-03 15:42:25 INFO] IPv4 supported, port: 19134
+[2020-06-03 15:42:25 INFO] IPv6 supported, port: 19133
+[2020-06-03 15:42:25 INFO] IPv4 supported, port: 19132
+[2020-06-03 15:42:25 INFO] IPv6 supported, port: 54386
+[2020-05-03 15:42:26 INFO] Banhammer started
+[2020-06-03 15:42:26 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:46:39 INFO] Starting Server
+[2020-06-03 15:46:39 INFO] Version 1.14.60.5
+[2020-06-03 15:46:39 INFO] Session ID a16b4f61-a374-40be-aa42-e911a8cf91ff
+[2020-06-03 15:46:39 INFO] Level Name: Bedrock level
+[2020-06-03 15:46:39 INFO] Game mode: 0 Survival
+[2020-06-03 15:46:39 INFO] Difficulty: 1 EASY
+[2020-06-03 15:46:39 INFO] opening worlds/Bedrock level/db
+[2020-06-03 15:46:40 INFO] IPv4 supported, port: 19134
+[2020-06-03 15:46:40 INFO] IPv6 supported, port: 19133
+[2020-06-03 15:46:40 INFO] IPv4 supported, port: 19132
+[2020-06-03 15:46:40 INFO] IPv6 supported, port: 51375
+[2020-05-03 15:46:41 INFO] Banhammer started
+[2020-06-03 15:46:41 INFO] Server started.
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:47:29 INFO] Starting Server
+[2020-06-03 15:47:29 INFO] Version 1.14.60.5
+[2020-06-03 15:47:29 INFO] Session ID c3e6cbd9-b320-4fc8-8452-2bc1f633765b
+[2020-06-03 15:47:29 INFO] Level Name: Bedrock level
+[2020-06-03 15:47:29 INFO] Game mode: 0 Survival
+[2020-06-03 15:47:29 INFO] Difficulty: 1 EASY
+[2020-06-03 15:47:29 INFO] opening worlds/Bedrock level/db
+[2020-06-03 15:47:30 INFO] IPv4 supported, port: 19134
+[2020-06-03 15:47:30 INFO] IPv6 supported, port: 19133
+[2020-06-03 15:47:30 INFO] IPv4 supported, port: 19132
+[2020-06-03 15:47:30 INFO] IPv6 supported, port: 64839
+[2020-05-03 15:47:31 INFO] Banhammer started
+[2020-06-03 15:47:31 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 15:54:28 INFO] Starting Server
+[2020-06-03 15:54:28 INFO] Version 1.14.60.5
+[2020-06-03 15:54:28 INFO] Session ID b3629d5d-c514-433e-8a18-8eda4bf517ba
+[2020-06-03 15:54:28 INFO] Level Name: Bedrock level
+[2020-06-03 15:54:28 INFO] Game mode: 0 Survival
+[2020-06-03 15:54:28 INFO] Difficulty: 1 EASY
+[2020-06-03 15:54:28 INFO] opening worlds/Bedrock level/db
+[2020-06-03 15:54:29 INFO] IPv4 supported, port: 19134
+[2020-06-03 15:54:29 INFO] IPv6 supported, port: 19133
+[2020-06-03 15:54:29 INFO] IPv4 supported, port: 19132
+[2020-06-03 15:54:29 INFO] IPv6 supported, port: 52939
+[2020-05-03 15:54:29 INFO] Banhammer started
+[2020-06-03 15:54:29 INFO] Server started.
+[2020-06-03 16:00:29 INFO] Running AutoCompaction...
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 16:02:44 INFO] Starting Server
+[2020-06-03 16:02:44 INFO] Version 1.14.60.5
+[2020-06-03 16:02:44 INFO] Session ID a8c14eba-bc16-4708-8e90-ddd661f8bf00
+[2020-06-03 16:02:44 INFO] Level Name: Bedrock level
+[2020-06-03 16:02:44 INFO] Game mode: 0 Survival
+[2020-06-03 16:02:44 INFO] Difficulty: 1 EASY
+[2020-06-03 16:02:45 INFO] opening worlds/Bedrock level/db
+[2020-06-03 16:02:46 INFO] IPv4 supported, port: 19134
+[2020-06-03 16:02:46 INFO] IPv6 supported, port: 19133
+[2020-06-03 16:02:46 INFO] IPv4 supported, port: 19132
+[2020-06-03 16:02:46 INFO] IPv6 supported, port: 55782
+[2020-05-03 16:02:46 INFO] Banhammer started
+[2020-06-03 16:02:46 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 16:03:15 INFO] Starting Server
+[2020-06-03 16:03:15 INFO] Version 1.14.60.5
+[2020-06-03 16:03:15 INFO] Session ID 20a0746c-39cc-4834-82ad-003972e4e45c
+[2020-06-03 16:03:15 INFO] Level Name: Bedrock level
+[2020-06-03 16:03:15 INFO] Game mode: 0 Survival
+[2020-06-03 16:03:15 INFO] Difficulty: 1 EASY
+[2020-06-03 16:03:15 INFO] opening worlds/Bedrock level/db
+[2020-06-03 16:03:16 INFO] IPv4 supported, port: 19134
+[2020-06-03 16:03:16 INFO] IPv6 supported, port: 19133
+[2020-06-03 16:03:17 INFO] IPv4 supported, port: 19132
+[2020-06-03 16:03:17 INFO] IPv6 supported, port: 63202
+[2020-05-03 16:03:17 INFO] Banhammer started
+[2020-06-03 16:03:17 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 16:08:50 INFO] Starting Server
+[2020-06-03 16:08:50 INFO] Version 1.14.60.5
+[2020-06-03 16:08:50 INFO] Session ID abf3f3f2-019d-456e-99e9-4fee1de83a5e
+[2020-06-03 16:08:50 INFO] Level Name: Bedrock level
+[2020-06-03 16:08:50 INFO] Game mode: 0 Survival
+[2020-06-03 16:08:50 INFO] Difficulty: 1 EASY
+[2020-06-03 16:08:50 INFO] opening worlds/Bedrock level/db
+[2020-06-03 16:08:52 INFO] IPv4 supported, port: 19134
+[2020-06-03 16:08:52 INFO] IPv6 supported, port: 19133
+[2020-06-03 16:08:52 INFO] IPv4 supported, port: 19132
+[2020-06-03 16:08:52 INFO] IPv6 supported, port: 63508
+[2020-05-03 16:08:52 INFO] Banhammer started
+[2020-06-03 16:08:52 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 16:12:28 INFO] Starting Server
+[2020-06-03 16:12:28 INFO] Version 1.14.60.5
+[2020-06-03 16:12:28 INFO] Session ID 62a3c94c-8042-4f2b-b255-bbd41ec87990
+[2020-06-03 16:12:28 INFO] Level Name: Bedrock level
+[2020-06-03 16:12:28 INFO] Game mode: 0 Survival
+[2020-06-03 16:12:28 INFO] Difficulty: 1 EASY
+[2020-06-03 16:12:29 INFO] opening worlds/Bedrock level/db
+[2020-06-03 16:12:30 INFO] IPv4 supported, port: 19134
+[2020-06-03 16:12:30 INFO] IPv6 supported, port: 19133
+[2020-06-03 16:12:30 INFO] IPv4 supported, port: 19132
+[2020-06-03 16:12:30 INFO] IPv6 supported, port: 56136
+[2020-05-03 16:12:30 INFO] Banhammer started
+[2020-06-03 16:12:30 INFO] Server started.
+[2020-06-03 16:18:03 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 16:18:17 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-06-03 16:18:29 INFO] Running AutoCompaction...
+[2020-06-03 16:24:29 INFO] Running AutoCompaction...
+[2020-06-03 16:30:29 INFO] Running AutoCompaction...
+[2020-06-03 16:36:29 INFO] Running AutoCompaction...
+[2020-06-03 16:42:31 INFO] Running AutoCompaction...
+[2020-06-03 16:48:31 INFO] Running AutoCompaction...
+[2020-06-03 16:54:31 INFO] Running AutoCompaction...
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:00:18 INFO] Starting Server
+[2020-06-03 17:00:18 INFO] Version 1.14.60.5
+[2020-06-03 17:00:18 INFO] Session ID 85735175-de34-4cce-a2a9-4fde26598948
+[2020-06-03 17:00:18 INFO] Level Name: Bedrock level
+[2020-06-03 17:00:18 INFO] Game mode: 0 Survival
+[2020-06-03 17:00:18 INFO] Difficulty: 1 EASY
+[2020-06-03 17:00:18 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:00:19 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:00:19 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:00:19 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:00:19 INFO] IPv6 supported, port: 59620
+[2020-05-03 17:00:20 INFO] Banhammer started
+[2020-06-03 17:00:20 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:02:33 INFO] Starting Server
+[2020-06-03 17:02:33 INFO] Version 1.14.60.5
+[2020-06-03 17:02:33 INFO] Session ID 0e74ed07-14b2-452b-85cf-e835379a942f
+[2020-06-03 17:02:33 INFO] Level Name: Bedrock level
+[2020-06-03 17:02:33 INFO] Game mode: 0 Survival
+[2020-06-03 17:02:33 INFO] Difficulty: 1 EASY
+[2020-06-03 17:02:33 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:02:34 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:02:34 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:02:34 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:02:34 INFO] IPv6 supported, port: 59667
+[2020-05-03 17:02:34 INFO] Banhammer started
+[2020-06-03 17:02:34 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:04:43 INFO] Starting Server
+[2020-06-03 17:04:43 INFO] Version 1.14.60.5
+[2020-06-03 17:04:43 INFO] Session ID 8c7e57e7-3e72-4ca1-9633-3cf200d4387b
+[2020-06-03 17:04:43 INFO] Level Name: Bedrock level
+[2020-06-03 17:04:43 INFO] Game mode: 0 Survival
+[2020-06-03 17:04:43 INFO] Difficulty: 1 EASY
+[2020-06-03 17:04:44 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:04:45 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:04:45 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:04:45 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:04:45 INFO] IPv6 supported, port: 59304
+[2020-05-03 17:04:45 INFO] Banhammer started
+[2020-06-03 17:04:45 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:05:12 INFO] Starting Server
+[2020-06-03 17:05:12 INFO] Version 1.14.60.5
+[2020-06-03 17:05:12 INFO] Session ID d3649c85-4813-46ce-87a5-504c25c05b2c
+[2020-06-03 17:05:12 INFO] Level Name: Bedrock level
+[2020-06-03 17:05:12 INFO] Game mode: 0 Survival
+[2020-06-03 17:05:12 INFO] Difficulty: 1 EASY
+[2020-06-03 17:05:12 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:05:14 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:05:14 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:05:14 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:05:14 INFO] IPv6 supported, port: 60429
+[2020-05-03 17:05:14 INFO] Banhammer started
+[2020-06-03 17:05:14 INFO] Server started.
+> stp^
+Unknown command: stp. Please check that the command exists and that you have permission to use it.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:06:16 INFO] Starting Server
+[2020-06-03 17:06:16 INFO] Version 1.14.60.5
+[2020-06-03 17:06:16 INFO] Level Name: Bedrock level
+[2020-06-03 17:06:16 INFO] Game mode: 0 Survival
+[2020-06-03 17:06:16 INFO] Difficulty: 1 EASY
+[2020-06-03 17:06:17 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:06:18 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:06:18 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:06:18 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:06:18 INFO] IPv6 supported, port: 57210
+[2020-05-03 17:06:18 INFO] Banhammer started
+[2020-06-03 17:06:18 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:08:28 INFO] Starting Server
+[2020-06-03 17:08:28 INFO] Version 1.14.60.5
+[2020-06-03 17:08:28 INFO] Session ID 443f9077-4b8b-4608-8e58-6581ab04f9ba
+[2020-06-03 17:08:28 INFO] Level Name: Bedrock level
+[2020-06-03 17:08:28 INFO] Game mode: 0 Survival
+[2020-06-03 17:08:28 INFO] Difficulty: 1 EASY
+[2020-06-03 17:08:28 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:08:29 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:08:29 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:08:29 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:08:29 INFO] IPv6 supported, port: 60482
+[2020-05-03 17:08:30 INFO] Banhammer started
+[2020-06-03 17:08:30 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:08:57 INFO] Starting Server
+[2020-06-03 17:08:57 INFO] Version 1.14.60.5
+[2020-06-03 17:08:57 INFO] Session ID e1e833f1-5e6b-4d65-833e-92c1102cf2cb
+[2020-06-03 17:08:57 INFO] Level Name: Bedrock level
+[2020-06-03 17:08:57 INFO] Game mode: 0 Survival
+[2020-06-03 17:08:57 INFO] Difficulty: 1 EASY
+[2020-06-03 17:08:57 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:08:58 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:08:58 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:08:58 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:08:58 INFO] IPv6 supported, port: 50369
+[2020-05-03 17:08:59 INFO] Banhammer started
+[2020-06-03 17:08:59 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:09:42 INFO] Starting Server
+[2020-06-03 17:09:42 INFO] Version 1.14.60.5
+[2020-06-03 17:09:42 INFO] Session ID 3a1f3e7a-1a63-4d25-a71a-ec0a113f430c
+[2020-06-03 17:09:42 INFO] Level Name: Bedrock level
+[2020-06-03 17:09:42 INFO] Game mode: 0 Survival
+[2020-06-03 17:09:42 INFO] Difficulty: 1 EASY
+[2020-06-03 17:09:42 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:09:43 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:09:43 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:09:43 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:09:43 INFO] IPv6 supported, port: 63416
+[2020-05-03 17:09:43 INFO] Banhammer started
+[2020-06-03 17:09:43 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:13:46 INFO] Starting Server
+[2020-06-03 17:13:46 INFO] Version 1.14.60.5
+[2020-06-03 17:13:46 INFO] Session ID 37090838-cc05-4e6b-83de-b8678bc66f50
+[2020-06-03 17:13:46 INFO] Level Name: Bedrock level
+[2020-06-03 17:13:46 INFO] Game mode: 0 Survival
+[2020-06-03 17:13:46 INFO] Difficulty: 1 EASY
+[2020-06-03 17:13:46 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:13:47 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:13:47 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:13:47 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:13:47 INFO] IPv6 supported, port: 49235
+[2020-05-03 17:13:47 INFO] Banhammer started
+[2020-06-03 17:13:47 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:19:24 INFO] Starting Server
+[2020-06-03 17:19:24 INFO] Version 1.14.60.5
+[2020-06-03 17:19:24 INFO] Session ID 38a13f42-afc0-4ae1-951c-cf106d8a10b4
+[2020-06-03 17:19:24 INFO] Level Name: Bedrock level
+[2020-06-03 17:19:24 INFO] Game mode: 0 Survival
+[2020-06-03 17:19:24 INFO] Difficulty: 1 EASY
+[2020-06-03 17:19:24 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:19:25 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:19:25 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:19:25 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:19:25 INFO] IPv6 supported, port: 49573
+[2020-05-03 17:19:25 INFO] Banhammer started
+[2020-06-03 17:19:25 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:23:02 INFO] Starting Server
+[2020-06-03 17:23:02 INFO] Version 1.14.60.5
+[2020-06-03 17:23:02 INFO] Session ID c2dedaac-51bb-4c2b-b1a3-2784cc0d517b
+[2020-06-03 17:23:02 INFO] Level Name: Bedrock level
+[2020-06-03 17:23:02 INFO] Game mode: 0 Survival
+[2020-06-03 17:23:02 INFO] Difficulty: 1 EASY
+[2020-06-03 17:23:03 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:23:04 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:23:04 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:23:04 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:23:04 INFO] IPv6 supported, port: 62939
+[2020-05-03 17:23:04 INFO] Banhammer started
+[2020-06-03 17:23:04 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:24:46 INFO] Starting Server
+[2020-06-03 17:24:46 INFO] Version 1.14.60.5
+[2020-06-03 17:24:46 INFO] Session ID 3f7715cd-1a78-4a97-882e-71224a74b903
+[2020-06-03 17:24:46 INFO] Level Name: Bedrock level
+[2020-06-03 17:24:46 INFO] Game mode: 0 Survival
+[2020-06-03 17:24:46 INFO] Difficulty: 1 EASY
+[2020-06-03 17:24:46 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:24:47 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:24:47 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:24:47 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:24:47 INFO] IPv6 supported, port: 50519
+[2020-05-03 17:24:47 INFO] Banhammer started
+[2020-06-03 17:24:47 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:30:40 INFO] Starting Server
+[2020-06-03 17:30:40 INFO] Version 1.14.60.5
+[2020-06-03 17:30:40 INFO] Session ID f97ff7b2-a459-461a-b6eb-9b9f552e8736
+[2020-06-03 17:30:40 INFO] Level Name: Bedrock level
+[2020-06-03 17:30:40 INFO] Game mode: 0 Survival
+[2020-06-03 17:30:40 INFO] Difficulty: 1 EASY
+[2020-06-03 17:30:40 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:30:41 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:30:41 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:30:41 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:30:41 INFO] IPv6 supported, port: 57216
+[2020-05-03 17:30:42 INFO] Banhammer started
+[2020-06-03 17:30:42 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:32:02 INFO] Starting Server
+[2020-06-03 17:32:02 INFO] Version 1.14.60.5
+[2020-06-03 17:32:02 INFO] Session ID 9ced2206-cbde-4b91-99b5-41b10df043bb
+[2020-06-03 17:32:02 INFO] Level Name: Bedrock level
+[2020-06-03 17:32:02 INFO] Game mode: 0 Survival
+[2020-06-03 17:32:02 INFO] Difficulty: 1 EASY
+[2020-06-03 17:32:02 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:32:03 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:32:03 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:32:03 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:32:03 INFO] IPv6 supported, port: 51120
+[2020-05-03 17:32:04 INFO] Banhammer started
+[2020-06-03 17:32:04 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:35:51 INFO] Starting Server
+[2020-06-03 17:35:51 INFO] Version 1.14.60.5
+[2020-06-03 17:35:51 INFO] Session ID 4ad5a44e-1851-4fe3-98bb-ca1c395a49b4
+[2020-06-03 17:35:51 INFO] Level Name: Bedrock level
+[2020-06-03 17:35:51 INFO] Game mode: 0 Survival
+[2020-06-03 17:35:51 INFO] Difficulty: 1 EASY
+[2020-06-03 17:35:51 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:35:52 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:35:52 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:35:52 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:35:52 INFO] IPv6 supported, port: 59528
+[2020-05-03 17:35:53 INFO] Banhammer started
+[2020-06-03 17:35:53 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:37:59 INFO] Starting Server
+[2020-06-03 17:37:59 INFO] Version 1.14.60.5
+[2020-06-03 17:37:59 INFO] Session ID ad3a15eb-980a-4eed-b254-3b0bd346209f
+[2020-06-03 17:37:59 INFO] Level Name: Bedrock level
+[2020-06-03 17:37:59 INFO] Game mode: 0 Survival
+[2020-06-03 17:37:59 INFO] Difficulty: 1 EASY
+[2020-06-03 17:37:59 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:38:01 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:38:01 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:38:01 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:38:01 INFO] IPv6 supported, port: 53839
+[2020-05-03 17:38:01 INFO] Banhammer started
+[2020-06-03 17:38:01 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:40:27 INFO] Starting Server
+[2020-06-03 17:40:27 INFO] Version 1.14.60.5
+[2020-06-03 17:40:27 INFO] Session ID 766b750f-4a14-4642-b1f6-1ca319e4d330
+[2020-06-03 17:40:27 INFO] Level Name: Bedrock level
+[2020-06-03 17:40:27 INFO] Game mode: 0 Survival
+[2020-06-03 17:40:27 INFO] Difficulty: 1 EASY
+[2020-06-03 17:40:27 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:40:28 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:40:28 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:40:28 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:40:28 INFO] IPv6 supported, port: 61317
+[2020-05-03 17:40:28 INFO] Banhammer started
+[2020-06-03 17:40:28 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 17:43:36 INFO] Starting Server
+[2020-06-03 17:43:36 INFO] Version 1.14.60.5
+[2020-06-03 17:43:36 INFO] Session ID 27bbe51e-ef28-4841-ab88-971e096fb0bc
+[2020-06-03 17:43:36 INFO] Level Name: Bedrock level
+[2020-06-03 17:43:36 INFO] Game mode: 0 Survival
+[2020-06-03 17:43:36 INFO] Difficulty: 1 EASY
+[2020-06-03 17:43:36 INFO] opening worlds/Bedrock level/db
+[2020-06-03 17:43:37 INFO] IPv4 supported, port: 19134
+[2020-06-03 17:43:37 INFO] IPv6 supported, port: 19133
+[2020-06-03 17:43:37 INFO] IPv4 supported, port: 19132
+[2020-06-03 17:43:37 INFO] IPv6 supported, port: 64339
+[2020-05-03 17:43:37 INFO] Banhammer started
+[2020-06-03 17:43:37 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:07:06 INFO] Starting Server
+[2020-06-03 18:07:06 INFO] Session ID 44fbf2f2-7937-4ed2-a5b0-707373dd7cab
+[2020-06-03 18:07:06 INFO] Level Name: Bedrock level
+[2020-06-03 18:07:06 INFO] Game mode: 0 Survival
+[2020-06-03 18:07:06 INFO] Difficulty: 1 EASY
+[2020-06-03 18:07:07 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:07:08 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:07:08 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:07:08 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:07:08 INFO] IPv6 supported, port: 63169
+[2020-05-03 18:07:08 INFO] Banhammer started
+[2020-06-03 18:07:08 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:07:42 INFO] Starting Server
+[2020-06-03 18:07:42 INFO] Version 1.14.60.5
+[2020-06-03 18:07:42 INFO] Session ID 640ced25-8c08-4478-a329-659c4d1e7fe9
+[2020-06-03 18:07:42 INFO] Level Name: Bedrock level
+[2020-06-03 18:07:42 INFO] Game mode: 0 Survival
+[2020-06-03 18:07:42 INFO] Difficulty: 1 EASY
+[2020-06-03 18:07:42 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:07:44 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:07:44 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:07:44 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:07:44 INFO] IPv6 supported, port: 62477
+[2020-05-03 18:07:44 INFO] Banhammer started
+[2020-06-03 18:07:44 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:30:46 INFO] Starting Server
+[2020-06-03 18:30:46 INFO] Version 1.14.60.5
+[2020-06-03 18:30:46 INFO] Session ID 94977c58-43e5-4c1c-85d3-dc8241469030
+[2020-06-03 18:30:46 INFO] Level Name: Bedrock level
+[2020-06-03 18:30:46 INFO] Game mode: 0 Survival
+[2020-06-03 18:30:46 INFO] Difficulty: 1 EASY
+[2020-06-03 18:30:47 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:30:48 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:30:48 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:30:48 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:30:48 INFO] IPv6 supported, port: 57121
+[2020-05-03 18:30:48 INFO] Banhammer started
+[2020-06-03 18:30:48 INFO] Server started.
+[2020-06-03 18:36:47 INFO] Running AutoCompaction...
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:37:04 INFO] Starting Server
+[2020-06-03 18:37:04 INFO] Version 1.14.60.5
+[2020-06-03 18:37:04 INFO] Session ID c5d79e4c-e3fc-42e1-8f0b-1daaeee7443b
+[2020-06-03 18:37:04 INFO] Level Name: Bedrock level
+[2020-06-03 18:37:04 INFO] Game mode: 0 Survival
+[2020-06-03 18:37:04 INFO] Difficulty: 1 EASY
+[2020-06-03 18:37:04 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:37:05 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:37:05 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:37:05 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:37:05 INFO] IPv6 supported, port: 60522
+[2020-05-03 18:37:05 INFO] Banhammer started
+[2020-06-03 18:37:05 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:45:50 INFO] Starting Server
+[2020-06-03 18:45:50 INFO] Version 1.14.60.5
+[2020-06-03 18:45:50 INFO] Session ID 143cddf6-a8d1-4200-8443-b91391d77957
+[2020-06-03 18:45:50 INFO] Level Name: Bedrock level
+[2020-06-03 18:45:50 INFO] Game mode: 0 Survival
+[2020-06-03 18:45:50 INFO] Difficulty: 1 EASY
+[2020-06-03 18:45:50 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:45:51 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:45:51 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:45:52 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:45:52 INFO] IPv6 supported, port: 51653
+[2020-05-03 18:45:52 INFO] Banhammer started
+[2020-06-03 18:45:52 INFO] Server started.
+> 
+Unknown command: . Please check that the command exists and that you have permission to use it.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:48:09 INFO] Starting Server
+[2020-06-03 18:48:09 INFO] Version 1.14.60.5
+[2020-06-03 18:48:09 INFO] Session ID ed0d6a12-ef70-4752-82ed-ed9debcb5527
+[2020-06-03 18:48:09 INFO] Level Name: Bedrock level
+[2020-06-03 18:48:09 INFO] Game mode: 0 Survival
+[2020-06-03 18:48:09 INFO] Difficulty: 1 EASY
+[2020-06-03 18:48:09 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:48:11 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:48:11 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:48:11 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:48:11 INFO] IPv6 supported, port: 64691
+[2020-05-03 18:48:11 INFO] Banhammer started
+[2020-06-03 18:48:11 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:49:11 INFO] Starting Server
+[2020-06-03 18:49:11 INFO] Version 1.14.60.5
+[2020-06-03 18:49:11 INFO] Session ID b6409810-ea84-4f56-b3cc-db4cc815b798
+[2020-06-03 18:49:11 INFO] Level Name: Bedrock level
+[2020-06-03 18:49:11 INFO] Game mode: 0 Survival
+[2020-06-03 18:49:11 INFO] Difficulty: 1 EASY
+[2020-06-03 18:49:11 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:49:12 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:49:12 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:49:12 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:49:12 INFO] IPv6 supported, port: 54277
+[2020-05-03 18:49:12 INFO] Banhammer started
+[2020-06-03 18:49:12 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:51:33 INFO] Starting Server
+[2020-06-03 18:51:33 INFO] Version 1.14.60.5
+[2020-06-03 18:51:33 INFO] Session ID 4198d33f-b8dd-48a1-8f99-ec05c4892968
+[2020-06-03 18:51:33 INFO] Level Name: Bedrock level
+[2020-06-03 18:51:33 INFO] Game mode: 0 Survival
+[2020-06-03 18:51:33 INFO] Difficulty: 1 EASY
+[2020-06-03 18:51:33 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:51:34 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:51:34 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:51:34 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:51:34 INFO] IPv6 supported, port: 50173
+[2020-05-03 18:51:34 INFO] Banhammer started
+[2020-06-03 18:51:34 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:56:30 INFO] Starting Server
+[2020-06-03 18:56:30 INFO] Version 1.14.60.5
+[2020-06-03 18:56:30 INFO] Session ID 70916370-5cb3-484e-b2a9-af812a8e67ea
+[2020-06-03 18:56:30 INFO] Level Name: Bedrock level
+[2020-06-03 18:56:30 INFO] Game mode: 0 Survival
+[2020-06-03 18:56:30 INFO] Difficulty: 1 EASY
+[2020-06-03 18:56:31 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:56:32 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:56:32 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:56:32 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:56:32 INFO] IPv6 supported, port: 52048
+[2020-05-03 18:56:32 INFO] Banhammer started
+[2020-06-03 18:56:32 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 18:57:13 INFO] Starting Server
+[2020-06-03 18:57:13 INFO] Version 1.14.60.5
+[2020-06-03 18:57:13 INFO] Session ID 1af5831e-abec-4bab-afdf-f49f38c51454
+[2020-06-03 18:57:13 INFO] Level Name: Bedrock level
+[2020-06-03 18:57:13 INFO] Game mode: 0 Survival
+[2020-06-03 18:57:13 INFO] Difficulty: 1 EASY
+[2020-06-03 18:57:13 INFO] opening worlds/Bedrock level/db
+[2020-06-03 18:57:14 INFO] IPv4 supported, port: 19134
+[2020-06-03 18:57:14 INFO] IPv6 supported, port: 19133
+[2020-06-03 18:57:14 INFO] IPv4 supported, port: 19132
+[2020-06-03 18:57:14 INFO] IPv6 supported, port: 64155
+[2020-05-03 18:57:14 INFO] Banhammer started
+[2020-06-03 18:57:14 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:03:14 INFO] Starting Server
+[2020-06-03 19:03:14 INFO] Version 1.14.60.5
+[2020-06-03 19:03:14 INFO] Session ID c9107773-c3fe-41de-8182-9605896c9472
+[2020-06-03 19:03:14 INFO] Level Name: Bedrock level
+[2020-06-03 19:03:14 INFO] Game mode: 0 Survival
+[2020-06-03 19:03:14 INFO] Difficulty: 1 EASY
+[2020-06-03 19:03:14 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:03:15 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:03:15 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:03:16 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:03:16 INFO] IPv6 supported, port: 60921
+[2020-05-03 19:03:16 INFO] Banhammer started
+[2020-06-03 19:03:16 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:03:47 INFO] Starting Server
+[2020-06-03 19:03:47 INFO] Version 1.14.60.5
+[2020-06-03 19:03:47 INFO] Session ID 438c392d-f91a-4304-9c0f-3c10eaf5d855
+[2020-06-03 19:03:47 INFO] Level Name: Bedrock level
+[2020-06-03 19:03:47 INFO] Game mode: 0 Survival
+[2020-06-03 19:03:47 INFO] Difficulty: 1 EASY
+[2020-06-03 19:03:47 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:03:48 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:03:48 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:03:48 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:03:48 INFO] IPv6 supported, port: 56068
+[2020-05-03 19:03:49 INFO] Banhammer started
+[2020-06-03 19:03:49 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:08:52 INFO] Starting Server
+[2020-06-03 19:08:52 INFO] Version 1.14.60.5
+[2020-06-03 19:08:52 INFO] Session ID 2e9e95ce-7d1a-4317-bcc7-b24c79878d8d
+[2020-06-03 19:08:52 INFO] Level Name: Bedrock level
+[2020-06-03 19:08:52 INFO] Game mode: 0 Survival
+[2020-06-03 19:08:52 INFO] Difficulty: 1 EASY
+[2020-06-03 19:08:53 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:08:54 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:08:54 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:08:54 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:08:54 INFO] IPv6 supported, port: 51532
+[2020-05-03 19:08:54 INFO] Banhammer started
+[2020-06-03 19:08:54 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:30:49 INFO] Starting Server
+[2020-06-03 19:30:49 INFO] Version 1.14.60.5
+[2020-06-03 19:30:49 INFO] Session ID 300af5cb-08c6-47bf-8b59-a39cda9c06fb
+[2020-06-03 19:30:49 INFO] Level Name: Bedrock level
+[2020-06-03 19:30:49 INFO] Game mode: 0 Survival
+[2020-06-03 19:30:49 INFO] Difficulty: 1 EASY
+[2020-06-03 19:30:50 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:30:51 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:30:51 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:30:51 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:30:51 INFO] IPv6 supported, port: 62246
+[2020-05-03 19:30:51 INFO] Banhammer started
+[2020-06-03 19:30:51 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:33:45 INFO] Starting Server
+[2020-06-03 19:33:45 INFO] Version 1.14.60.5
+[2020-06-03 19:33:45 INFO] Session ID d8abf1fd-85c7-4878-b170-8e410cfa6f60
+[2020-06-03 19:33:45 INFO] Level Name: Bedrock level
+[2020-06-03 19:33:45 INFO] Game mode: 0 Survival
+[2020-06-03 19:33:45 INFO] Difficulty: 1 EASY
+[2020-06-03 19:33:45 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:33:46 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:33:46 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:33:46 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:33:46 INFO] IPv6 supported, port: 58097
+[2020-05-03 19:33:47 INFO] Banhammer started
+[2020-06-03 19:33:47 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:34:44 INFO] Starting Server
+[2020-06-03 19:34:44 INFO] Version 1.14.60.5
+[2020-06-03 19:34:44 INFO] Session ID 16a8c244-014f-4cb5-b44c-35419cb030e0
+[2020-06-03 19:34:44 INFO] Level Name: Bedrock level
+[2020-06-03 19:34:44 INFO] Game mode: 0 Survival
+[2020-06-03 19:34:44 INFO] Difficulty: 1 EASY
+[2020-06-03 19:34:44 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:34:45 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:34:45 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:34:45 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:34:45 INFO] IPv6 supported, port: 52841
+[2020-05-03 19:34:46 INFO] Banhammer started
+[2020-06-03 19:34:46 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:37:24 INFO] Starting Server
+[2020-06-03 19:37:24 INFO] Version 1.14.60.5
+[2020-06-03 19:37:24 INFO] Session ID 61ba9dda-fc50-4a07-89ad-e7fda655f951
+[2020-06-03 19:37:24 INFO] Level Name: Bedrock level
+[2020-06-03 19:37:24 INFO] Game mode: 0 Survival
+[2020-06-03 19:37:24 INFO] Difficulty: 1 EASY
+[2020-06-03 19:37:25 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:37:26 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:37:26 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:37:26 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:37:26 INFO] IPv6 supported, port: 58324
+[2020-05-03 19:37:26 INFO] Banhammer started
+[2020-06-03 19:37:26 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:47:32 INFO] Starting Server
+[2020-06-03 19:47:32 INFO] Version 1.14.60.5
+[2020-06-03 19:47:32 INFO] Session ID 78d38f1a-f0d7-4456-92b9-f73617aa380e
+[2020-06-03 19:47:32 INFO] Level Name: Bedrock level
+[2020-06-03 19:47:32 INFO] Game mode: 0 Survival
+[2020-06-03 19:47:32 INFO] Difficulty: 1 EASY
+[2020-06-03 19:47:32 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:47:34 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:47:34 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:47:34 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:47:34 INFO] IPv6 supported, port: 51769
+[2020-05-03 19:47:34 INFO] Banhammer started
+[2020-06-03 19:47:34 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:49:34 INFO] Session ID 86d1cdb3-0331-426b-8077-a43442610aa4
+[2020-06-03 19:49:34 INFO] Level Name: Bedrock level
+[2020-06-03 19:49:34 INFO] Game mode: 0 Survival
+[2020-06-03 19:49:34 INFO] Difficulty: 1 EASY
+[2020-06-03 19:49:34 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:49:35 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:49:35 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:49:35 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:49:35 INFO] IPv6 supported, port: 55514
+[2020-05-03 19:49:35 INFO] Banhammer started
+[2020-06-03 19:49:35 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:51:02 INFO] Starting Server
+[2020-06-03 19:51:02 INFO] Session ID 92073170-dc7c-45d7-9732-d3a935ebef83
+[2020-06-03 19:51:02 INFO] Level Name: Bedrock level
+[2020-06-03 19:51:02 INFO] Game mode: 0 Survival
+[2020-06-03 19:51:02 INFO] Difficulty: 1 EASY
+[2020-06-03 19:51:02 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:51:03 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:51:03 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:51:03 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:51:03 INFO] IPv6 supported, port: 58111
+[2020-05-03 19:51:03 INFO] Banhammer started
+[2020-06-03 19:51:03 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:54:41 INFO] Starting Server
+[2020-06-03 19:54:41 INFO] Version 1.14.60.5
+[2020-06-03 19:54:41 INFO] Session ID 796cde7b-4592-4f64-83e9-fc6d24963c8b
+[2020-06-03 19:54:41 INFO] Level Name: Bedrock level
+[2020-06-03 19:54:41 INFO] Game mode: 0 Survival
+[2020-06-03 19:54:41 INFO] Difficulty: 1 EASY
+[2020-06-03 19:54:41 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:54:43 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:54:43 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:54:43 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:54:43 INFO] IPv6 supported, port: 52238
+[2020-05-03 19:54:43 INFO] Banhammer started
+[2020-06-03 19:54:43 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 19:58:58 INFO] Starting Server
+[2020-06-03 19:58:58 INFO] Version 1.14.60.5
+[2020-06-03 19:58:58 INFO] Session ID 3413ef7e-6ea6-4285-a387-8a8d076298a2
+[2020-06-03 19:58:58 INFO] Level Name: Bedrock level
+[2020-06-03 19:58:58 INFO] Game mode: 0 Survival
+[2020-06-03 19:58:58 INFO] Difficulty: 1 EASY
+[2020-06-03 19:58:59 INFO] opening worlds/Bedrock level/db
+[2020-06-03 19:59:00 INFO] IPv4 supported, port: 19134
+[2020-06-03 19:59:00 INFO] IPv6 supported, port: 19133
+[2020-06-03 19:59:00 INFO] IPv4 supported, port: 19132
+[2020-06-03 19:59:00 INFO] IPv6 supported, port: 51628
+[2020-05-03 19:59:00 INFO] Banhammer started
+[2020-06-03 19:59:00 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:04:19 INFO] Starting Server
+[2020-06-03 20:04:19 INFO] Version 1.14.60.5
+[2020-06-03 20:04:19 INFO] Session ID 8f2fa3f6-47d3-472d-a1d4-859e67cb4408
+[2020-06-03 20:04:19 INFO] Level Name: Bedrock level
+[2020-06-03 20:04:19 INFO] Game mode: 0 Survival
+[2020-06-03 20:04:19 INFO] Difficulty: 1 EASY
+[2020-06-03 20:04:19 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:04:20 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:04:20 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:04:20 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:04:20 INFO] IPv6 supported, port: 63055
+[2020-05-03 20:04:21 INFO] Banhammer started
+[2020-06-03 20:04:21 INFO] Server started.
+[2020-06-03 20:10:20 INFO] Running AutoCompaction...
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:12:20 INFO] Starting Server
+[2020-06-03 20:12:20 INFO] Version 1.14.60.5
+[2020-06-03 20:12:20 INFO] Session ID e7a90223-bbc9-4374-a2d2-2b7180d3ebcc
+[2020-06-03 20:12:20 INFO] Level Name: Bedrock level
+[2020-06-03 20:12:20 INFO] Game mode: 0 Survival
+[2020-06-03 20:12:20 INFO] Difficulty: 1 EASY
+[2020-06-03 20:12:20 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:12:21 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:12:21 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:12:21 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:12:21 INFO] IPv6 supported, port: 64203
+[2020-05-03 20:12:22 INFO] Banhammer started
+[2020-06-03 20:12:22 INFO] Server started.
+[2020-06-03 20:12:26 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:12:27 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:14:30 INFO] Starting Server
+[2020-06-03 20:14:30 INFO] Version 1.14.60.5
+[2020-06-03 20:14:30 INFO] Session ID a3d07e90-9aae-4d7e-8180-431e6530ba45
+[2020-06-03 20:14:30 INFO] Level Name: Bedrock level
+[2020-06-03 20:14:30 INFO] Game mode: 0 Survival
+[2020-06-03 20:14:30 INFO] Difficulty: 1 EASY
+[2020-06-03 20:14:30 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:14:31 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:14:31 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:14:32 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:14:32 INFO] IPv6 supported, port: 61261
+[2020-05-03 20:14:32 INFO] Banhammer started
+[2020-06-03 20:14:32 INFO] Server started.
+[2020-06-03 20:14:33 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:14:37 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:15:04 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:15:04 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:18:47 INFO] Starting Server
+[2020-06-03 20:18:47 INFO] Version 1.14.60.5
+[2020-06-03 20:18:47 INFO] Session ID 34e1295f-26cf-4b3d-b715-65ef68df9a3e
+[2020-06-03 20:18:47 INFO] Level Name: Bedrock level
+[2020-06-03 20:18:47 INFO] Game mode: 0 Survival
+[2020-06-03 20:18:47 INFO] Difficulty: 1 EASY
+[2020-06-03 20:18:47 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:18:48 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:18:48 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:18:48 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:18:48 INFO] IPv6 supported, port: 60532
+[2020-05-03 20:18:49 INFO] Banhammer started
+[2020-06-03 20:18:49 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:21:43 INFO] Starting Server
+[2020-06-03 20:21:43 INFO] Version 1.14.60.5
+[2020-06-03 20:21:43 INFO] Session ID a675cf8e-6a1b-49df-9a71-1c01f5ad15dd
+[2020-06-03 20:21:43 INFO] Level Name: Bedrock level
+[2020-06-03 20:21:43 INFO] Game mode: 0 Survival
+[2020-06-03 20:21:43 INFO] Difficulty: 1 EASY
+[2020-06-03 20:21:43 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:21:45 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:21:45 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:21:45 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:21:45 INFO] IPv6 supported, port: 63254
+[2020-05-03 20:21:45 INFO] Banhammer started
+[2020-06-03 20:21:45 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:26:13 INFO] Starting Server
+[2020-06-03 20:26:13 INFO] Version 1.14.60.5
+[2020-06-03 20:26:13 INFO] Session ID 5726f836-feb7-4b85-b4f5-8f68234b747e
+[2020-06-03 20:26:13 INFO] Level Name: Bedrock level
+[2020-06-03 20:26:13 INFO] Game mode: 0 Survival
+[2020-06-03 20:26:13 INFO] Difficulty: 1 EASY
+[2020-06-03 20:26:13 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:26:14 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:26:14 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:26:14 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:26:14 INFO] IPv6 supported, port: 53235
+[2020-05-03 20:26:15 INFO] Banhammer started
+[2020-06-03 20:26:15 INFO] Server started.
+[2020-06-03 20:26:17 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:26:17 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 20:29:22 INFO] Starting Server
+[2020-06-03 20:29:22 INFO] Session ID eb546524-3ac9-43ac-b388-143da2ca9e05
+[2020-06-03 20:29:22 INFO] Level Name: Bedrock level
+[2020-06-03 20:29:22 INFO] Game mode: 0 Survival
+[2020-06-03 20:29:22 INFO] Difficulty: 1 EASY
+[2020-06-03 20:29:22 INFO] opening worlds/Bedrock level/db
+[2020-06-03 20:29:23 INFO] IPv4 supported, port: 19134
+[2020-06-03 20:29:23 INFO] IPv6 supported, port: 19133
+[2020-06-03 20:29:24 INFO] IPv4 supported, port: 19132
+[2020-06-03 20:29:24 INFO] IPv6 supported, port: 60601
+[2020-05-03 20:29:24 INFO] Banhammer started
+[2020-06-03 20:29:24 INFO] Server started.
+[2020-06-03 20:29:38 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 20:29:39 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> sto
+Unknown command: sto. Please check that the command exists and that you have permission to use it.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 21:41:37 INFO] Starting Server
+[2020-06-03 21:41:37 INFO] Version 1.14.60.5
+[2020-06-03 21:41:37 INFO] Session ID 90dfb88a-4c28-4ed8-8f68-ef38007fad86
+[2020-06-03 21:41:37 INFO] Level Name: Bedrock level
+[2020-06-03 21:41:37 INFO] Game mode: 0 Survival
+[2020-06-03 21:41:37 INFO] Difficulty: 1 EASY
+[2020-06-03 21:41:37 INFO] opening worlds/Bedrock level/db
+[2020-06-03 21:41:38 INFO] IPv4 supported, port: 19134
+[2020-06-03 21:41:38 INFO] IPv6 supported, port: 19133
+[2020-06-03 21:41:39 INFO] IPv4 supported, port: 19132
+[2020-06-03 21:41:39 INFO] IPv6 supported, port: 62495
+[2020-05-03 21:41:39 INFO] Banhammer started
+[2020-06-03 21:41:39 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 21:43:14 INFO] Starting Server
+[2020-06-03 21:43:14 INFO] Version 1.14.60.5
+[2020-06-03 21:43:14 INFO] Session ID 005bdc08-63e7-4939-97a2-91de37c2cdee
+[2020-06-03 21:43:14 INFO] Level Name: Bedrock level
+[2020-06-03 21:43:14 INFO] Game mode: 0 Survival
+[2020-06-03 21:43:14 INFO] Difficulty: 1 EASY
+[2020-06-03 21:43:14 INFO] opening worlds/Bedrock level/db
+[2020-06-03 21:43:15 INFO] IPv4 supported, port: 19134
+[2020-06-03 21:43:15 INFO] IPv6 supported, port: 19133
+[2020-06-03 21:43:15 INFO] IPv4 supported, port: 19132
+[2020-06-03 21:43:15 INFO] IPv6 supported, port: 62170
+[2020-05-03 21:43:16 INFO] Banhammer started
+[2020-06-03 21:43:16 INFO] Server started.
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 21:44:21 INFO] Starting Server
+[2020-06-03 21:44:21 INFO] Version 1.14.60.5
+[2020-06-03 21:44:21 INFO] Session ID f9d1a5d4-db2d-4f6a-9530-33717efb713e
+[2020-06-03 21:44:21 INFO] Level Name: Bedrock level
+[2020-06-03 21:44:21 INFO] Game mode: 0 Survival
+[2020-06-03 21:44:21 INFO] Difficulty: 1 EASY
+[2020-06-03 21:44:21 INFO] opening worlds/Bedrock level/db
+[2020-06-03 21:44:22 INFO] IPv4 supported, port: 19134
+[2020-06-03 21:44:22 INFO] IPv6 supported, port: 19133
+[2020-06-03 21:44:22 INFO] IPv4 supported, port: 19132
+[2020-06-03 21:44:22 INFO] IPv6 supported, port: 63378
+[2020-05-03 21:44:22 INFO] Banhammer started
+[2020-06-03 21:44:22 INFO] Server started.
+[2020-06-03 21:44:30 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 21:44:31 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:11:48 INFO] Starting Server
+[2020-06-03 22:11:48 INFO] Version 1.14.60.5
+[2020-06-03 22:11:48 INFO] Session ID f1527cff-1f41-4b72-b3bb-1555ddfd320d
+[2020-06-03 22:11:48 INFO] Level Name: Bedrock level
+[2020-06-03 22:11:48 INFO] Game mode: 0 Survival
+[2020-06-03 22:11:48 INFO] Difficulty: 1 EASY
+[2020-06-03 22:11:48 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:11:49 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:11:49 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:11:49 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:11:49 INFO] IPv6 supported, port: 63174
+[2020-05-03 22:11:50 INFO] Banhammer started
+[2020-06-03 22:11:50 INFO] Server started.
+[2020-06-03 22:12:04 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:12:06 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:14:39 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:14:54 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:27:05 INFO] Starting Server
+[2020-06-03 22:27:05 INFO] Version 1.14.60.5
+[2020-06-03 22:27:05 INFO] Session ID 14a25755-ba10-4e2d-b1df-954559b9b497
+[2020-06-03 22:27:05 INFO] Level Name: Bedrock level
+[2020-06-03 22:27:05 INFO] Game mode: 0 Survival
+[2020-06-03 22:27:05 INFO] Difficulty: 1 EASY
+[2020-06-03 22:27:05 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:27:06 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:27:06 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:27:06 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:27:06 INFO] IPv6 supported, port: 52744
+[2020-05-03 22:27:07 INFO] Banhammer started
+[2020-06-03 22:27:07 INFO] Server started.
+[2020-06-03 22:27:09 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:27:11 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:29:13 INFO] Starting Server
+[2020-06-03 22:29:13 INFO] Version 1.14.60.5
+[2020-06-03 22:29:13 INFO] Session ID 0e514fb8-ecf2-4f3f-a0cd-55b0a999b819
+[2020-06-03 22:29:13 INFO] Level Name: Bedrock level
+[2020-06-03 22:29:13 INFO] Game mode: 0 Survival
+[2020-06-03 22:29:13 INFO] Difficulty: 1 EASY
+[2020-06-03 22:29:13 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:29:14 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:29:14 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:29:14 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:29:14 INFO] IPv6 supported, port: 51097
+[2020-05-03 22:29:15 INFO] Banhammer started
+[2020-06-03 22:29:15 INFO] Server started.
+[2020-06-03 22:29:33 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:29:34 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:34:24 INFO] Starting Server
+[2020-06-03 22:34:24 INFO] Version 1.14.60.5
+[2020-06-03 22:34:24 INFO] Session ID bc56721d-4422-4f85-a29f-8f5186a83a4e
+[2020-06-03 22:34:24 INFO] Level Name: Bedrock level
+[2020-06-03 22:34:24 INFO] Game mode: 0 Survival
+[2020-06-03 22:34:24 INFO] Difficulty: 1 EASY
+[2020-06-03 22:34:24 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:34:25 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:34:25 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:34:26 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:34:26 INFO] IPv6 supported, port: 63794
+[2020-05-03 22:34:26 INFO] Banhammer started
+[2020-06-03 22:34:26 INFO] Server started.
+[2020-06-03 22:34:41 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:34:42 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:36:31 INFO] Starting Server
+[2020-06-03 22:36:31 INFO] Version 1.14.60.5
+[2020-06-03 22:36:31 INFO] Session ID f914ad4e-2af6-4c51-a3bb-84b9fa18115c
+[2020-06-03 22:36:31 INFO] Level Name: Bedrock level
+[2020-06-03 22:36:31 INFO] Game mode: 0 Survival
+[2020-06-03 22:36:31 INFO] Difficulty: 1 EASY
+[2020-06-03 22:36:31 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:36:32 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:36:32 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:36:33 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:36:33 INFO] IPv6 supported, port: 49522
+[2020-05-03 22:36:33 INFO] Banhammer started
+[2020-06-03 22:36:33 INFO] Server started.
+[2020-06-03 22:36:36 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:36:36 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 22:44:10 INFO] Starting Server
+[2020-06-03 22:44:10 INFO] Version 1.14.60.5
+[2020-06-03 22:44:10 INFO] Session ID 14c2f384-ccf7-456b-b447-7760485b6207
+[2020-06-03 22:44:10 INFO] Level Name: Bedrock level
+[2020-06-03 22:44:10 INFO] Game mode: 0 Survival
+[2020-06-03 22:44:10 INFO] Difficulty: 1 EASY
+[2020-06-03 22:44:10 INFO] opening worlds/Bedrock level/db
+[2020-06-03 22:44:11 INFO] IPv4 supported, port: 19134
+[2020-06-03 22:44:11 INFO] IPv6 supported, port: 19133
+[2020-06-03 22:44:11 INFO] IPv4 supported, port: 19132
+[2020-06-03 22:44:11 INFO] IPv6 supported, port: 51431
+[2020-05-03 22:44:11 INFO] Banhammer started
+[2020-06-03 22:44:11 INFO] Server started.
+[2020-06-03 22:44:13 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:44:15 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-06-03 22:50:11 INFO] Running AutoCompaction...
+[2020-06-03 22:56:11 INFO] Running AutoCompaction...
+[2020-06-03 23:02:11 INFO] Running AutoCompaction...
+[2020-06-03 23:08:11 INFO] Running AutoCompaction...
+[2020-06-03 23:14:11 INFO] Running AutoCompaction...
+[2020-06-03 23:20:11 INFO] Running AutoCompaction...
+[2020-06-03 23:26:11 INFO] Running AutoCompaction...
+[2020-06-03 23:32:11 INFO] Running AutoCompaction...
+[2020-06-03 23:38:11 INFO] Running AutoCompaction...
+> stop
+Quit correctly
+NO LOG FILE! - setting up server logging...
+[2020-06-03 23:41:44 INFO] Starting Server
+[2020-06-03 23:41:44 INFO] Version 1.14.60.5
+[2020-06-03 23:41:44 INFO] Session ID 2a639e7f-a64b-496a-bddd-396259d1512a
+[2020-06-03 23:41:44 INFO] Level Name: Bedrock level
+[2020-06-03 23:41:44 INFO] Game mode: 0 Survival
+[2020-06-03 23:41:44 INFO] Difficulty: 1 EASY
+[2020-06-03 23:41:44 INFO] opening worlds/Bedrock level/db
+[2020-06-03 23:41:52 INFO] IPv4 supported, port: 19134
+[2020-06-03 23:41:52 INFO] IPv6 supported, port: 19133
+[2020-06-03 23:41:52 INFO] IPv4 supported, port: 19132
+[2020-06-03 23:41:52 INFO] IPv6 supported, port: 60825
+[2020-05-03 23:41:53 INFO] Banhammer started
+[2020-06-03 23:41:53 INFO] Server started.
+[2020-06-03 23:41:59 INFO] Player connected: hazae41, xuid: 2535434693526619
+[2020-06-03 23:42:00 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> stop
+Quit correctly

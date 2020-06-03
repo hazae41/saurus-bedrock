@@ -13,14 +13,14 @@ export class ConnectionRequest extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const clientID = buffer.readLong();
     const sendPingTime = buffer.readLong();
     const useSecurity = buffer.readBool();
     return new this(clientID, sendPingTime, useSecurity);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeLong(this.clientID);
     buffer.writeLong(this.sendPingTime);
@@ -43,7 +43,7 @@ export class ConnectionRequestAccepted extends ProtocolPacket {
     this.systemAddresses.push(local);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
     buffer.writeAddress(this.address);
     buffer.writeShort(0);
@@ -72,7 +72,7 @@ export class NewIncomingConnection extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
     const address = buffer.readAddress();
     const dummy = { hostname: "0.0.0.0", port: 0, version: 4 as 4 };
     const addresses = [];
@@ -88,17 +88,17 @@ export class NewIncomingConnection extends ProtocolPacket {
     return new this(address, addresses, sendPingTime, sendPongTime);
   }
 
-  async to(buffer: Buffer) {}
+  to(buffer: Buffer) {}
 }
 
 export class DisconnectNotification extends ProtocolPacket {
   static id = 0x15;
 
   static from(buffer: Buffer) {
-    super.from(buffer);
+    super.check(buffer);
   }
 
-  async to(buffer: Buffer) {
+  to(buffer: Buffer) {
     super.to(buffer);
   }
 }
