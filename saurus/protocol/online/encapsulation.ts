@@ -84,6 +84,7 @@ export class EncapsulatedPacket extends Packet {
       buffer.writeInt(index);
     }
 
-    buffer.writeArray(sub!!);
+    if (!sub) throw Error("No sub");
+    buffer.writeArray(sub);
   }
 }

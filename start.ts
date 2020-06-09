@@ -24,6 +24,6 @@ minecraft.on(["stopped", "low"], () => Deno.exit());
 minecraft.sigint();
 
 new Banhammer(saurus, minecraft);
-new MOTD(saurus, "Hello world!");
+new MOTD(saurus, "Hello world");
 
 await saurus.read();

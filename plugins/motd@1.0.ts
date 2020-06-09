@@ -16,13 +16,14 @@ export class MOTD {
     }
   }
 
-  private async ondata(data: Uint8Array): AsyncEventResult {
+  private async ondata([data]: [Uint8Array]): AsyncEventResult {
+    if (!data) return;
     const buffer = new Buffer(data);
 
     if (buffer.header === OfflinePong.id) {
       const pong = OfflinePong.from(buffer);
       pong.infos.name = this.motd;
-      return [await pong.export()];
+      return [[await pong.export()]];
     }
   }
 }

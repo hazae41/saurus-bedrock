@@ -9,6 +9,11 @@ export interface Address {
   port: number;
 }
 
+export function origin(from: Origin) {
+  if (from === "client") return "->";
+  if (from === "server") return "<-";
+}
+
 function listen(port: number) {
   const listener = Deno.listenDatagram({ port, transport: "udp" });
   (listener as any)["bufSize"] = 2048;
@@ -82,10 +87,14 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
           const session = this.sessionOf(client);
           session.time = Date.now();
 
-          const result = await session.emit("data", data, "client");
+          const result = await session.emit("data", [data], "client");
           if (result === "cancelled") continue;
-          const [modified] = result as [Uint8Array];
-          send(session.listener, modified, session.target);
+          const [buffers] = result as [Uint8Array[]];
+          console.log(origin("client"), buffers.length);
+
+          for (const buffer of buffers) {
+            await send(session.listener, buffer, session.target);
+          }
         } catch (e) {
           this.emit("error", e);
         }
@@ -99,10 +108,14 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     try {
       for await (const [data, from] of session.listener) {
         try {
-          const result = await session.emit("data", data, "server");
+          const result = await session.emit("data", [data], "server");
           if (result === "cancelled") continue;
-          const [modified] = result as [Uint8Array];
-          send(this.listener, modified, session.address);
+          const [buffers] = result as [Uint8Array[]];
+          console.log(origin("server"), buffers.length);
+
+          for (const buffer of buffers) {
+            await send(this.listener, buffer, session.address);
+          }
         } catch (e) {
           this.emit("error", e);
         }

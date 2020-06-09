@@ -7,21 +7,24 @@ export class Datagram extends Packet {
   static flag_ack = 0x40;
   static flag_nak = 0x20;
 
-  packets: EncapsulatedPacket[] = [];
-  headerFlags = 0;
-  seqNumber?: number;
-  sendTime?: number;
+  constructor(
+    public headerFlags = 0,
+    public seqNumber = 0,
+    public packets: EncapsulatedPacket[] = [],
+  ) {
+    super();
+  }
 
   static from(buffer: Buffer) {
-    const it = new this();
-    it.headerFlags = buffer.readByte();
-    it.seqNumber = buffer.readLTriad();
+    const headerFlags = buffer.readByte();
+    const seqNumber = buffer.readLTriad();
 
+    const packets = [];
     while (buffer.remaining) {
-      it.packets.push(EncapsulatedPacket.from(buffer));
+      packets.push(EncapsulatedPacket.from(buffer));
     }
 
-    return it;
+    return new this(headerFlags, seqNumber, packets);
   }
 
   async to(buffer: Buffer) {

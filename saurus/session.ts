@@ -11,6 +11,7 @@ import {
   ConnectionRequestAccepted,
   ServerToClientHandshakePacket,
   LoginPacket,
+  Open2Request,
 } from "./protocol/mod.ts";
 
 import {
@@ -22,7 +23,7 @@ import {
   decode,
   KeyPair,
 } from "./mod.ts";
-import { Address, Listener, Origin } from "./handler.ts";
+import { Address, Listener, Origin, origin } from "./handler.ts";
 
 function datagramOf(buffer: Buffer) {
   const { header } = buffer;
@@ -53,13 +54,19 @@ export type SessionEvent =
   | "packet"
   | "bedrock";
 
-function origin(from: Origin) {
-  if (from === "client") return "->";
-  if (from === "server") return "<-";
-}
+export type SessionState =
+  | "offline"
+  | "open"
+  | "accepted"
+  | "handshake";
 
 export class Session extends EventEmitter<SessionEvent> {
   time = 0;
+  _state: SessionState = "offline";
+  _mtuSize = 1492;
+  _splits = new Array<SplitMemory>(4);
+  _splitID = 0;
+  _indexID = 0;
 
   constructor(
     public address: Address,
@@ -73,8 +80,6 @@ export class Session extends EventEmitter<SessionEvent> {
     this.on(["bedrock"], this.onbedrock.bind(this));
   }
 
-  _state: "offline" | "open" | "accepted" | "handshake" = "offline";
-
   get state() {
     return this._state;
   }
@@ -87,8 +92,6 @@ export class Session extends EventEmitter<SessionEvent> {
   disconnect() {
     this.state = "offline";
   }
-
-  _splits = new Array<SplitMemory>(4);
 
   memoryOf(id: number): [number, SplitMemory] {
     let slot = this._splits.findIndex((m) => m?.id === id);
@@ -127,50 +130,73 @@ export class Session extends EventEmitter<SessionEvent> {
       buffer.writeArray(packet.sub);
     }
 
-    const final = new EncapsulatedPacket(reliability, buffer.array);
-    Object.assign(final, { reliability, index, order });
+    const final = new EncapsulatedPacket(
+      reliability,
+      buffer.array,
+      index,
+      undefined,
+      order,
+    );
 
     delete this._splits[slot];
     return final;
   }
 
-  private async ondata(data: Uint8Array, from: Origin) {
+  private async ondata([data]: [Uint8Array], from: Origin) {
+    if (!data) return;
     const buffer = new Buffer(data);
 
     if (this.state === "offline") {
       if (buffer.header === OfflinePong.id) {
         const pong = OfflinePong.from(buffer);
         pong.infos.name = "Proxied server";
-        data = await pong.export();
+        return [[await pong.export()]];
+      }
+
+      if (buffer.header === Open2Request.id) {
+        const request = Open2Request.from(buffer);
+        this._mtuSize = Math.min(request.mtuSize, this._mtuSize);
       }
 
       if (buffer.header === Open2Reply.id) {
         this.state = "open";
       }
-    }
-
-    if (this.state !== "offline") {
+    } else {
+      console.log("datagram");
       const datagram = datagramOf(buffer);
       if (!(datagram instanceof Datagram)) return;
+      const { headerFlags, seqNumber } = datagram;
 
-      const packets = [];
+      const datagrams: Datagram[] = [];
 
       for (const packet of datagram.packets) {
-        const result = await this.emit("packet", packet, from);
+        const result = await this.emit("packet", [packet], from);
         if (result === "cancelled") continue;
-        const [modified] = result as [EncapsulatedPacket];
-        packets.push(modified);
+        const [packets] = result as [EncapsulatedPacket[]];
+
+        for (const packet of packets) {
+          const datagram = new Datagram(headerFlags, seqNumber, [packet]);
+          datagrams.push(datagram);
+        }
       }
 
-      datagram.packets = packets;
-      data = await datagram.export();
+      if (!datagrams.length) return "cancelled";
+      const exports = datagrams.map((it) => it.export());
+      const buffers = await Promise.all(exports);
+      return [buffers];
     }
-
-    return [data];
   }
 
-  private async onpacket(packet: EncapsulatedPacket, from: Origin) {
-    if (packet.split) return;
+  private async onpacket([packet]: [EncapsulatedPacket], from: Origin) {
+    if (!packet) return;
+
+    if (packet.split) {
+      console.log("split");
+      const unsplit = this.unsplit(packet);
+      if (!unsplit) return "cancelled";
+      packet = unsplit;
+      console.log("finished");
+    }
 
     const buffer = new Buffer(packet.sub);
     console.log(origin(from), "packet", buffer.header);
@@ -188,20 +214,49 @@ export class Session extends EventEmitter<SessionEvent> {
     }
 
     if (buffer.header === Batch.id) {
+      console.log(buffer.array);
       const batch = await Batch.from(buffer);
-      if (!batch.packets.length) return;
 
-      const packets = [];
+      const { reliability, order, sequence, index } = packet;
+      const packets: EncapsulatedPacket[] = [];
 
       for (const data of batch.packets) {
         const result = await this.emit("bedrock", data, from);
         if (result === "cancelled") continue;
-        const [modified] = result;
-        packets.push(modified);
+        const [modified] = result as [Uint8Array];
+
+        const length = packet.sub.length;
+        const maxSize = this._mtuSize - 60;
+
+        const buffers = [];
+        const quotient = Math.floor(length / maxSize);
+        const remainder = length % maxSize;
+
+        const buffer = new Buffer(modified);
+        for (let i = 0; i <= quotient; i++) {
+          const size = i === quotient ? remainder : maxSize;
+          buffers.push(buffer.readArray(size));
+        }
+
+        const count = buffers.length;
+        const id = this._splitID % 65536;
+        let i = 0;
+
+        for (const buffer of buffers) {
+          const packet = new EncapsulatedPacket(
+            reliability,
+            buffer,
+            index,
+            sequence,
+            order,
+            { count, id, index: i++ },
+          );
+
+          packets.push(packet);
+        }
       }
 
-      batch.packets = packets;
-      packet.sub = await batch.export();
+      return [packets];
     }
   }
 
@@ -231,7 +286,7 @@ export class Session extends EventEmitter<SessionEvent> {
       this.keyPair = keyPair;
 
       handshake.jwt.header.x5u = keyPair.publicKey;
-      data = await handshake.export();
+      //data = await handshake.export();
 
       this.state = "handshake";
     }
