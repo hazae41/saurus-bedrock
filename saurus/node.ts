@@ -1,5 +1,4 @@
 import { encode, decode } from "./saurus.ts";
-import { JWT } from "./protocol/mod.ts";
 
 export interface DiffieHellman {
   privateKey: string;
@@ -13,7 +12,7 @@ export interface KeyPair {
 }
 
 export class Node {
-  readonly process: Deno.Process;
+  readonly process: Deno.Process<any>;
 
   constructor(readonly port: number) {
     const options: any = { stdin: "piped" };

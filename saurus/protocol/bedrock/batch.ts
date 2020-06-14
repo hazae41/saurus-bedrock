@@ -25,7 +25,6 @@ export const BatchPacket = (key?: Uint8Array) =>
       }
 
       const unzipped = await node.unzip(remaining);
-      console.log("unzipped", unzipped);
       const payload = new Buffer(unzipped);
 
       const packets = [];
@@ -39,14 +38,22 @@ export const BatchPacket = (key?: Uint8Array) =>
     async to(buffer: Buffer) {
       super.to(buffer);
 
-      const payload = Buffer.empty();
+      const payload = Buffer.empty(524288);
 
       for (const packet of this.packets) {
         payload.writeUVIntArray(packet);
       }
 
       const array = payload.export();
+      console.log("zipping", array.length);
       const zipped = await node.zip(array);
+      console.log("zipped");
       buffer.writeArray(zipped);
+    }
+
+    async export(): Promise<Uint8Array> {
+      const buffer = Buffer.empty(32768);
+      await this.to(buffer);
+      return buffer.export();
     }
   };

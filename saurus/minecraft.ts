@@ -11,7 +11,7 @@ export type MinecraftEvent =
   | "stopped";
 
 export class Minecraft extends EventEmitter<MinecraftEvent> {
-  readonly process: Deno.Process;
+  readonly process: Deno.Process<any>;
 
   constructor(readonly cmd: string[]) {
     super();
@@ -50,23 +50,30 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
   }
 
   async read(action?: (line: string) => void) {
-    const reader = read(this.process.stdout!!);
+    const reader = this.process.stdout;
+    if (!reader) return;
+
     if (action) this.on(["log"], action);
-    for await (const line of reader) this.emit("log", line);
+    for await (const line of read(reader)) this.emit("log", line);
     this.emit("stopped");
   }
 
   async error(action?: (line: string) => void) {
-    const reader = read(this.process.stderr!!);
+    const reader = this.process.stderr!!;
+    if (!reader) return;
+
     if (action) this.on(["error"], action);
-    for await (const line of reader) this.emit("error", line);
+    for await (const line of read(reader)) this.emit("error", line);
   }
 
   async write(line: string) {
-    const writer = this.process.stdin!!;
+    const writer = this.process.stdin;
+    if (!writer) return;
+
     const result = await this.emit("command", line);
     if (result === "cancelled") return;
     [line] = result;
+
     await writer.write(encode(line));
   }
 }

@@ -1,63 +1,58 @@
 import { Buffer } from "../buffer.ts";
 import { BedrockPacket } from "../mod.ts";
-
-function decodeJWT(token: string): any {
-  const [head, payload, sig] = token.split(".");
-  const translated = payload.split("-_").join("+/");
-  const decoded = atob(translated);
-  return JSON.parse(decoded);
-}
+import { JWT } from "./jwt.ts";
 
 export class LoginPacket extends BedrockPacket {
   static id = 0x01;
 
-  name?: string;
-  uuid?: string;
-  XUID?: string;
-  publicKey?: string;
-  locale?: string;
-  clientID?: number;
-  clientData: any;
-
   constructor(
     public protocol: number,
+    public tokens: JWT[],
+    public client: JWT,
   ) {
     super();
   }
 
   static from(buffer: Buffer): LoginPacket {
     super.check(buffer);
+
     const protocol = buffer.readInt();
-    const packet = new this(protocol);
 
     const sub = new Buffer(buffer.readUVIntArray());
-
     const data = JSON.parse(sub.readLIntString());
-    let extra = false;
-    for (const chain of data.chain) {
-      const token = decodeJWT(chain);
 
-      if (token.extraData) {
-        if (extra) throw Error("Multiple extra data");
-        extra = true;
-        const { extraData } = token;
-        packet.name = extraData.displayName;
-        packet.uuid = extraData.identity;
-        packet.XUID = extraData.XUID;
-      }
-
-      if (token.identityPublicKey) {
-        packet.publicKey = token.identityPublicKey;
-      }
+    const tokens = [];
+    for (const token of data.chain) {
+      tokens.push(new JWT(token));
     }
 
-    const clientData = decodeJWT(sub.readLIntString());
+    const client = new JWT(sub.readLIntString());
 
-    packet.clientData = clientData;
-    packet.clientID = clientData.ClientRandomId;
-    packet.locale = clientData.LanguageCode;
+    return new this(protocol, tokens, client);
+  }
 
-    return packet;
+  to(buffer: Buffer) {
+    super.to(buffer);
+
+    buffer.writeInt(this.protocol);
+
+    const chain = [];
+    for (const token of this.tokens) {
+      chain.push(token.export());
+    }
+
+    const data = { chain };
+
+    const sub = Buffer.empty(524288);
+    sub.writeLIntString(JSON.stringify(data));
+    sub.writeLIntString(this.client.export());
+    buffer.writeUVIntArray(sub.export());
+  }
+
+  async export(): Promise<Uint8Array> {
+    const buffer = Buffer.empty(524288);
+    await this.to(buffer);
+    return buffer.export();
   }
 }
 

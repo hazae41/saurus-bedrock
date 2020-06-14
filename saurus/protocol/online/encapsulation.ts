@@ -1,21 +1,36 @@
 import { Packet } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import { isReliable, isOrdered, isSequenced } from "./reliability.ts";
+import {
+  isReliable,
+  isOrdered,
+  isSequenced,
+  Unreliable,
+} from "./reliability.ts";
+
+export interface EncapsulatedPacketParams {
+  reliability?: number;
+  sub?: Uint8Array;
+  index?: number;
+  sequence?: number;
+  order?: { index: number; channel: number };
+  split?: { count: number; id: number; index: number };
+}
 
 export class EncapsulatedPacket extends Packet {
   static reliability_shift = 5;
   static reliability_flags = 0b111 << EncapsulatedPacket.reliability_shift;
   static split_flag = 0b00010000;
 
-  constructor(
-    public reliability: number,
-    public sub: Uint8Array,
-    public index?: number,
-    public sequence?: number,
-    public order?: { index: number; channel: number },
-    public split?: { count: number; id: number; index: number },
-  ) {
+  reliability = Unreliable;
+  sub = new Uint8Array([]);
+  index?: number;
+  sequence?: number;
+  order?: { index: number; channel: number };
+  split?: { count: number; id: number; index: number };
+
+  constructor(params: EncapsulatedPacketParams) {
     super();
+    Object.assign(this, params);
   }
 
   static from(buffer: Buffer) {
@@ -53,7 +68,7 @@ export class EncapsulatedPacket extends Packet {
 
     const sub = buffer.readArray(length);
 
-    return new this(reliability, sub, index, sequence, order, split);
+    return new this({ reliability, sub, index, sequence, order, split });
   }
 
   to(buffer: Buffer) {

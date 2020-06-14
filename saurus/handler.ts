@@ -1,5 +1,5 @@
 import { Session } from "./session.ts";
-import { EventEmitter } from "./mod.ts";
+import { EventEmitter, Offline } from "./mod.ts";
 
 export type Listener = Deno.DatagramConn;
 export type Origin = "client" | "server";
@@ -29,11 +29,7 @@ function tryListen(port: number): Listener {
   }
 }
 
-function send(proxy: Listener, data: Uint8Array, address: Address) {
-  return proxy.send(data, { ...address, transport: "udp" });
-}
-
-export class Handler extends EventEmitter<"error" | "data" | "packet"> {
+export class Handler extends EventEmitter<"error" | "session"> {
   public timeout = 5000;
 
   readonly listener: Listener;
@@ -59,18 +55,11 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     if (got) return got;
 
     const proxy = tryListen(50139);
-    const session = new Session(address, this.target, proxy);
-
-    session.on(["data"], (data, from) => {
-      return this.emit("data", data, session, from);
-    });
-
-    session.on(["packet"], (packet, from) => {
-      return this.emit("packet", packet, session, from);
-    });
-
+    const session = new Session(address, this.target, proxy, this);
     this.sessions.set(name, session);
     this.redirect(session);
+
+    this.emit("session", session);
 
     return session;
   }
@@ -87,14 +76,7 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
           const session = this.sessionOf(client);
           session.time = Date.now();
 
-          const result = await session.emit("data", [data], "client");
-          if (result === "cancelled") continue;
-          const [buffers] = result as [Uint8Array[]];
-          console.log(origin("client"), buffers.length);
-
-          for (const buffer of buffers) {
-            await send(session.listener, buffer, session.target);
-          }
+          await session.handle(data, "client");
         } catch (e) {
           this.emit("error", e);
         }
@@ -108,14 +90,8 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
     try {
       for await (const [data, from] of session.listener) {
         try {
-          const result = await session.emit("data", [data], "server");
-          if (result === "cancelled") continue;
-          const [buffers] = result as [Uint8Array[]];
-          console.log(origin("server"), buffers.length);
-
-          for (const buffer of buffers) {
-            await send(this.listener, buffer, session.address);
-          }
+          // TODO: verify from
+          await session.handle(data, "server");
         } catch (e) {
           this.emit("error", e);
         }
@@ -133,7 +109,7 @@ export class Handler extends EventEmitter<"error" | "data" | "packet"> {
   public async free() {
     for (const [name, session] of this.sessions.entries()) {
       if (Date.now() - session.time < this.timeout) continue;
-      session.state = "offline";
+      session.state = Offline;
       session.listener.close();
       this.sessions.delete(name);
     }

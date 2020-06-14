@@ -3,6 +3,7 @@ import {
   AsyncEventResult,
   Protocol,
 } from "../start.ts";
+import { Session, DataType } from "../saurus/mod.ts";
 
 const {
   Buffer,
@@ -12,18 +13,21 @@ const {
 export class MOTD {
   constructor(readonly saurus: Saurus, readonly motd: string) {
     for (const handler of saurus.handlers) {
-      handler.on(["data"], this.ondata.bind(this));
+      handler.on(["session"], (session: Session) => {
+        session.on(["output"], this.onoutput.bind(this));
+      });
     }
   }
 
-  private async ondata([data]: [Uint8Array]): AsyncEventResult {
-    if (!data) return;
-    const buffer = new Buffer(data);
+  private async onoutput(data: DataType): AsyncEventResult {
+    if (data instanceof Uint8Array) {
+      const buffer = new Buffer(data);
 
-    if (buffer.header === OfflinePong.id) {
-      const pong = OfflinePong.from(buffer);
-      pong.infos.name = this.motd;
-      return [[await pong.export()]];
+      if (buffer.header === OfflinePong.id) {
+        const pong = OfflinePong.from(buffer);
+        pong.infos.name = this.motd;
+        return [await pong.export()];
+      }
     }
   }
 }
