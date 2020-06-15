@@ -21,7 +21,6 @@ import {
 import {
   EventEmitter,
   inRange,
-  node,
   DiffieHellman,
   encode,
   decode,
@@ -267,7 +266,7 @@ export class Session extends EventEmitter<SessionEvent> {
         const batch = await BatchPacket().from(buffer);
 
         const packets = [];
-        for (const bedrock of batch.packets) {
+        for (let bedrock of batch.packets) {
           const id = new Buffer(bedrock).readUVInt();
 
           if (id === ServerToClientHandshakePacket.id) {
@@ -278,16 +277,17 @@ export class Session extends EventEmitter<SessionEvent> {
             const buffer = new Buffer(bedrock);
             const login = LoginPacket.from(buffer);
             console.log("Logged in", login);
-            packets.push(await login.export());
-            continue;
+            console.log(bedrock.length, bedrock.slice(0, 20));
+            bedrock = await login.export();
+            console.log(bedrock.length, bedrock.slice(0, 20));
           }
 
           packets.push(bedrock);
         }
 
         batch.packets = packets;
-        //packet.sub = await batch.export();
-        //console.log("export", packet.sub.length);
+        packet.sub = await batch.export();
+        console.log("export", packet.sub.length);
       }
     }
 

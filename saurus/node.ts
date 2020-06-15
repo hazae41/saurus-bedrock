@@ -1,4 +1,7 @@
 import { encode, decode } from "./saurus.ts";
+import {
+  readLines,
+} from "https://deno.land/std/io/bufio.ts";
 
 export interface DiffieHellman {
   privateKey: string;
@@ -11,56 +14,53 @@ export interface KeyPair {
   publicKey: string;
 }
 
-export class Node {
-  readonly process: Deno.Process<any>;
+export async function call(method: string, data = new Uint8Array()) {
+  const { stringify, parse } = JSON;
+  const cmd = `node node/${method}.js`.split(" ");
+  const process = Deno.run({ cmd, stdin: "piped", stdout: "piped" });
+  const reader = process.stdout!!;
+  const writer = process.stdin!!;
+  const request = stringify(Array.from(data));
+  await writer.write(encode(request + "\n"));
 
-  constructor(readonly port: number) {
-    const options: any = { stdin: "piped" };
-    const cmd = `node node/node.js ${port}`.split(" ");
-    this.process = Deno.run({ cmd, ...options });
+  for await (const line of readLines(reader)) {
+    process.kill(9);
+    return new Uint8Array(parse(line));
   }
 
-  async kill() {
-    this.process.kill(9);
-  }
-
-  async call(method: number, data?: Uint8Array) {
-    const { port } = this;
-    const conn = await Deno.connect({ port });
-    const concat = [method, ...Array.from(data ?? [])];
-    await conn.write(new Uint8Array(concat));
-    return await Deno.readAll(conn);
-  }
-
-  async zip(data: Uint8Array) {
-    return await this.call(0, data);
-  }
-
-  async unzip(data: Uint8Array) {
-    return await this.call(1, data);
-  }
-
-  async gen(): Promise<KeyPair> {
-    const result = await this.call(2);
-    return JSON.parse(decode(result));
-  }
-
-  async key(dh: DiffieHellman) {
-    const request = encode(JSON.stringify(dh));
-    return await this.call(3, request);
-  }
-
-  async decrypt(data: Uint8Array, key: Uint8Array) {
-    const array = [data, key].map((it) => Array.from(it));
-    const request = encode(JSON.stringify(array));
-    return await this.call(4, request);
-  }
-
-  async test(text: string) {
-    const zipped = await node.zip(encode(text));
-    const unzipped = decode(await node.unzip(zipped));
-    return unzipped;
-  }
+  process.kill(9);
+  throw new Error("No result");
 }
 
-export const node = new Node(8005);
+export async function zip(data: Uint8Array) {
+  return await call("deflate", data);
+}
+
+export async function unzip(data: Uint8Array) {
+  return await call("inflate", data);
+}
+
+export async function test(text: string) {
+  const zipped = await zip(encode(text));
+  const unzipped = decode(await unzip(zipped));
+  return unzipped;
+}
+
+// export class Node {
+//   // async gen(): Promise<KeyPair> {
+//   //   const result = await this.call(2);
+//   //   return JSON.parse(decode(result));
+//   // }
+
+//   // async key(dh: DiffieHellman) {
+//   //   const request = encode(JSON.stringify(dh));
+//   //   return await this.call(3, request);
+//   // }
+
+//   // async decrypt(data: Uint8Array, key: Uint8Array) {
+//   //   const array = [data, key].map((it) => Array.from(it));
+//   //   const request = encode(JSON.stringify(array));
+//   //   return await this.call(4, request);
+//   // }
+
+// }

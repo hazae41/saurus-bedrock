@@ -1,4 +1,5 @@
 import { VersionedAddress, Packet } from "./packets.ts";
+import { decode, encode } from "../mod.ts";
 
 export const magic = [
   0x00,
@@ -186,11 +187,14 @@ export class Buffer {
   }
 
   readUVIntArray(): Uint8Array {
-    return this.readArray(this.readUVInt());
+    const size = this.readUVInt();
+    console.log("size", size);
+    return this.readArray(size);
   }
 
   writeUVIntArray(array: Uint8Array) {
     this.writeUVInt(array.length);
+    console.log("size", array.length);
     this.writeArray(array);
   }
 
@@ -210,13 +214,11 @@ export class Buffer {
 
   readString(size: number): string {
     const array = this.readArray(size);
-    const decoder = new TextDecoder("utf-8");
-    return decoder.decode(array);
+    return decode(array);
   }
 
-  _writeString(s: string) {
-    const encoder = new TextEncoder();
-    const array = encoder.encode(s);
+  writeString(s: string) {
+    const array = encode(s);
     this.writeArray(array);
   }
 
@@ -226,7 +228,7 @@ export class Buffer {
 
   writeShortString(s: string) {
     this.writeShort(s.length);
-    this._writeString(s);
+    this.writeString(s);
   }
 
   readUVIntString(): string {
@@ -236,7 +238,7 @@ export class Buffer {
 
   writeUVIntString(s: string) {
     this.writeUVInt(s.length);
-    this._writeString(s);
+    this.writeString(s);
   }
 
   readLIntString(): string {
@@ -246,7 +248,7 @@ export class Buffer {
 
   writeLIntString(s: string) {
     this.writeLInt(s.length);
-    this._writeString(s);
+    this.writeString(s);
   }
 
   readAddress(): VersionedAddress {
@@ -298,9 +300,9 @@ export class Buffer {
 
   readUVInt(): number {
     let x = 0;
-    for (let i = 0; i <= 64; i += 7) {
+    for (let i = 0; i < 64; i += 7) {
       const b = this.readByte();
-      x |= ((b & 0x7f) << i);
+      x |= (b & 0x7f) << i;
       if ((b & 0x80) === 0) return x;
     }
 
@@ -308,8 +310,6 @@ export class Buffer {
   }
 
   writeUVInt(x: number) {
-    x &= 0xffffffff;
-
     while (true) {
       if ((x & ~0x7f) === 0) {
         this.writeByte(x);

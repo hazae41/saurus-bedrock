@@ -1,19 +1,9 @@
-import { BufReader } from "https://deno.land/std/io/bufio.ts";
+import { BufReader, readLines } from "https://deno.land/std/io/bufio.ts";
 import { Handler } from "./handler.ts";
 import { EventEmitter, Logger } from "./mod.ts";
 
 export const encode = (text: string) => new TextEncoder().encode(text);
 export const decode = (buffer: Uint8Array) => new TextDecoder().decode(buffer);
-
-export async function* read(reader: Deno.Reader) {
-  const buffered = new BufReader(reader);
-
-  while (true) {
-    const line = await buffered.readString("\n");
-    if (line !== null) yield line;
-    else break;
-  }
-}
 
 export function inRange(n: number, [start, end]: number[]) {
   return n >= start && n <= end;
@@ -42,7 +32,7 @@ export class Saurus extends EventEmitter<"command"> {
   }
 
   async read() {
-    for await (const line of read(Deno.stdin)) {
+    for await (const line of readLines(Deno.stdin)) {
       try {
         Logger.file.write(encode("> " + line));
         await this.emit("command", line);

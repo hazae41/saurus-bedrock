@@ -1,6 +1,6 @@
 import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import { node } from "../../node.ts";
+import { unzip, zip } from "../../mod.ts";
 
 export const BatchPacket = (key?: Uint8Array) =>
   class extends ProtocolPacket {
@@ -19,12 +19,12 @@ export const BatchPacket = (key?: Uint8Array) =>
 
       let remaining = buffer.readArray(buffer.remaining);
 
-      if (key) {
-        remaining = await node.decrypt(remaining, key);
-        remaining = remaining.slice(0, remaining.length - 8);
-      }
+      // if (key) {
+      //   remaining = await node.decrypt(remaining, key);
+      //   remaining = remaining.slice(0, remaining.length - 8);
+      // }
 
-      const unzipped = await node.unzip(remaining);
+      const unzipped = await unzip(remaining);
       const payload = new Buffer(unzipped);
 
       const packets = [];
@@ -46,7 +46,7 @@ export const BatchPacket = (key?: Uint8Array) =>
 
       const array = payload.export();
       console.log("zipping", array.length);
-      const zipped = await node.zip(array);
+      const zipped = await zip(array);
       console.log("zipped");
       buffer.writeArray(zipped);
     }

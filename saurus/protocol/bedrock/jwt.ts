@@ -6,6 +6,7 @@ export class JWT {
   constructor(jwt: string) {
     const { parse } = JSON;
     const [header, payload, signature] = jwt.split(".");
+    console.log(header);
     this.header = parse(atob(header));
     this.payload = parse(atob(payload));
     this.signature = signature;
@@ -13,9 +14,10 @@ export class JWT {
 
   export() {
     const { stringify } = JSON;
-    const header = stringify(btoa(this.header));
-    const payload = stringify(btoa(this.payload));
+    const header = btoa(stringify(this.header)).replace("==", "o");
+    const payload = btoa(stringify(this.payload)).replace("==", "o");
     const signature = this.signature;
+    console.log(header);
     return [header, payload, signature].join(".");
   }
 }

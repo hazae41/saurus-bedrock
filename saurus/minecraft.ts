@@ -1,5 +1,6 @@
-import { read, encode } from "./saurus.ts";
+import { encode } from "./saurus.ts";
 import { EventEmitter } from "./mod.ts";
+import { readLines } from "https://deno.land/std/io/bufio.ts";
 
 export type MinecraftEvent =
   | "log"
@@ -54,7 +55,7 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
     if (!reader) return;
 
     if (action) this.on(["log"], action);
-    for await (const line of read(reader)) this.emit("log", line);
+    for await (const line of readLines(reader)) this.emit("log", line);
     this.emit("stopped");
   }
 
@@ -63,12 +64,12 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
     if (!reader) return;
 
     if (action) this.on(["error"], action);
-    for await (const line of read(reader)) this.emit("error", line);
+    for await (const line of readLines(reader)) this.emit("error", line);
   }
 
-  async write(line: string) {
-    const writer = this.process.stdin;
-    if (!writer) return;
+  async write(line: string, newline = true) {
+    if (newline) line += "\n";
+    const writer = this.process.stdin!!;
 
     const result = await this.emit("command", line);
     if (result === "cancelled") return;
