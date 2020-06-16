@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "compile": "tsc node.ts deflate.ts inflate.ts"
+    "compile": "tsc"
   },
   "dependencies": {
     "@types/node": "^14.0.9",

@@ -1,5 +1,5 @@
 import { encode } from "./saurus.ts";
-import { EventEmitter } from "./mod.ts";
+import { EventEmitter, Logger } from "./mod.ts";
 import { readLines } from "https://deno.land/std/io/bufio.ts";
 
 export type MinecraftEvent =
@@ -14,11 +14,16 @@ export type MinecraftEvent =
 export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly process: Deno.Process<any>;
 
-  constructor(readonly cmd: string[]) {
+  constructor(command: string) {
     super();
 
-    const options: any = { stdin: "piped", stdout: "piped", stderr: "piped" };
-    this.process = Deno.run({ cmd, ...options });
+    this.process = Deno.run({
+      cmd: command.split(" "),
+      stdin: "piped",
+      stdout: "piped",
+      stderr: "piped",
+    });
+
     this.on(["log"], this.onlog.bind(this));
     this.on(["command"], this.oncommand.bind(this));
   }

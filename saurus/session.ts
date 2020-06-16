@@ -277,9 +277,9 @@ export class Session extends EventEmitter<SessionEvent> {
             const buffer = new Buffer(bedrock);
             const login = LoginPacket.from(buffer);
             console.log("Logged in", login);
-            console.log(bedrock.length, bedrock.slice(0, 20));
+            console.log(bedrock.length);
             bedrock = await login.export();
-            console.log(bedrock.length, bedrock.slice(0, 20));
+            console.log(bedrock.length);
           }
 
           packets.push(bedrock);

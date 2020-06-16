@@ -22,11 +22,11 @@ export class LoginPacket extends BedrockPacket {
     const data = JSON.parse(sub.readLIntString());
 
     const tokens = [];
-    for (const token of data.chain) {
-      tokens.push(new JWT(token));
+    for (const [i, token] of data.chain.entries()) {
+      tokens.push(new JWT(token, true, i === 0, i === 0));
     }
 
-    const client = new JWT(sub.readLIntString());
+    const client = new JWT(sub.readLIntString(), true, true);
 
     return new this(protocol, tokens, client);
   }
