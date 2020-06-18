@@ -1,33 +1,29 @@
+import { Address, Listener, Origin, origin } from "./handler.ts";
 import {
+  diffieHellman,
+  EventEmitter,
+  genKeyPair,
+  genSalt,
+  Handler,
+  KeyPair,
+} from "./mod.ts";
+import { JWT, fromB64url } from "./protocol/bedrock/jwt.ts";
+import {
+  ACK,
+  BatchPacket,
+  BedrockPacket,
   Buffer,
   Datagram,
-  ACK,
-  NACK,
+  datagramOf,
   EncapsulatedPacket,
+  LoginPacket,
+  NACK,
   OfflinePong,
   Open2Reply,
-  BatchPacket,
-  DisconnectNotification,
-  ConnectionRequestAccepted,
-  ServerToClientHandshakePacket,
-  LoginPacket,
   Open2Request,
-  AcknowledgePacket,
-  isReliable,
-  BedrockPacket,
-  datagramOf,
+  ServerToClientHandshakePacket,
 } from "./protocol/mod.ts";
-
-import {
-  EventEmitter,
-  inRange,
-  DiffieHellman,
-  encode,
-  decode,
-  KeyPair,
-  Handler,
-} from "./mod.ts";
-import { Address, Listener, Origin, origin } from "./handler.ts";
+import { encode } from "./saurus.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -81,6 +77,12 @@ export class Session extends EventEmitter<SessionEvent> {
 
   _serverSeqNumber = 0;
   _clientSeqNumber = 0;
+
+  _keyPair?: KeyPair;
+  _clientSecret = "";
+  _serverSecret = "";
+  _clientSalt = "";
+  _serverSalt = "";
 
   constructor(
     public client: Address,
@@ -259,36 +261,69 @@ export class Session extends EventEmitter<SessionEvent> {
       delete splits[slot];
     }
 
-    if (this.state < Encrypted) {
-      const buffer = new Buffer(packet.sub);
+    const buffer = new Buffer(packet.sub);
+    const secret = from === "client" ? this._clientSecret : this._serverSecret;
 
-      if (buffer.header === BatchPacket().id) {
-        const batch = await BatchPacket().from(buffer);
+    if (buffer.header === BatchPacket(secret).id) {
+      const batch = await BatchPacket(secret).from(buffer);
 
-        const packets = [];
-        for (let bedrock of batch.packets) {
-          const id = new Buffer(bedrock).readUVInt();
+      const packets = [];
+      for (let bedrock of batch.packets) {
+        const id = new Buffer(bedrock).readUVInt();
 
-          if (id === ServerToClientHandshakePacket.id) {
-            this.state = Encrypted;
-          }
+        console.log("id", id);
 
-          if (id === LoginPacket.id) {
-            const buffer = new Buffer(bedrock);
-            const login = LoginPacket.from(buffer);
-            console.log("Logged in", login);
-            console.log(bedrock.length);
-            bedrock = await login.export();
-            console.log(bedrock.length);
-          }
+        if (id === ServerToClientHandshakePacket.id) {
+          this.state = Encrypted;
 
-          packets.push(bedrock);
+          const buffer = new Buffer(bedrock);
+          const handshake = ServerToClientHandshakePacket.from(buffer);
+
+          const keyPair = this._keyPair!!;
+          const privateKey = keyPair.privateKey;
+          const publicKey = handshake.token.header.x5u;
+          const salt = handshake.token.payload.salt;
+
+          const secret = await diffieHellman({ privateKey, publicKey, salt });
+
+          this._serverSalt = salt;
+          this._serverSecret = secret;
+
+          await handshake.token.sign(keyPair);
         }
 
-        batch.packets = packets;
-        packet.sub = await batch.export();
-        console.log("export", packet.sub.length);
+        if (id === LoginPacket.id) {
+          const buffer = new Buffer(bedrock);
+          const login = LoginPacket.from(buffer);
+
+          console.log("Logged in");
+
+          const keyPair = await genKeyPair();
+
+          const last = login.tokens[login.tokens.length - 1];
+          last.payload.identityPublicKey = keyPair.publicKey;
+
+          const privateKey = keyPair.privateKey;
+          const publicKey = last.payload.identityPublicKey;
+          const salt = await genSalt();
+
+          const secret = await diffieHellman({ privateKey, publicKey, salt });
+
+          this._keyPair = keyPair;
+          this._clientSecret = secret;
+          this._clientSalt = salt;
+
+          await last.sign(keyPair);
+          await login.client.sign(keyPair);
+
+          bedrock = await login.export();
+        }
+
+        packets.push(bedrock);
       }
+
+      batch.packets = packets;
+      packet.sub = await batch.export();
     }
 
     await this.sendPacket(packet, opposite(from));
@@ -348,43 +383,4 @@ export class Session extends EventEmitter<SessionEvent> {
       await this.sendDatagram(datagram, to);
     }
   }
-
-  // keyPair?: KeyPair;
-  // serverKey?: Uint8Array;
-  // clientKey?: Uint8Array;
-
-  // private async onbedrock(data: Uint8Array, from: Origin) {
-  //   const buffer = new Buffer(data);
-  //   console.log(origin(from), "mcpe", buffer.header);
-
-  //   if (buffer.header === ServerToClientHandshakePacket.id) {
-  //     console.log("handshake");
-
-  //     const handshake = ServerToClientHandshakePacket.from(buffer);
-
-  //     const { jwt } = handshake;
-  //     const keyPair = await node.gen();
-
-  //     const dh: DiffieHellman = {
-  //       publicKey: jwt.header.x5u,
-  //       privateKey: keyPair.privateKey,
-  //       salt: jwt.payload.salt,
-  //     };
-
-  //     this.serverKey = await node.key(dh);
-  //     this.keyPair = keyPair;
-
-  //     handshake.jwt.header.x5u = keyPair.publicKey;
-  //     //data = await handshake.export();
-
-  //     this.state = "handshake";
-  //   }
-
-  //   if (buffer.header === LoginPacket.id) {
-  //     const login = LoginPacket.from(buffer);
-  //     console.log(`${login.name} logged in!!!`);
-  //   }
-
-  //   return [data];
-  // }
 }

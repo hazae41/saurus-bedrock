@@ -18,6 +18,12 @@ std.on("line", (input) => {
   const keyPair = generateKeyPairSync("ec", { namedCurve: "secp384r1" });
   const privateKey = keyPair.privateKey.export(privateKeyFormat);
   const publicKey = keyPair.publicKey.export(publicKeyFormat);
-  console.log(stringify({ publicKey, privateKey }));
+
+  const response = {
+    publicKey: (publicKey as Buffer).toString("base64"),
+    privateKey: (privateKey as Buffer).toString("base64"),
+  };
+
+  console.log(stringify(response));
   process.exit(0);
 });

@@ -14,32 +14,72 @@ export interface KeyPair {
   publicKey: string;
 }
 
-export async function call(method: string, data = new Uint8Array()) {
+export async function call(method: string, request = {}) {
   const { stringify, parse } = JSON;
+
   const cmd = `node node/build/${method}.js`.split(" ");
   const process = Deno.run({ cmd, stdin: "piped", stdout: "piped" });
+
   const reader = process.stdout!!;
   const writer = process.stdin!!;
-  const request = stringify(Array.from(data));
-  await writer.write(encode(request + "\n"));
+
+  await writer.write(encode(stringify(request) + "\n"));
 
   for await (const line of readLines(reader)) {
-    return new Uint8Array(parse(line));
+    return parse(line);
   }
 
   throw new Error("No result");
 }
 
 export async function deflate(data: Uint8Array) {
-  return await call("deflate", data);
+  const request = Array.from(data);
+  const response = await call("deflate", request);
+  return new Uint8Array(response);
 }
 
 export async function inflate(data: Uint8Array) {
-  return await call("inflate", data);
+  const request = Array.from(data);
+  const response = await call("inflate", request);
+  return new Uint8Array(response);
 }
 
 export async function genKeyPair() {
-  return await call("generate");
+  return await call("generate") as KeyPair;
+}
+
+export async function diffieHellman(dh: DiffieHellman) {
+  return await call("diffiehellman", dh);
+}
+
+export async function genSalt() {
+  return await call("salt") as string;
+}
+
+export async function sign(keyPair: KeyPair, data: Uint8Array) {
+  return await call("sign", {
+    privateKey: keyPair.privateKey,
+    publicKey: keyPair.publicKey,
+    data: Array.from(data),
+  });
+}
+
+export async function decrypt(data: Uint8Array, secret: string) {
+  const response = await call("decrypt", {
+    data: Array.from(data),
+    secret,
+  });
+
+  return new Uint8Array(response);
+}
+
+export async function encrypt(data: Uint8Array, secret: string) {
+  const response = await call("encrypt", {
+    data: Array.from(data),
+    secret,
+  });
+
+  return new Uint8Array(response);
 }
 
 export async function test(text: string) {

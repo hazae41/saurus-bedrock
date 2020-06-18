@@ -2,50 +2,29 @@ import {
   encode as btoa,
   decode as atob,
 } from "https://deno.land/std/encoding/base64url.ts";
-import { decode } from "../../mod.ts";
+import { decode, KeyPair, sign, encode } from "../../mod.ts";
+
+export const toB64url = (raw: Uint8Array | string) => btoa(raw);
+export const fromB64url = (text: string) => decode(new Uint8Array(atob(text)));
 
 export class JWT {
   public header: any;
-  public rawPayload: string;
   public payload: any;
   public signature: string;
 
-  constructor(
-    jwt: string,
-    public keepPayload = false,
-    public headerEndsWithO = false,
-    public payloadEndsWithCg = false,
-  ) {
+  constructor(public token: string) {
     const { parse } = JSON;
-    const [header, payload, signature] = jwt.split(".");
 
-    const theader = decode(new Uint8Array(atob(header)));
-    this.header = parse(theader.replace(/\\\//g, "$/"));
+    const [header, payload, signature] = token.split(".");
 
-    this.rawPayload = payload;
-    if (!this.keepPayload) console.log(payload);
-
-    const tpayload = decode(new Uint8Array(atob(payload)));
-    this.payload = parse(tpayload.replace(/\\\//g, "$/"));
-
+    this.header = parse(fromB64url(header));
+    this.payload = parse(fromB64url(payload));
     this.signature = signature;
   }
 
-  export() {
+  async sign(keyPair: KeyPair) {
     const { stringify } = JSON;
-
-    let header = btoa(stringify(this.header).replace(/\$\//g, "\\/"));
-    if (this.headerEndsWithO) header += "o";
-
-    let payload = this.rawPayload;
-
-    if (!this.keepPayload) {
-      payload = btoa(stringify(this.payload).replace(/\$\//g, "\\/"));
-      if (this.payloadEndsWithCg) payload += "Cg";
-      console.log(payload);
-    }
-
-    const signature = this.signature;
-    return [header, payload, signature].join(".");
+    const data = encode(stringify(this.payload));
+    this.token = await sign(keyPair, data);
   }
 }

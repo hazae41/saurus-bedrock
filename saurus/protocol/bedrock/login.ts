@@ -21,12 +21,12 @@ export class LoginPacket extends BedrockPacket {
     const sub = new Buffer(buffer.readUVIntArray());
     const data = JSON.parse(sub.readLIntString());
 
-    const tokens = [];
-    for (const [i, token] of data.chain.entries()) {
-      tokens.push(new JWT(token, true, i === 0, i === 0));
+    const tokens: JWT[] = [];
+    for (const token of data.chain) {
+      tokens.push(new JWT(token));
     }
 
-    const client = new JWT(sub.readLIntString(), true, true);
+    const client = new JWT(sub.readLIntString());
 
     return new this(protocol, tokens, client);
   }
@@ -36,16 +36,16 @@ export class LoginPacket extends BedrockPacket {
 
     buffer.writeInt(this.protocol);
 
-    const chain = [];
+    const chain: string[] = [];
     for (const token of this.tokens) {
-      chain.push(token.export());
+      chain.push(token.token);
     }
 
     const data = { chain };
 
     const sub = Buffer.empty(524288);
     sub.writeLIntString(JSON.stringify(data));
-    sub.writeLIntString(this.client.export());
+    sub.writeLIntString(this.client.token);
     buffer.writeUVIntArray(sub.export());
   }
 

@@ -6,20 +6,19 @@ export class ServerToClientHandshakePacket extends BedrockPacket {
   static id = 0x03;
 
   constructor(
-    public jwt: JWT,
+    public token: JWT,
   ) {
     super();
   }
 
   static from(buffer: Buffer) {
     super.check(buffer);
-    const compact = buffer.readUVIntString();
-    const jwt = new JWT(compact);
-    return new this(jwt);
+    const token = buffer.readUVIntString();
+    return new this(new JWT(token));
   }
 
   to(buffer: Buffer) {
     super.to(buffer);
-    buffer.writeUVIntString(this.jwt.export());
+    buffer.writeUVIntString(this.token.token);
   }
 }

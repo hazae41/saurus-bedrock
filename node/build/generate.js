@@ -16,6 +16,10 @@ std.on("line", function (input) {
     var keyPair = crypto_1.generateKeyPairSync("ec", { namedCurve: "secp384r1" });
     var privateKey = keyPair.privateKey["export"](privateKeyFormat);
     var publicKey = keyPair.publicKey["export"](publicKeyFormat);
-    console.log(stringify({ publicKey: publicKey, privateKey: privateKey }));
+    var response = {
+        publicKey: publicKey.toString("base64"),
+        privateKey: privateKey.toString("base64")
+    };
+    console.log(stringify(response));
     process.exit(0);
 });

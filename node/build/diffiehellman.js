@@ -36,6 +36,7 @@ std.on("line", function (input) {
         .update(b64(request.salt))
         .update(secret)
         .digest();
-    console.log(stringify(key));
+    var response = key.toString("base64");
+    console.log(stringify(response));
     process.exit(0);
 });

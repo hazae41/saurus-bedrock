@@ -8,10 +8,10 @@ std.on("line", (input) => {
   const request = parse(input);
 
   const data = Buffer.from(request.data);
-  const key = Buffer.from(request.key);
-  const iv = Buffer.from(request.iv);
+  const secret = Buffer.from(request.secret, "base64");
+  const iv = secret.slice(0, 16);
 
-  const cipher = createCipheriv("aes-256-gcm", key, iv);
+  const cipher = createCipheriv("aes-256-gcm", secret, iv);
   const result = Buffer.concat([cipher.update(data), cipher.final()]);
 
   console.log(stringify(Array.from(result)));

@@ -45,6 +45,7 @@ std.on("line", (input) => {
     .update(secret)
     .digest();
 
-  console.log(stringify(key));
+  const response = key.toString("base64");
+  console.log(stringify(response));
   process.exit(0);
 });
