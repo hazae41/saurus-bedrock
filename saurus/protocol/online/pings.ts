@@ -11,7 +11,6 @@ export class OnlinePing extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const sendPingTime = buffer.readLong();
     return new this(sendPingTime);
   }
@@ -33,7 +32,6 @@ export class OnlinePong extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const sendPingTime = buffer.readLong();
     const sendPongTime = buffer.readLong();
     return new this(sendPingTime, sendPongTime);

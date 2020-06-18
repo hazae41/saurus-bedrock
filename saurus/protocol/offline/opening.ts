@@ -12,8 +12,6 @@ export class Open1Request extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     buffer.checkMagic();
     const protocol = buffer.readByte();
     const mtuSize = buffer.length - buffer.offset;
@@ -45,8 +43,6 @@ export class Open1Reply extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     buffer.checkMagic();
     const serverID = buffer.readLong();
     const mtuSize = buffer.readShort();
@@ -56,8 +52,6 @@ export class Open1Reply extends ProtocolPacket {
   }
 
   to(buffer: Buffer) {
-    super.to(buffer);
-
     buffer.writeMagic();
     buffer.writeLong(this.serverID);
     buffer.writeBool(this.security);
@@ -77,8 +71,6 @@ export class Open2Request extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     buffer.checkMagic();
     const serverAddress = buffer.readAddress();
     const mtuSize = buffer.readShort();
@@ -110,8 +102,6 @@ export class Open2Reply extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     buffer.checkMagic();
     const serverID = buffer.readLong();
     const clientAddress = buffer.readAddress();

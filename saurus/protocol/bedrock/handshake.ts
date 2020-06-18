@@ -2,7 +2,7 @@ import { Buffer } from "../buffer.ts";
 import { BedrockPacket } from "../mod.ts";
 import { JWT } from "./jwt.ts";
 
-export class ServerToClientHandshakePacket extends BedrockPacket {
+export class ServerHandshakePacket extends BedrockPacket {
   static id = 0x03;
 
   constructor(
@@ -12,7 +12,6 @@ export class ServerToClientHandshakePacket extends BedrockPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const token = buffer.readUVIntString();
     return new this(new JWT(token));
   }

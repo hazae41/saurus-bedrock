@@ -25,14 +25,13 @@ export function isMagic(array: Uint8Array) {
 }
 
 export class Buffer {
-  offset = 0;
-
   constructor(
     public array: Uint8Array,
+    public offset = 0,
   ) {}
 
   static empty(length?: number) {
-    const buffer = new ArrayBuffer(length ?? 2048);
+    const buffer = new ArrayBuffer(length ?? 0);
     return new this(new Uint8Array(buffer));
   }
 
@@ -45,7 +44,7 @@ export class Buffer {
   }
 
   get length() {
-    return this.array.byteLength;
+    return this.array.length;
   }
 
   get remaining() {
@@ -57,6 +56,7 @@ export class Buffer {
   }
 
   expand(length: number) {
+    if (length <= 0) return;
     const total = this.length + length;
     const next = new Uint8Array(total);
     next.set(this.array, 0);
@@ -72,15 +72,19 @@ export class Buffer {
   }
 
   off(x: number) {
-    return (this.offset += x) - x;
+    const offset = (this.offset += x) - x;
+    this.expand(this.offset - this.length);
+    return offset;
   }
 
   readByte(): number {
-    return this.view.getUint8(this.off(1));
+    const offset = this.off(1);
+    return this.view.getUint8(offset);
   }
 
   writeByte(x: number) {
-    this.view.setUint8(this.off(1), x);
+    const offset = this.off(1);
+    this.view.setUint8(offset, x);
   }
 
   writeBool(x: boolean) {
@@ -92,51 +96,63 @@ export class Buffer {
   }
 
   readShort(): number {
-    return this.view.getUint16(this.off(2));
+    const offset = this.off(2);
+    return this.view.getUint16(offset);
   }
 
   writeShort(x: number) {
-    this.view.setUint16(this.off(2), x);
+    const offset = this.off(2);
+    this.view.setUint16(offset, x);
   }
 
   readLShort(): number {
-    return this.view.getUint16(this.off(2), true);
+    const offset = this.off(2);
+    return this.view.getUint16(offset, true);
   }
 
   writeLShort(x: number) {
-    this.view.setUint16(this.off(2), x, true);
+    const offset = this.off(2);
+    this.view.setUint16(offset, x, true);
   }
 
   readInt(): number {
-    return this.view.getInt32(this.off(4));
+    const offset = this.off(4);
+    return this.view.getInt32(offset);
   }
 
   writeInt(x: number) {
-    this.view.setInt32(this.off(4), x);
+    const offset = this.off(4);
+    this.view.setInt32(offset, x);
   }
 
   readUInt(): number {
-    return this.view.getUint32(this.off(4));
+    const offset = this.off(4);
+    return this.view.getUint32(offset);
   }
 
   writeUInt(x: number) {
-    this.view.setUint32(this.off(4), x);
+    const offset = this.off(4);
+    this.view.setUint32(offset, x);
   }
 
   readLInt(): number {
-    return this.view.getInt32(this.off(4), true);
+    const offset = this.off(4);
+    return this.view.getInt32(offset, true);
   }
 
   writeLInt(x: number) {
-    this.view.setInt32(this.off(4), x, true);
+    const offset = this.off(4);
+    this.view.setInt32(offset, x, true);
   }
 
   readLUInt(): number {
-    return this.view.getUint32(this.off(4), true);
+    const offset = this.off(4);
+    return this.view.getUint32(offset, true);
   }
 
   writeLUInt(x: number) {
-    this.view.setUint32(this.off(4), x, true);
+    const offset = this.off(4);
+    this.view.setUint32(offset, x, true);
   }
 
   readLong(): number {
@@ -177,24 +193,24 @@ export class Buffer {
   }
 
   readArray(size: number): Uint8Array {
+    const offset = this.off(size);
     const buffer = this.view.buffer;
-    const sub = buffer.slice(this.off(size), this.offset);
+    const sub = buffer.slice(offset, this.offset);
     return new Uint8Array(sub);
   }
 
   writeArray(array: Uint8Array) {
-    array.forEach((x) => this.writeByte(x));
+    const offset = this.off(array.length);
+    this.array.set(array, offset);
   }
 
   readUVIntArray(): Uint8Array {
     const size = this.readUVInt();
-    console.log("size", size);
     return this.readArray(size);
   }
 
   writeUVIntArray(array: Uint8Array) {
     this.writeUVInt(array.length);
-    console.log("size", array.length);
     this.writeArray(array);
   }
 

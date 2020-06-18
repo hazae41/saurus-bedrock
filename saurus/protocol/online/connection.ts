@@ -13,7 +13,6 @@ export class ConnectionRequest extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const clientID = buffer.readLong();
     const sendPingTime = buffer.readLong();
     const useSecurity = buffer.readBool();
@@ -72,7 +71,6 @@ export class NewIncomingConnection extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const address = buffer.readAddress();
     const dummy = { hostname: "0.0.0.0", port: 0, version: 4 as 4 };
     const addresses = [];
@@ -93,10 +91,6 @@ export class NewIncomingConnection extends ProtocolPacket {
 
 export class DisconnectNotification extends ProtocolPacket {
   static id = 0x15;
-
-  static from(buffer: Buffer) {
-    super.check(buffer);
-  }
 
   to(buffer: Buffer) {
     super.to(buffer);

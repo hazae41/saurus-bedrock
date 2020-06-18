@@ -21,7 +21,9 @@ import {
   OfflinePong,
   Open2Reply,
   Open2Request,
-  ServerToClientHandshakePacket,
+  ServerHandshakePacket,
+  ProtocolPacket,
+  AcknowledgePacket,
 } from "./protocol/mod.ts";
 import { encode } from "./saurus.ts";
 
@@ -36,8 +38,12 @@ export interface SplitMemory {
 
 export type SessionEvent =
   | "state"
-  | "input"
-  | "output";
+  | "data-in"
+  | "data-out"
+  | "packet-in"
+  | "packet-out"
+  | "bedrock-in"
+  | "bedrock-out";
 
 export type DataType =
   | Uint8Array
@@ -46,14 +52,12 @@ export type DataType =
   | BedrockPacket;
 
 export const Offline = 0;
-export const Open = 1;
-export const Accepted = 2;
-export const Encrypted = 3;
+export const Online = 1;
+export const Encrypted = 2;
 
 export type SessionState =
   | typeof Offline
-  | typeof Open
-  | typeof Accepted
+  | typeof Online
   | typeof Encrypted;
 
 export function opposite(origin: Origin): Origin {
@@ -79,10 +83,18 @@ export class Session extends EventEmitter<SessionEvent> {
   _clientSeqNumber = 0;
 
   _keyPair?: KeyPair;
+
   _clientSecret = "";
   _serverSecret = "";
+
   _clientSalt = "";
   _serverSalt = "";
+
+  _clientSendCounter = 0;
+  _serverSendCounter = 0;
+
+  _clientReceiveCounter = 0;
+  _serverReceiveCounter = 0;
 
   constructor(
     public client: Address,
@@ -119,25 +131,25 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   async handle(data: Uint8Array, from: Origin) {
-    const result = await this.emit("input", data, from);
+    const result = await this.emit("data-in", data, from);
     if (result === "cancelled") return;
     [data, from] = result;
 
     if (!data || !from) return;
 
-    if (this.state > Offline) {
-      await this.handleOnline(data, from);
-    } else {
+    if (this.state === Offline) {
       await this.handleOffline(data, from);
+    } else {
+      await this.handleOnline(data, from);
     }
   }
 
   async send(data: Uint8Array, to: Origin) {
-    const result = await this.emit("output", data, to);
+    const result = await this.emit("data-out", data, to);
     if (result === "cancelled") return;
     [data, to] = result;
 
-    if (!data || !to) return;
+    if (!data || !to) throw new Error("Event error");
 
     if (to === "client") {
       const listener = this.handler.listener;
@@ -152,20 +164,15 @@ export class Session extends EventEmitter<SessionEvent> {
 
   async handleOffline(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
+    const id = ProtocolPacket.header(buffer);
 
-    if (buffer.header === OfflinePong.id) {
-      const pong = OfflinePong.from(buffer);
-      pong.infos.name = "Proxied server";
-      data = await pong.export();
-    }
-
-    if (buffer.header === Open2Request.id) {
+    if (id === Open2Request.id) {
       const request = Open2Request.from(buffer);
       this._mtuSize = Math.min(request.mtuSize, this._mtuSize);
     }
 
-    if (buffer.header === Open2Reply.id) {
-      this.state = Open;
+    if (id === Open2Reply.id) {
+      this.state = Online;
     }
 
     await this.send(data, opposite(from));
@@ -173,64 +180,37 @@ export class Session extends EventEmitter<SessionEvent> {
 
   async handleOnline(data: Uint8Array, from: Origin) {
     const datagram = datagramOf(data);
-    if (!datagram) return;
 
     if (datagram instanceof Datagram) {
       await this.handleDatagram(datagram, from);
-    } else {
+    }
+
+    if (datagram instanceof AcknowledgePacket) {
       await this.handleAck(datagram, from);
     }
   }
 
   async handleAck(ack: ACK | NACK, from: Origin) {
-    const result = await this.emit("input", ack, from);
-    if (result === "cancelled") return;
-    [ack, from] = result;
-
-    if (!ack || !from) return;
-
     if (ack instanceof NACK) {
       console.log(origin(from), "NACK");
     }
-
-    // await this.sendAck(ack, opposite(from));
   }
 
   async sendAck(ack: ACK | NACK, to: Origin) {
-    const result = await this.emit("output", ack, to);
-    if (result === "cancelled") return;
-    [ack, to] = result;
-
-    if (!ack || !to) return;
-
     const data = await ack.export();
     await this.send(data, to);
   }
 
   async handleDatagram(datagram: Datagram, from: Origin) {
-    const result = await this.emit("input", datagram, from);
-    if (result === "cancelled") return;
-    [datagram, from] = result;
-
-    if (!datagram || !from) return;
-
     const ack = new ACK([datagram.seqNumber]);
     await this.sendAck(ack, from);
 
     for (const packet of datagram.packets) {
       await this.handlePacket(packet, from);
     }
-
-    // await this.sendDatagram(datagram, opposite(from));
   }
 
   async sendDatagram(datagram: Datagram, to: Origin) {
-    const result = await this.emit("output", datagram, to);
-    if (result === "cancelled") return;
-    [datagram, to] = result;
-
-    if (!datagram || !to) return;
-
     const data = await datagram.export();
     await this.send(data, to);
   }
@@ -262,68 +242,12 @@ export class Session extends EventEmitter<SessionEvent> {
     }
 
     const buffer = new Buffer(packet.sub);
-    const secret = from === "client" ? this._clientSecret : this._serverSecret;
+    const id = ProtocolPacket.header(buffer);
 
-    if (buffer.header === BatchPacket(secret).id) {
-      const batch = await BatchPacket(secret).from(buffer);
+    console.log("packet", id);
 
-      const packets = [];
-      for (let bedrock of batch.packets) {
-        const id = new Buffer(bedrock).readUVInt();
-
-        console.log("id", id);
-
-        if (id === ServerToClientHandshakePacket.id) {
-          this.state = Encrypted;
-
-          const buffer = new Buffer(bedrock);
-          const handshake = ServerToClientHandshakePacket.from(buffer);
-
-          const keyPair = this._keyPair!!;
-          const privateKey = keyPair.privateKey;
-          const publicKey = handshake.token.header.x5u;
-          const salt = handshake.token.payload.salt;
-
-          const secret = await diffieHellman({ privateKey, publicKey, salt });
-
-          this._serverSalt = salt;
-          this._serverSecret = secret;
-
-          await handshake.token.sign(keyPair);
-        }
-
-        if (id === LoginPacket.id) {
-          const buffer = new Buffer(bedrock);
-          const login = LoginPacket.from(buffer);
-
-          console.log("Logged in");
-
-          const keyPair = await genKeyPair();
-
-          const last = login.tokens[login.tokens.length - 1];
-          last.payload.identityPublicKey = keyPair.publicKey;
-
-          const privateKey = keyPair.privateKey;
-          const publicKey = last.payload.identityPublicKey;
-          const salt = await genSalt();
-
-          const secret = await diffieHellman({ privateKey, publicKey, salt });
-
-          this._keyPair = keyPair;
-          this._clientSecret = secret;
-          this._clientSalt = salt;
-
-          await last.sign(keyPair);
-          await login.client.sign(keyPair);
-
-          bedrock = await login.export();
-        }
-
-        packets.push(bedrock);
-      }
-
-      batch.packets = packets;
-      packet.sub = await batch.export();
+    if (id === BatchPacket().id) {
+      packet.sub = await this.handleBatch(buffer, from);
     }
 
     await this.sendPacket(packet, opposite(from));
@@ -382,5 +306,107 @@ export class Session extends EventEmitter<SessionEvent> {
       const datagram = new Datagram(Datagram.flag_valid, seqNumber, [packet]);
       await this.sendDatagram(datagram, to);
     }
+  }
+
+  async handleBatch(buffer: Buffer, from: Origin) {
+    const receiveCounter = from === "client"
+      ? this._clientReceiveCounter++
+      : this._serverReceiveCounter++;
+
+    const sendCounter = from === "client"
+      ? this._serverSendCounter++
+      : this._clientSendCounter++;
+
+    let receiveSecret = "";
+    let sendSecret = "";
+
+    if (this.state === Encrypted) {
+      receiveSecret = from === "client"
+        ? this._clientSecret
+        : this._serverSecret;
+
+      sendSecret = from === "client" ? this._serverSecret : this._clientSecret;
+    }
+
+    const ReceiveBatch = BatchPacket(receiveCounter, receiveSecret);
+    const SendBatch = BatchPacket(sendCounter, sendSecret);
+
+    const receiveBatch = await ReceiveBatch.from(buffer);
+
+    const packets: Uint8Array[] = [];
+    for (let bedrock of receiveBatch.packets) {
+      bedrock = await this.handleBedrock(bedrock, from);
+      packets.push(bedrock);
+    }
+
+    const sendBatch = new SendBatch(...packets);
+    return await sendBatch.export();
+  }
+
+  async handleBedrock(data: Uint8Array, from: Origin) {
+    const buffer = new Buffer(data);
+    const id = BedrockPacket.header(buffer);
+
+    console.log("bedrock", id);
+
+    if (from === "client") {
+      if (id === LoginPacket.id) {
+        data = await this.handleLoginPacket(buffer);
+      }
+    }
+
+    if (from === "server") {
+      if (id === ServerHandshakePacket.id) {
+        data = await this.handleHandshakePacket(buffer);
+      }
+    }
+
+    return data;
+  }
+
+  async handleHandshakePacket(buffer: Buffer) {
+    const handshake = ServerHandshakePacket.from(buffer);
+
+    const keyPair = this._keyPair!!;
+    const privateKey = keyPair.privateKey;
+    const publicKey = handshake.token.header.x5u;
+    const salt = handshake.token.payload.salt;
+
+    const secret = await diffieHellman({ privateKey, publicKey, salt });
+
+    this._serverSalt = salt;
+    this._serverSecret = secret;
+
+    handshake.token.payload.salt = this._clientSalt;
+    await handshake.token.sign(keyPair);
+
+    this.state = Encrypted;
+
+    return await handshake.export();
+  }
+
+  async handleLoginPacket(buffer: Buffer) {
+    const login = LoginPacket.from(buffer);
+
+    const keyPair = await genKeyPair();
+
+    const last = login.tokens[login.tokens.length - 1];
+
+    const privateKey = keyPair.privateKey;
+    const publicKey = last.payload.identityPublicKey;
+    const salt = await genSalt();
+
+    const secret = await diffieHellman({ privateKey, publicKey, salt });
+
+    this._keyPair = keyPair;
+    this._clientSecret = secret;
+    this._clientSalt = salt;
+
+    last.payload.identityPublicKey = keyPair.publicKey;
+
+    await last.sign(keyPair);
+    await login.client.sign(keyPair);
+
+    return await login.export();
   }
 }

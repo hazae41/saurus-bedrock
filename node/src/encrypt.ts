@@ -11,8 +11,8 @@ std.on("line", (input) => {
   const secret = Buffer.from(request.secret, "base64");
   const iv = secret.slice(0, 16);
 
-  const cipher = createCipheriv("aes-256-gcm", secret, iv);
-  const result = Buffer.concat([cipher.update(data), cipher.final()]);
+  const cipher = createCipheriv("aes-256-cfb8", secret, iv);
+  const result = cipher.update(data);
 
   console.log(stringify(Array.from(result)));
   process.exit(0);

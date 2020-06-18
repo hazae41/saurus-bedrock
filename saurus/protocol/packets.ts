@@ -13,8 +13,6 @@ export abstract class Packet {
     return type.id;
   }
 
-  static check(buffer: Buffer) {}
-
   to(buffer: Buffer): Promise<void> | void {}
 
   async export(): Promise<Uint8Array> {
@@ -25,9 +23,8 @@ export abstract class Packet {
 }
 
 export abstract class ProtocolPacket extends Packet {
-  static check(buffer: Buffer) {
-    if (this.id === buffer.readByte()) return;
-    throw new Error("Invalid ID");
+  static header(buffer: Buffer) {
+    return buffer.readByte();
   }
 
   to(buffer: Buffer) {
@@ -36,9 +33,8 @@ export abstract class ProtocolPacket extends Packet {
 }
 
 export abstract class BedrockPacket extends Packet {
-  static check(buffer: Buffer) {
-    if (this.id === buffer.readUVInt()) return;
-    throw new Error("Invalid ID");
+  static header(buffer: Buffer) {
+    return buffer.readUVInt();
   }
 
   to(buffer: Buffer) {

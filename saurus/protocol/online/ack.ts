@@ -9,8 +9,6 @@ export class AcknowledgePacket extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     const packets = [];
     const count = buffer.readShort();
     for (let i = 0; i < count; i++) {

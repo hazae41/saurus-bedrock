@@ -1,8 +1,8 @@
 import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import { inflate, deflate, decrypt, encrypt } from "../../mod.ts";
+import { inflate, deflate, decrypt, encrypt, hashOf } from "../../mod.ts";
 
-export const BatchPacket = (secret?: string) =>
+export const BatchPacket = (counter = 0, secret?: string) =>
   class extends ProtocolPacket {
     static id = 0xfe;
     packets: Uint8Array[];
@@ -15,13 +15,11 @@ export const BatchPacket = (secret?: string) =>
     }
 
     static async from(buffer: Buffer) {
-      super.check(buffer);
-
       let remaining = buffer.readArray(buffer.remaining);
 
       if (secret) {
-        //remaining = remaining.slice(0, remaining.length - 8);
         remaining = await decrypt(remaining, secret);
+        remaining = remaining.slice(0, remaining.length - 8);
       }
 
       const unzipped = await inflate(remaining);
@@ -38,8 +36,7 @@ export const BatchPacket = (secret?: string) =>
     async to(buffer: Buffer) {
       super.to(buffer);
 
-      const payload = Buffer.empty(524288);
-
+      const payload = Buffer.empty();
       for (const packet of this.packets) {
         payload.writeUVIntArray(packet);
       }
@@ -50,15 +47,12 @@ export const BatchPacket = (secret?: string) =>
       let remaining = zipped;
 
       if (secret) {
-        remaining = await encrypt(remaining, secret);
+        const hash = await hashOf(remaining, counter - 1, secret);
+        const hashed = new Buffer(remaining, remaining.length);
+        hashed.writeArray(hash.slice(0, 8));
+        remaining = await encrypt(hashed.export(), secret);
       }
 
-      buffer.writeArray(zipped);
-    }
-
-    async export(): Promise<Uint8Array> {
-      const buffer = Buffer.empty(32768);
-      await this.to(buffer);
-      return buffer.export();
+      buffer.writeArray(remaining);
     }
   };

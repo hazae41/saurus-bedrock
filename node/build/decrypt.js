@@ -9,8 +9,8 @@ std.on("line", function (input) {
     var data = Buffer.from(request.data);
     var secret = Buffer.from(request.secret, "base64");
     var iv = secret.slice(0, 16);
-    var cipher = crypto_1.createDecipheriv("aes-256-gcm", secret, iv);
-    var result = Buffer.concat([cipher.update(data), cipher.final()]);
+    var decipher = crypto_1.createDecipheriv("aes-256-cfb8", secret, iv);
+    var result = decipher.update(data);
     console.log(stringify(Array.from(result)));
     process.exit(0);
 });

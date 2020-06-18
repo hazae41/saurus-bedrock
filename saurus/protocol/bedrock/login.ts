@@ -14,8 +14,6 @@ export class LoginPacket extends BedrockPacket {
   }
 
   static from(buffer: Buffer): LoginPacket {
-    super.check(buffer);
-
     const protocol = buffer.readInt();
 
     const sub = new Buffer(buffer.readUVIntArray());
@@ -66,7 +64,6 @@ export class DisconnectPacket extends BedrockPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
     const hidden = buffer.readBool();
     const message = hidden ? "" : buffer.readUVIntString();
     return new this(message);
@@ -100,7 +97,6 @@ export class PlayStatusPacket extends BedrockPacket {
   }
 
   static from(buffer: Buffer): PlayStatusPacket {
-    super.check(buffer);
     return new this(buffer.readInt());
   }
 

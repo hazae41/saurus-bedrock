@@ -12,8 +12,6 @@ export class OfflinePing extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     const time = buffer.readLong();
     buffer.checkMagic();
     const clientID = buffer.readLong();
@@ -54,8 +52,6 @@ export class OfflinePong extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     const time = buffer.readLong();
     const serverID = buffer.readLong();
     buffer.checkMagic();
@@ -113,8 +109,6 @@ export class IncompatibleProtocol extends ProtocolPacket {
   }
 
   static from(buffer: Buffer) {
-    super.check(buffer);
-
     const protocol = buffer.readByte();
     buffer.checkMagic();
     const serverID = buffer.readLong();

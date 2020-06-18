@@ -2,6 +2,7 @@ import { encode, decode } from "./saurus.ts";
 import {
   readLines,
 } from "https://deno.land/std/io/bufio.ts";
+import { Buffer } from "./protocol/mod.ts";
 
 export interface DiffieHellman {
   privateKey: string;
@@ -76,6 +77,23 @@ export async function decrypt(data: Uint8Array, secret: string) {
 export async function encrypt(data: Uint8Array, secret: string) {
   const response = await call("encrypt", {
     data: Array.from(data),
+    secret,
+  });
+
+  return new Uint8Array(response);
+}
+
+export async function hashOf(
+  data: Uint8Array,
+  counter: number,
+  secret: string,
+) {
+  const bcounter = Buffer.empty(8);
+  bcounter.writeLLong(counter);
+
+  const response = await call("hash", {
+    data: Array.from(data),
+    counter: Array.from(bcounter.export()),
     secret,
   });
 
