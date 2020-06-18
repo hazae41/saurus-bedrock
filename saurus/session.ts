@@ -244,7 +244,7 @@ export class Session extends EventEmitter<SessionEvent> {
     const buffer = new Buffer(packet.sub);
     const id = ProtocolPacket.header(buffer);
 
-    console.log("packet", id);
+    console.log(origin(from), "packet", id);
 
     if (id === BatchPacket().id) {
       packet.sub = await this.handleBatch(buffer, from);
@@ -334,6 +334,7 @@ export class Session extends EventEmitter<SessionEvent> {
     const receiveBatch = await ReceiveBatch.from(buffer);
 
     const packets: Uint8Array[] = [];
+
     for (let bedrock of receiveBatch.packets) {
       bedrock = await this.handleBedrock(bedrock, from);
       packets.push(bedrock);
@@ -347,7 +348,7 @@ export class Session extends EventEmitter<SessionEvent> {
     const buffer = new Buffer(data);
     const id = BedrockPacket.header(buffer);
 
-    console.log("bedrock", id);
+    console.log(origin(from), "bedrock", id);
 
     if (from === "client") {
       if (id === LoginPacket.id) {

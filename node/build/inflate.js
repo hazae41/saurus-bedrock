@@ -6,7 +6,7 @@ var std = readline_1.createInterface(process.stdin);
 std.on("line", function (input) {
     var stringify = JSON.stringify, parse = JSON.parse;
     var request = Buffer.from(parse(input));
-    var result = zlib_1.inflateSync(request);
+    var result = zlib_1.unzipSync(request);
     console.log(stringify(Array.from(result)));
     process.exit(0);
 });
