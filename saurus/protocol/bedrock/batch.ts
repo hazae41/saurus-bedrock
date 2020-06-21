@@ -18,8 +18,16 @@ export const BatchPacket = (counter = 0, secret?: string) =>
       let remaining = buffer.readArray(buffer.remaining);
 
       if (secret) {
-        remaining = await decrypt(remaining, secret);
-        remaining = remaining.slice(0, remaining.length - 8);
+        const full = await decrypt(remaining, secret);
+        const data = full.slice(0, full.length - 8);
+        const hash1 = full.slice(full.length - 8, full.length);
+        const hash2 = await hashOf(data, counter - 1, secret);
+
+        for (const [i, byte] of hash1.entries()) {
+          if (byte !== hash2[i]) throw new Error("Corrupt");
+        }
+
+        remaining = data;
       }
 
       const unzipped = await inflate(remaining);

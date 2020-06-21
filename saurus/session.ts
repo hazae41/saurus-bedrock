@@ -83,12 +83,10 @@ export class Session extends EventEmitter<SessionEvent> {
   _clientSeqNumber = 0;
 
   _keyPair?: KeyPair;
+  _salt = "";
 
   _clientSecret = "";
   _serverSecret = "";
-
-  _clientSalt = "";
-  _serverSalt = "";
 
   _clientSendCounter = 0;
   _serverSendCounter = 0;
@@ -335,9 +333,8 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const packets: Uint8Array[] = [];
 
-    for (let bedrock of receiveBatch.packets) {
-      bedrock = await this.handleBedrock(bedrock, from);
-      packets.push(bedrock);
+    for (const data of receiveBatch.packets) {
+      packets.push(await this.handleBedrock(data, from));
     }
 
     const sendBatch = new SendBatch(...packets);
@@ -375,10 +372,9 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
-    this._serverSalt = salt;
     this._serverSecret = secret;
 
-    handshake.token.payload.salt = this._clientSalt;
+    handshake.token.payload.salt = this._salt;
     await handshake.token.sign(keyPair);
 
     this.state = Encrypted;
@@ -389,9 +385,9 @@ export class Session extends EventEmitter<SessionEvent> {
   async handleLoginPacket(buffer: Buffer) {
     const login = LoginPacket.from(buffer);
 
-    const keyPair = await genKeyPair();
-
     const last = login.tokens[login.tokens.length - 1];
+
+    const keyPair = await genKeyPair();
 
     const privateKey = keyPair.privateKey;
     const publicKey = last.payload.identityPublicKey;
@@ -400,8 +396,8 @@ export class Session extends EventEmitter<SessionEvent> {
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
     this._keyPair = keyPair;
+    this._salt = salt;
     this._clientSecret = secret;
-    this._clientSalt = salt;
 
     last.payload.identityPublicKey = keyPair.publicKey;
 
