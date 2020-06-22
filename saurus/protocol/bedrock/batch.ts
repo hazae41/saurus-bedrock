@@ -21,7 +21,7 @@ export const BatchPacket = (counter = 0, secret?: string) =>
         const full = await decrypt(remaining, secret);
         const data = full.slice(0, full.length - 8);
         const hash1 = full.slice(full.length - 8, full.length);
-        const hash2 = await hashOf(data, counter - 1, secret);
+        const hash2 = await hashOf(data, counter, secret);
 
         for (const [i, byte] of hash1.entries()) {
           if (byte !== hash2[i]) throw new Error("Corrupt");
@@ -55,7 +55,7 @@ export const BatchPacket = (counter = 0, secret?: string) =>
       let remaining = zipped;
 
       if (secret) {
-        const hash = await hashOf(remaining, counter - 1, secret);
+        const hash = await hashOf(remaining, counter, secret);
         const hashed = new Buffer(remaining, remaining.length);
         hashed.writeArray(hash.slice(0, 8));
         remaining = await encrypt(hashed.export(), secret);

@@ -326,8 +326,8 @@ export class Session extends EventEmitter<SessionEvent> {
       sendSecret = from === "client" ? this._serverSecret : this._clientSecret;
     }
 
-    const ReceiveBatch = BatchPacket(receiveCounter, receiveSecret);
-    const SendBatch = BatchPacket(sendCounter, sendSecret);
+    const ReceiveBatch = BatchPacket(receiveCounter - 1, receiveSecret);
+    const SendBatch = BatchPacket(sendCounter - 1, sendSecret);
 
     const receiveBatch = await ReceiveBatch.from(buffer);
 
