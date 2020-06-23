@@ -1,7 +1,9 @@
 import { createInterface } from "readline";
-import { createDecipheriv } from "crypto";
+import { createDecipheriv, Decipher } from "crypto";
 
 const std = createInterface(process.stdin);
+
+let decipher: Decipher | undefined;
 
 std.on("line", (input) => {
   const { stringify, parse } = JSON;
@@ -11,9 +13,9 @@ std.on("line", (input) => {
   const secret = Buffer.from(request.secret, "base64");
   const iv = secret.slice(0, 16);
 
-  const decipher = createDecipheriv("aes-256-cfb8", secret, iv);
+  if (!decipher) decipher = createDecipheriv("aes-256-cfb8", secret, iv);
+
   const result = decipher.update(data);
 
   console.log(stringify(Array.from(result)));
-  process.exit(0);
 });

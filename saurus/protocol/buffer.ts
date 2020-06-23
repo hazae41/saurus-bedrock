@@ -175,8 +175,8 @@ export class Buffer {
 
   writeLLong(x: number) {
     let max = 0xFFFFFFFF;
-    this.writeInt(x & max);
-    this.writeInt(~~(x / max));
+    this.writeLUInt(x & max);
+    this.writeLUInt(~~(x / max));
   }
 
   readLTriad(): number {

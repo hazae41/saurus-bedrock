@@ -6,6 +6,7 @@ import {
   genSalt,
   Handler,
   KeyPair,
+  inRange,
 } from "./mod.ts";
 import { JWT, fromB64url } from "./protocol/bedrock/jwt.ts";
 import {
@@ -24,8 +25,10 @@ import {
   ServerHandshakePacket,
   ProtocolPacket,
   AcknowledgePacket,
+  isReliable,
 } from "./protocol/mod.ts";
 import { encode } from "./saurus.ts";
+import { process, NodeProcess } from "./node.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -64,6 +67,10 @@ export function opposite(origin: Origin): Origin {
   return origin === "client" ? "server" : "client";
 }
 
+export interface NumberHolder {
+  x: number;
+}
+
 export class Session extends EventEmitter<SessionEvent> {
   time = 0;
 
@@ -79,6 +86,12 @@ export class Session extends EventEmitter<SessionEvent> {
   _serverPacketIndex = 0;
   _clientPacketIndex = 0;
 
+  _clientReliableWindow = { start: 0, end: 2048 };
+  _serverReliableWindow = { start: 0, end: 2048 };
+
+  _clientPacketIndexes = new Set<number>();
+  _serverPacketIndexes = new Set<number>();
+
   _serverSeqNumber = 0;
   _clientSeqNumber = 0;
 
@@ -88,11 +101,17 @@ export class Session extends EventEmitter<SessionEvent> {
   _clientSecret = "";
   _serverSecret = "";
 
-  _clientSendCounter = 0;
-  _serverSendCounter = 0;
+  _clientEncryptor = process("encrypt");
+  _clientDecryptor = process("decrypt");
 
-  _clientReceiveCounter = 0;
-  _serverReceiveCounter = 0;
+  _serverEncryptor = process("encrypt");
+  _serverDecryptor = process("decrypt");
+
+  _clientSendCounter: NumberHolder = { x: 0 };
+  _serverSendCounter: NumberHolder = { x: 0 };
+
+  _clientReceiveCounter: NumberHolder = { x: 0 };
+  _serverReceiveCounter: NumberHolder = { x: 0 };
 
   constructor(
     public client: Address,
@@ -214,6 +233,37 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   async handlePacket(packet: EncapsulatedPacket, from: Origin) {
+    if (isReliable(packet.reliability)) {
+      const { index } = packet;
+      if (index === undefined) throw Error("No index");
+
+      const window = from === "client"
+        ? this._clientReliableWindow
+        : this._serverReliableWindow;
+
+      const indexes = from === "client"
+        ? this._clientPacketIndexes
+        : this._serverPacketIndexes;
+
+      const { start, end } = window;
+
+      if (!inRange(index, [start, end])) return;
+
+      if (indexes.has(index)) {
+        throw Error("Duplicate packet index");
+      }
+
+      indexes.add(index);
+
+      if (index === start) {
+        while (indexes.has(start)) {
+          indexes.delete(start);
+          window.start++;
+          window.end++;
+        }
+      }
+    }
+
     if (packet.split) {
       const { split } = packet;
       const { id, index, count } = split;
@@ -241,8 +291,6 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const buffer = new Buffer(packet.sub);
     const id = ProtocolPacket.header(buffer);
-
-    console.log(origin(from), "packet", id);
 
     if (id === BatchPacket().id) {
       packet.sub = await this.handleBatch(buffer, from);
@@ -307,45 +355,80 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   async handleBatch(buffer: Buffer, from: Origin) {
-    const receiveCounter = from === "client"
-      ? this._clientReceiveCounter++
-      : this._serverReceiveCounter++;
-
-    const sendCounter = from === "client"
-      ? this._serverSendCounter++
-      : this._clientSendCounter++;
-
-    let receiveSecret = "";
-    let sendSecret = "";
-
     if (this.state === Encrypted) {
-      receiveSecret = from === "client"
-        ? this._clientSecret
-        : this._serverSecret;
-
-      sendSecret = from === "client" ? this._serverSecret : this._clientSecret;
+      return await this.handleEncryptedBatch(buffer, from);
+    } else {
+      return await this.handleUnencryptedBatch(buffer, from);
     }
+  }
 
-    const ReceiveBatch = BatchPacket(receiveCounter - 1, receiveSecret);
-    const SendBatch = BatchPacket(sendCounter - 1, sendSecret);
-
-    const receiveBatch = await ReceiveBatch.from(buffer);
-
+  async handleUnencryptedBatch(buffer: Buffer, from: Origin) {
+    const Batch = BatchPacket();
+    const batch = await Batch.from(buffer);
     const packets: Uint8Array[] = [];
 
-    for (const data of receiveBatch.packets) {
+    for (const data of batch.packets) {
       packets.push(await this.handleBedrock(data, from));
     }
 
-    const sendBatch = new SendBatch(...packets);
-    return await sendBatch.export();
+    return await new Batch(...packets).export();
+  }
+
+  async handleEncryptedBatch(buffer: Buffer, from: Origin) {
+    const receiveCounter = from === "client"
+      ? this._clientReceiveCounter
+      : this._serverReceiveCounter;
+
+    const sendCounter = from === "client"
+      ? this._serverSendCounter
+      : this._clientSendCounter;
+
+    const receiveSecret = from === "client"
+      ? this._clientSecret
+      : this._serverSecret;
+
+    const sendSecret = from === "client"
+      ? this._serverSecret
+      : this._clientSecret;
+
+    const decryptor = from === "client"
+      ? this._clientDecryptor
+      : this._serverDecryptor;
+
+    const encryptor = from === "client"
+      ? this._serverEncryptor
+      : this._clientEncryptor;
+
+    const ReceiveBatch = BatchPacket({
+      secret: receiveSecret,
+      counter: receiveCounter,
+      decryptor,
+    });
+
+    const SendBatch = BatchPacket({
+      secret: sendSecret,
+      counter: sendCounter,
+      encryptor,
+    });
+
+    const batch = await ReceiveBatch.from(buffer);
+
+    const packets: Uint8Array[] = [];
+
+    for (const data of batch.packets) {
+      packets.push(await this.handleBedrock(data, from));
+    }
+
+    return await new SendBatch(...packets).export();
   }
 
   async handleBedrock(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
     const id = BedrockPacket.header(buffer);
 
-    console.log(origin(from), "bedrock", id);
+    // if (Math.random() > 0.9) {
+    //   console.log(origin(from), "bedrock", id);
+    // }
 
     if (from === "client") {
       if (id === LoginPacket.id) {
@@ -388,15 +471,16 @@ export class Session extends EventEmitter<SessionEvent> {
     const last = login.tokens[login.tokens.length - 1];
 
     const keyPair = await genKeyPair();
-
-    const privateKey = keyPair.privateKey;
-    const publicKey = last.payload.identityPublicKey;
     const salt = await genSalt();
-
-    const secret = await diffieHellman({ privateKey, publicKey, salt });
 
     this._keyPair = keyPair;
     this._salt = salt;
+
+    const privateKey = keyPair.privateKey;
+    const publicKey = last.payload.identityPublicKey;
+
+    const secret = await diffieHellman({ privateKey, publicKey, salt });
+
     this._clientSecret = secret;
 
     last.payload.identityPublicKey = keyPair.publicKey;

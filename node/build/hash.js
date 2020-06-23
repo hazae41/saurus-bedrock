@@ -14,5 +14,4 @@ std.on("line", function (input) {
         .digest();
     var response = Array.from(hash);
     console.log(stringify(response));
-    process.exit(0);
 });

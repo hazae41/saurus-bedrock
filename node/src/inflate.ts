@@ -8,5 +8,4 @@ std.on("line", (input) => {
   const request = Buffer.from(parse(input));
   const result = unzipSync(request);
   console.log(stringify(Array.from(result)));
-  process.exit(0);
 });

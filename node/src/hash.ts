@@ -23,5 +23,4 @@ std.on("line", (input) => {
 
   const response = Array.from(hash);
   console.log(stringify(response));
-  process.exit(0);
 });
