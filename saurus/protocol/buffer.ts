@@ -202,6 +202,7 @@ export class Buffer {
   writeArray(array: Uint8Array) {
     const offset = this.off(array.length);
     this.array.set(array, offset);
+    return this;
   }
 
   readUVIntArray(): Uint8Array {

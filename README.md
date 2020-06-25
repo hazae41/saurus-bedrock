@@ -12,6 +12,8 @@ git clone https://github.com/hazae41/saurus
 
 - Install [Deno](https://deno.land/#installation) and [Velociraptor](https://github.com/umbopepato/velociraptor#install).
 
+- Install [Node 14 (Current)](https://nodejs.org/)
+
 - Configure `start.ts`, add/remove plugins, modify ports, rename .exe to .sh if you're on Linux.
 
 - Start Saurus using Velociraptor.

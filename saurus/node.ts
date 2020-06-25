@@ -101,25 +101,6 @@ export async function encrypt(
   return new Uint8Array(response);
 }
 
-const hashor = process("hash");
-
-export async function hashOf(
-  data: Uint8Array,
-  counter: number,
-  secret: string,
-) {
-  const bcounter = Buffer.empty(8);
-  bcounter.writeLLong(counter);
-
-  const response = await call(hashor, {
-    data: Array.from(data),
-    counter: Array.from(bcounter.export()),
-    secret,
-  });
-
-  return new Uint8Array(response);
-}
-
 export async function test(text: string) {
   const zipped = await deflate(encode(text));
   const unzipped = decode(await inflate(zipped));

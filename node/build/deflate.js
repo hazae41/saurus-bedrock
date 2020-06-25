@@ -6,6 +6,6 @@ var std = readline_1.createInterface(process.stdin);
 std.on("line", function (input) {
     var stringify = JSON.stringify, parse = JSON.parse;
     var request = Buffer.from(parse(input));
-    var result = zlib_1.deflateSync(request);
+    var result = zlib_1.deflateRawSync(request);
     console.log(stringify(Array.from(result)));
 });

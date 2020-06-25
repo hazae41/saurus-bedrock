@@ -1,14 +1,16 @@
 import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
+import * as wasm from "../../wasm.ts";
 import {
   inflate,
   deflate,
   decrypt,
   encrypt,
-  hashOf,
   NodeProcess,
   NumberHolder,
 } from "../../mod.ts";
+
+import * as Base64 from "https://deno.land/std/encoding/base64.ts";
 
 export interface BatchParams {
   secret: string;
@@ -17,8 +19,23 @@ export interface BatchParams {
   decryptor?: NodeProcess;
 }
 
-export const BatchPacket = (params?: BatchParams) =>
-  class extends ProtocolPacket {
+export function BatchPacket(params?: BatchParams) {
+  function hashOf(data: Uint8Array) {
+    if (!params) throw Error("No params");
+    const { secret, counter } = params;
+
+    const bcounter = Buffer.empty();
+    bcounter.writeLLong(counter.x++);
+    const acounter = bcounter.export();
+
+    const asecret = Base64.decode(secret);
+
+    const hash = wasm.hashOf(acounter, data, asecret);
+
+    return hash.slice(0, 8);
+  }
+
+  return class extends ProtocolPacket {
     static id = 0xfe;
     packets: Uint8Array[];
 
@@ -30,28 +47,23 @@ export const BatchPacket = (params?: BatchParams) =>
     }
 
     static async from(buffer: Buffer) {
-      let remaining = buffer.readArray(buffer.remaining);
+      let data = buffer.readArray(buffer.remaining);
 
       if (params?.decryptor) {
-        const { secret, counter, decryptor } = params;
+        const { secret, decryptor } = params;
 
-        const full = await decrypt(decryptor, remaining, secret);
+        const full = await decrypt(decryptor, data, secret);
 
-        const data = full.slice(0, full.length - 8);
-        const hash1 = full.slice(full.length - 8, full.length);
-        const hash2 = await hashOf(data, counter.x++, secret);
+        data = full.slice(0, -8);
+        const hash1 = full.slice(-8);
+        const hash2 = hashOf(data);
 
         for (const [i, byte] of hash1.entries()) {
-          if (byte !== hash2[i]) {
-            console.log(full);
-            throw new Error("Corrupt");
-          }
+          if (byte !== hash2[i]) throw new Error("Corrupt");
         }
-
-        remaining = data;
       }
 
-      const unzipped = await inflate(remaining);
+      const unzipped = await inflate(data);
       const payload = new Buffer(unzipped);
 
       const packets = [];
@@ -71,22 +83,18 @@ export const BatchPacket = (params?: BatchParams) =>
         payload.writeUVIntArray(packet);
       }
 
-      const array = payload.export();
-      const zipped = await deflate(array);
-
-      let remaining = zipped;
+      let data = await deflate(payload.array);
 
       if (params?.encryptor) {
-        const { secret, counter, encryptor } = params;
+        const { secret, encryptor } = params;
 
-        const hash = await hashOf(remaining, counter.x++, secret);
+        const full = new Buffer(data, data.length);
+        full.writeArray(hashOf(data));
 
-        const hashed = new Buffer(remaining, remaining.length);
-        hashed.writeArray(hash.slice(0, 8));
-
-        remaining = await encrypt(encryptor, hashed.export(), secret);
+        data = await encrypt(encryptor, full.array, secret);
       }
 
-      buffer.writeArray(remaining);
+      buffer.writeArray(data);
     }
   };
+}

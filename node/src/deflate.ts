@@ -1,11 +1,11 @@
 import { createInterface } from "readline";
-import { deflateSync } from "zlib";
+import { deflateRawSync } from "zlib";
 
 const std = createInterface(process.stdin);
 
 std.on("line", (input) => {
   const { stringify, parse } = JSON;
   const request = Buffer.from(parse(input));
-  const result = deflateSync(request);
+  const result = deflateRawSync(request);
   console.log(stringify(Array.from(result)));
 });
