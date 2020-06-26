@@ -2,8 +2,6 @@ import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
 import * as wasm from "../../wasm.ts";
 import {
-  inflate,
-  deflate,
   decrypt,
   encrypt,
   NodeProcess,
@@ -63,7 +61,7 @@ export function BatchPacket(params?: BatchParams) {
         }
       }
 
-      const unzipped = await inflate(data);
+      const unzipped = wasm.inflate(data);
       const payload = new Buffer(unzipped);
 
       const packets = [];
@@ -83,7 +81,7 @@ export function BatchPacket(params?: BatchParams) {
         payload.writeUVIntArray(packet);
       }
 
-      let data = await deflate(payload.array);
+      let data = wasm.deflate(payload.array);
 
       if (params?.encryptor) {
         const { secret, encryptor } = params;

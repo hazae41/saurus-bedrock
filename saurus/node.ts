@@ -2,7 +2,6 @@ import { encode, decode } from "./saurus.ts";
 import {
   readLines,
 } from "https://deno.land/std/io/bufio.ts";
-import { Buffer } from "./protocol/mod.ts";
 
 export interface DiffieHellman {
   privateKey: string;
@@ -38,21 +37,6 @@ export async function call(process: NodeProcess, request = {}) {
   }
 
   throw new Error("No result");
-}
-
-const deflator = process("deflate");
-const inflator = process("inflate");
-
-export async function deflate(data: Uint8Array) {
-  const request = Array.from(data);
-  const response = await call(deflator, request);
-  return new Uint8Array(response);
-}
-
-export async function inflate(data: Uint8Array) {
-  const request = Array.from(data);
-  const response = await call(inflator, request);
-  return new Uint8Array(response);
 }
 
 export async function genKeyPair() {
@@ -99,10 +83,4 @@ export async function encrypt(
   });
 
   return new Uint8Array(response);
-}
-
-export async function test(text: string) {
-  const zipped = await deflate(encode(text));
-  const unzipped = decode(await inflate(zipped));
-  return unzipped;
 }
