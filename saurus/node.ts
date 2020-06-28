@@ -44,7 +44,7 @@ export async function genKeyPair() {
 }
 
 export async function diffieHellman(dh: DiffieHellman) {
-  return await call(process("diffiehellman"), dh);
+  return await call(process("diffiehellman"), dh) as string;
 }
 
 export async function genSalt() {
@@ -57,30 +57,4 @@ export async function sign(keyPair: KeyPair, data: Uint8Array) {
     publicKey: keyPair.publicKey,
     data: Array.from(data),
   });
-}
-
-export async function decrypt(
-  decryptor: NodeProcess,
-  data: Uint8Array,
-  secret: string,
-) {
-  const response = await call(decryptor, {
-    data: Array.from(data),
-    secret,
-  });
-
-  return new Uint8Array(response);
-}
-
-export async function encrypt(
-  encryptor: NodeProcess,
-  data: Uint8Array,
-  secret: string,
-) {
-  const response = await call(encryptor, {
-    data: Array.from(data),
-    secret,
-  });
-
-  return new Uint8Array(response);
 }

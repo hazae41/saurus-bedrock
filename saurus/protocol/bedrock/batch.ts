@@ -1,24 +1,17 @@
 import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import * as wasm from "../../wasm.ts";
-import {
-  decrypt,
-  encrypt,
-  NodeProcess,
-  NumberHolder,
-} from "../../mod.ts";
-
-import * as Base64 from "https://deno.land/std/encoding/base64.ts";
+import { Aes256Cfb8, inflate, deflate, sha256 } from "../../wasm.ts";
+import { fromB64 } from "../../saurus.ts";
 
 export interface BatchParams {
   secret: string;
-  counter: NumberHolder;
-  encryptor?: NodeProcess;
-  decryptor?: NodeProcess;
+  counter: { x: number };
+  encryptor?: Aes256Cfb8;
+  decryptor?: Aes256Cfb8;
 }
 
 export function BatchPacket(params?: BatchParams) {
-  function hashOf(data: Uint8Array) {
+  function makeHash(data: Uint8Array) {
     if (!params) throw Error("No params");
     const { secret, counter } = params;
 
@@ -26,9 +19,9 @@ export function BatchPacket(params?: BatchParams) {
     bcounter.writeLLong(counter.x++);
     const acounter = bcounter.export();
 
-    const asecret = Base64.decode(secret);
+    const asecret = fromB64(secret);
 
-    const hash = wasm.hashOf(acounter, data, asecret);
+    const hash = sha256(acounter, data, asecret);
 
     return hash.slice(0, 8);
   }
@@ -48,20 +41,21 @@ export function BatchPacket(params?: BatchParams) {
       let data = buffer.readArray(buffer.remaining);
 
       if (params?.decryptor) {
-        const { secret, decryptor } = params;
+        const { decryptor } = params;
 
-        const full = await decrypt(decryptor, data, secret);
+        decryptor.decrypt(data);
 
-        data = full.slice(0, -8);
-        const hash1 = full.slice(-8);
-        const hash2 = hashOf(data);
+        const hash1 = data.slice(-8);
+        const hash2 = makeHash(data);
 
         for (const [i, byte] of hash1.entries()) {
-          if (byte !== hash2[i]) throw new Error("Corrupt");
+          // if (byte !== hash2[i]) throw new Error("Corrupt");
         }
+
+        data = data.slice(0, -8);
       }
 
-      const unzipped = wasm.inflate(data);
+      const unzipped = inflate(data);
       const payload = new Buffer(unzipped);
 
       const packets = [];
@@ -81,15 +75,16 @@ export function BatchPacket(params?: BatchParams) {
         payload.writeUVIntArray(packet);
       }
 
-      let data = wasm.deflate(payload.array);
+      let data = deflate(payload.array);
 
       if (params?.encryptor) {
-        const { secret, encryptor } = params;
+        const { encryptor } = params;
 
         const full = new Buffer(data, data.length);
-        full.writeArray(hashOf(data));
+        full.writeArray(makeHash(data));
 
-        data = await encrypt(encryptor, full.array, secret);
+        encryptor.encrypt(full.array);
+        data = full.array;
       }
 
       buffer.writeArray(data);

@@ -6,29 +6,26 @@ import {
   genSalt,
   Handler,
   KeyPair,
-  inRange,
 } from "./mod.ts";
-import { JWT, fromB64url } from "./protocol/bedrock/jwt.ts";
 import {
   ACK,
+  AcknowledgePacket,
   BatchPacket,
   BedrockPacket,
   Buffer,
   Datagram,
   datagramOf,
   EncapsulatedPacket,
+  isReliable,
   LoginPacket,
   NACK,
-  OfflinePong,
   Open2Reply,
   Open2Request,
-  ServerHandshakePacket,
   ProtocolPacket,
-  AcknowledgePacket,
-  isReliable,
+  ServerHandshakePacket,
 } from "./protocol/mod.ts";
-import { encode } from "./saurus.ts";
-import { process, NodeProcess } from "./node.ts";
+import { fromB64 } from "./saurus.ts";
+import { Aes256Cfb8 } from "./wasm.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -67,8 +64,8 @@ export function opposite(origin: Origin): Origin {
   return origin === "client" ? "server" : "client";
 }
 
-export interface NumberHolder {
-  x: number;
+export function inRange(n: number, [start, end]: number[]) {
+  return n >= start && n <= end;
 }
 
 export class Session extends EventEmitter<SessionEvent> {
@@ -101,17 +98,17 @@ export class Session extends EventEmitter<SessionEvent> {
   _clientSecret = "";
   _serverSecret = "";
 
-  _clientEncryptor = process("encrypt");
-  _clientDecryptor = process("decrypt");
+  _clientEncryptor?: Aes256Cfb8;
+  _clientDecryptor?: Aes256Cfb8;
 
-  _serverEncryptor = process("encrypt");
-  _serverDecryptor = process("decrypt");
+  _serverEncryptor?: Aes256Cfb8;
+  _serverDecryptor?: Aes256Cfb8;
 
-  _clientSendCounter: NumberHolder = { x: 0 };
-  _serverSendCounter: NumberHolder = { x: 0 };
+  _clientSendCounter = { x: 0 };
+  _serverSendCounter = { x: 0 };
 
-  _clientReceiveCounter: NumberHolder = { x: 0 };
-  _serverReceiveCounter: NumberHolder = { x: 0 };
+  _clientReceiveCounter = { x: 0 };
+  _serverReceiveCounter = { x: 0 };
 
   constructor(
     public client: Address,
@@ -426,10 +423,6 @@ export class Session extends EventEmitter<SessionEvent> {
     const buffer = new Buffer(data);
     const id = BedrockPacket.header(buffer);
 
-    // if (Math.random() > 0.9) {
-    //   console.log(origin(from), "bedrock", id);
-    // }
-
     if (from === "client") {
       if (id === LoginPacket.id) {
         data = await this.handleLoginPacket(buffer);
@@ -455,7 +448,13 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
+    const bsecret = fromB64(secret);
+    const iv = bsecret.slice(0, 16);
+
     this._serverSecret = secret;
+
+    this._serverEncryptor = new Aes256Cfb8(bsecret, iv);
+    this._serverDecryptor = new Aes256Cfb8(bsecret, iv);
 
     handshake.token.payload.salt = this._salt;
     await handshake.token.sign(keyPair);
@@ -481,7 +480,13 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
+    const bsecret = fromB64(secret);
+    const iv = bsecret.slice(0, 16);
+
     this._clientSecret = secret;
+
+    this._clientEncryptor = new Aes256Cfb8(bsecret, iv);
+    this._clientDecryptor = new Aes256Cfb8(bsecret, iv);
 
     last.payload.identityPublicKey = keyPair.publicKey;
 

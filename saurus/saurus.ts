@@ -1,13 +1,18 @@
 import { BufReader, readLines } from "https://deno.land/std/io/bufio.ts";
+import * as Base64 from "https://deno.land/std/encoding/base64.ts";
+import * as Base64url from "https://deno.land/std/encoding/base64url.ts";
 import { Handler } from "./handler.ts";
 import { EventEmitter, Logger } from "./mod.ts";
 
 export const encode = (text: string) => new TextEncoder().encode(text);
 export const decode = (buffer: Uint8Array) => new TextDecoder().decode(buffer);
 
-export function inRange(n: number, [start, end]: number[]) {
-  return n >= start && n <= end;
-}
+export const fromB64 = (b64: string) => new Uint8Array(Base64.decode(b64));
+export const toB64 = (buffer: Uint8Array) => Base64.encode(buffer);
+
+export const fromB64url = (b64: string) =>
+  new Uint8Array(Base64url.decode(b64));
+export const toB64url = (buffer: Uint8Array) => Base64url.encode(buffer);
 
 export interface SaurusOptions {
   handlers: Handler[];

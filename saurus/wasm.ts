@@ -1,8 +1,9 @@
 import { createHash } from "https://deno.land/std/hash/mod.ts";
 
-export * from "https://raw.githubusercontent.com/hazae41/denoflate/master/mod.ts";
+export * from "https://deno.land/x/denoflate/mod.ts";
+export * from "../../aescfb8/mod.ts";
 
-export function hashOf(...datas: ArrayBuffer[]) {
+export function sha256(...datas: ArrayBuffer[]) {
   const hash = createHash("sha256");
   for (const data of datas) {
     hash.update(data);

@@ -1,11 +1,4 @@
-import {
-  encode as btoa,
-  decode as atob,
-} from "https://deno.land/std/encoding/base64url.ts";
-import { decode, KeyPair, sign, encode } from "../../mod.ts";
-
-export const toB64url = (raw: Uint8Array | string) => btoa(raw);
-export const fromB64url = (text: string) => decode(new Uint8Array(atob(text)));
+import { decode, KeyPair, sign, encode, fromB64url } from "../../mod.ts";
 
 export class JWT {
   public header: any;
@@ -17,8 +10,8 @@ export class JWT {
 
     const [header, payload, signature] = token.split(".");
 
-    this.header = parse(fromB64url(header));
-    this.payload = parse(fromB64url(payload));
+    this.header = parse(decode(fromB64url(header)));
+    this.payload = parse(decode(fromB64url(payload)));
     this.signature = signature;
   }
 
