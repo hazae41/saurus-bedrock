@@ -1,5 +1,5 @@
 import { Session } from "./session.ts";
-import { EventEmitter, Offline } from "./mod.ts";
+import { EventEmitter } from "./mod.ts";
 
 export type Listener = Deno.DatagramConn;
 export type Origin = "client" | "server";
@@ -109,8 +109,7 @@ export class Handler extends EventEmitter<"error" | "session"> {
   public async free() {
     for (const [name, session] of this.sessions.entries()) {
       if (Date.now() - session.time < this.timeout) continue;
-      session.state = Offline;
-      session.listener.close();
+      session.disconnect();
       this.sessions.delete(name);
     }
   }

@@ -45,18 +45,16 @@ export function BatchPacket(params?: BatchParams) {
 
         decryptor.decrypt(data);
 
-        const hash1 = data.slice(-8);
-        const hash2 = makeHash(data);
-
-        for (const [i, byte] of hash1.entries()) {
-          // if (byte !== hash2[i]) throw new Error("Corrupt");
-        }
-
+        const hash = data.slice(-8);
         data = data.slice(0, -8);
+
+        for (const [i, byte] of makeHash(data).entries()) {
+          if (byte !== hash[i]) throw new Error("Corrupt");
+        }
       }
 
-      const unzipped = inflate(data);
-      const payload = new Buffer(unzipped);
+      const decompressed = inflate(data);
+      const payload = new Buffer(decompressed);
 
       const packets = [];
 
@@ -75,19 +73,20 @@ export function BatchPacket(params?: BatchParams) {
         payload.writeUVIntArray(packet);
       }
 
-      let data = deflate(payload.array);
+      const compressed = deflate(payload.array);
 
       if (params?.encryptor) {
         const { encryptor } = params;
 
-        const full = new Buffer(data, data.length);
-        full.writeArray(makeHash(data));
+        const encrypted = Buffer.empty();
+        encrypted.writeArray(compressed);
+        encrypted.writeArray(makeHash(compressed));
 
-        encryptor.encrypt(full.array);
-        data = full.array;
+        encryptor.encrypt(encrypted.array);
+        buffer.writeArray(encrypted.array);
+      } else {
+        buffer.writeArray(compressed);
       }
-
-      buffer.writeArray(data);
     }
   };
 }

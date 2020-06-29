@@ -26,6 +26,10 @@ import {
 } from "./protocol/mod.ts";
 import { fromB64 } from "./saurus.ts";
 import { Aes256Cfb8 } from "./wasm.ts";
+import {
+  ResourcePackResponse,
+  ResourcePackStatus,
+} from "./protocol/bedrock/resourcepacks.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -51,14 +55,11 @@ export type DataType =
   | EncapsulatedPacket
   | BedrockPacket;
 
-export const Offline = 0;
-export const Online = 1;
-export const Encrypted = 2;
-
-export type SessionState =
-  | typeof Offline
-  | typeof Online
-  | typeof Encrypted;
+export enum SessionState {
+  Offline = 0,
+  Online = 1,
+  Encrypted = 2,
+}
 
 export function opposite(origin: Origin): Origin {
   return origin === "client" ? "server" : "client";
@@ -71,7 +72,7 @@ export function inRange(n: number, [start, end]: number[]) {
 export class Session extends EventEmitter<SessionEvent> {
   time = 0;
 
-  _state: SessionState = Offline;
+  _state = SessionState.Offline;
   _mtuSize = 1492;
 
   _serverSplits = new Array<SplitMemory>(4);
@@ -129,7 +130,8 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   disconnect() {
-    this.state = Offline;
+    this.state = SessionState.Offline;
+    this.listener.close();
   }
 
   memoryOf(splits: SplitMemory[], id: number): [number, SplitMemory] {
@@ -151,7 +153,7 @@ export class Session extends EventEmitter<SessionEvent> {
 
     if (!data || !from) return;
 
-    if (this.state === Offline) {
+    if (this.state === SessionState.Offline) {
       await this.handleOffline(data, from);
     } else {
       await this.handleOnline(data, from);
@@ -186,7 +188,7 @@ export class Session extends EventEmitter<SessionEvent> {
     }
 
     if (id === Open2Reply.id) {
-      this.state = Online;
+      this.state = SessionState.Online;
     }
 
     await this.send(data, opposite(from));
@@ -352,7 +354,7 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   async handleBatch(buffer: Buffer, from: Origin) {
-    if (this.state === Encrypted) {
+    if (this.state === SessionState.Encrypted) {
       return await this.handleEncryptedBatch(buffer, from);
     } else {
       return await this.handleUnencryptedBatch(buffer, from);
@@ -408,6 +410,7 @@ export class Session extends EventEmitter<SessionEvent> {
       encryptor,
     });
 
+    console.log(origin(from), "batch");
     const batch = await ReceiveBatch.from(buffer);
 
     const packets: Uint8Array[] = [];
@@ -422,10 +425,16 @@ export class Session extends EventEmitter<SessionEvent> {
   async handleBedrock(data: Uint8Array, from: Origin) {
     const buffer = new Buffer(data);
     const id = BedrockPacket.header(buffer);
+    console.log(origin(from), "bedrock", id);
 
     if (from === "client") {
       if (id === LoginPacket.id) {
         data = await this.handleLoginPacket(buffer);
+      }
+
+      if (id === ResourcePackResponse.id) {
+        const packet = ResourcePackResponse.from(buffer);
+        console.log(ResourcePackStatus[packet.status]);
       }
     }
 
@@ -459,7 +468,7 @@ export class Session extends EventEmitter<SessionEvent> {
     handshake.token.payload.salt = this._salt;
     await handshake.token.sign(keyPair);
 
-    this.state = Encrypted;
+    this.state = SessionState.Encrypted;
 
     return await handshake.export();
   }
