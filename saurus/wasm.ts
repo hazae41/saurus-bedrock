@@ -1,7 +1,7 @@
 import { createHash } from "https://deno.land/std/hash/mod.ts";
 
-export * from "../../denoflate/mod.ts";
-export * from "../../aescfb8/mod.ts";
+export { deflate, inflate } from "https://deno.land/x/denoflate/mod.ts";
+export { Aes256Cfb8 } from "../../aescfb/mod.ts";
 
 export function sha256(...datas: ArrayBuffer[]) {
   const hash = createHash("sha256");

@@ -1,4 +1,5 @@
 import { Address, Listener, Origin, origin } from "./handler.ts";
+
 import {
   diffieHellman,
   EventEmitter,
@@ -7,6 +8,7 @@ import {
   Handler,
   KeyPair,
 } from "./mod.ts";
+
 import {
   ACK,
   AcknowledgePacket,
@@ -24,12 +26,14 @@ import {
   ProtocolPacket,
   ServerHandshakePacket,
 } from "./protocol/mod.ts";
+
 import { fromB64 } from "./saurus.ts";
-import { Aes256Cfb8 } from "./wasm.ts";
+
 import {
   ResourcePackResponse,
   ResourcePackStatus,
 } from "./protocol/bedrock/resourcepacks.ts";
+import { Aes256Cfb8 } from "../../aescfb/mod.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -44,8 +48,6 @@ export type SessionEvent =
   | "state"
   | "data-in"
   | "data-out"
-  | "packet-in"
-  | "packet-out"
   | "bedrock-in"
   | "bedrock-out";
 
@@ -95,21 +97,6 @@ export class Session extends EventEmitter<SessionEvent> {
 
   _keyPair?: KeyPair;
   _salt = "";
-
-  _clientSecret = "";
-  _serverSecret = "";
-
-  _clientEncryptor?: Aes256Cfb8;
-  _clientDecryptor?: Aes256Cfb8;
-
-  _serverEncryptor?: Aes256Cfb8;
-  _serverDecryptor?: Aes256Cfb8;
-
-  _clientSendCounter = { x: 0 };
-  _serverSendCounter = { x: 0 };
-
-  _clientReceiveCounter = { x: 0 };
-  _serverReceiveCounter = { x: 0 };
 
   constructor(
     public client: Address,
@@ -290,6 +277,7 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const buffer = new Buffer(packet.sub);
     const id = ProtocolPacket.header(buffer);
+    console.log(origin(from), "packet", id);
 
     if (id === BatchPacket().id) {
       packet.sub = await this.handleBatch(buffer, from);
@@ -370,45 +358,23 @@ export class Session extends EventEmitter<SessionEvent> {
       packets.push(await this.handleBedrock(data, from));
     }
 
-    return await new Batch(...packets).export();
+    return await new Batch(packets).export();
   }
 
+  _clientReceiveBatch?: ReturnType<typeof BatchPacket>;
+  _clientSendBatch?: ReturnType<typeof BatchPacket>;
+
+  _serverReceiveBatch?: ReturnType<typeof BatchPacket>;
+  _serverSendBatch?: ReturnType<typeof BatchPacket>;
+
   async handleEncryptedBatch(buffer: Buffer, from: Origin) {
-    const receiveCounter = from === "client"
-      ? this._clientReceiveCounter
-      : this._serverReceiveCounter;
+    const ReceiveBatch = from === "client"
+      ? this._clientReceiveBatch!!
+      : this._serverReceiveBatch!!;
 
-    const sendCounter = from === "client"
-      ? this._serverSendCounter
-      : this._clientSendCounter;
-
-    const receiveSecret = from === "client"
-      ? this._clientSecret
-      : this._serverSecret;
-
-    const sendSecret = from === "client"
-      ? this._serverSecret
-      : this._clientSecret;
-
-    const decryptor = from === "client"
-      ? this._clientDecryptor
-      : this._serverDecryptor;
-
-    const encryptor = from === "client"
-      ? this._serverEncryptor
-      : this._clientEncryptor;
-
-    const ReceiveBatch = BatchPacket({
-      secret: receiveSecret,
-      counter: receiveCounter,
-      decryptor,
-    });
-
-    const SendBatch = BatchPacket({
-      secret: sendSecret,
-      counter: sendCounter,
-      encryptor,
-    });
+    const SendBatch = from === "client"
+      ? this._serverSendBatch!!
+      : this._clientSendBatch!!;
 
     console.log(origin(from), "batch");
     const batch = await ReceiveBatch.from(buffer);
@@ -419,7 +385,7 @@ export class Session extends EventEmitter<SessionEvent> {
       packets.push(await this.handleBedrock(data, from));
     }
 
-    return await new SendBatch(...packets).export();
+    return await new SendBatch(packets).export();
   }
 
   async handleBedrock(data: Uint8Array, from: Origin) {
@@ -460,10 +426,17 @@ export class Session extends EventEmitter<SessionEvent> {
     const bsecret = fromB64(secret);
     const iv = bsecret.slice(0, 16);
 
-    this._serverSecret = secret;
+    this._serverReceiveBatch = BatchPacket({
+      secret,
+      counter: { x: 0 },
+      decryptor: new Aes256Cfb8(bsecret, iv),
+    });
 
-    this._serverEncryptor = new Aes256Cfb8(bsecret, iv);
-    this._serverDecryptor = new Aes256Cfb8(bsecret, iv);
+    this._serverSendBatch = BatchPacket({
+      secret,
+      counter: { x: 0 },
+      encryptor: new Aes256Cfb8(bsecret, iv),
+    });
 
     handshake.token.payload.salt = this._salt;
     await handshake.token.sign(keyPair);
@@ -492,10 +465,17 @@ export class Session extends EventEmitter<SessionEvent> {
     const bsecret = fromB64(secret);
     const iv = bsecret.slice(0, 16);
 
-    this._clientSecret = secret;
+    this._clientReceiveBatch = BatchPacket({
+      secret,
+      counter: { x: 0 },
+      decryptor: new Aes256Cfb8(bsecret, iv),
+    });
 
-    this._clientEncryptor = new Aes256Cfb8(bsecret, iv);
-    this._clientDecryptor = new Aes256Cfb8(bsecret, iv);
+    this._clientSendBatch = BatchPacket({
+      secret,
+      counter: { x: 0 },
+      encryptor: new Aes256Cfb8(bsecret, iv),
+    });
 
     last.payload.identityPublicKey = keyPair.publicKey;
 

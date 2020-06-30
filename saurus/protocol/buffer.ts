@@ -31,8 +31,8 @@ export class Buffer {
   ) {}
 
   static empty(length?: number) {
-    const buffer = new ArrayBuffer(length ?? 0);
-    return new this(new Uint8Array(buffer));
+    const array = new Uint8Array(length ?? 0);
+    return new this(array);
   }
 
   get view() {

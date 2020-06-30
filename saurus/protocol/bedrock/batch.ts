@@ -1,7 +1,7 @@
 import { ProtocolPacket } from "../packets.ts";
 import { Buffer } from "../buffer.ts";
-import { Aes256Cfb8, inflate, deflate, sha256 } from "../../wasm.ts";
 import { fromB64 } from "../../saurus.ts";
+import { sha256, Aes256Cfb8, deflate, inflate } from "../../wasm.ts";
 
 export interface BatchParams {
   secret: string;
@@ -28,13 +28,11 @@ export function BatchPacket(params?: BatchParams) {
 
   return class extends ProtocolPacket {
     static id = 0xfe;
-    packets: Uint8Array[];
 
     constructor(
-      ...packets: Uint8Array[]
+      public packets: Uint8Array[],
     ) {
       super();
-      this.packets = packets;
     }
 
     static async from(buffer: Buffer) {
@@ -62,7 +60,7 @@ export function BatchPacket(params?: BatchParams) {
         packets.push(payload.readUVIntArray());
       }
 
-      return new this(...packets);
+      return new this(packets);
     }
 
     async to(buffer: Buffer) {
@@ -73,7 +71,7 @@ export function BatchPacket(params?: BatchParams) {
         payload.writeUVIntArray(packet);
       }
 
-      const compressed = deflate(payload.array);
+      const compressed = deflate(payload.array, undefined);
 
       if (params?.encryptor) {
         const { encryptor } = params;
