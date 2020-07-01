@@ -1,6 +1,9 @@
 import { createHash } from "https://deno.land/std/hash/mod.ts";
 
 export { deflate, inflate } from "https://deno.land/x/denoflate/mod.ts";
+
+export * as rand from "https://raw.githubusercontent.com/hazae41/denorand/master/mod.ts";
+
 export { Aes256Cfb8 } from "../../aescfb/mod.ts";
 
 export function sha256(...datas: ArrayBuffer[]) {

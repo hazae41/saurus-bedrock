@@ -4,7 +4,6 @@ import {
   diffieHellman,
   EventEmitter,
   genKeyPair,
-  genSalt,
   Handler,
   KeyPair,
 } from "./mod.ts";
@@ -25,15 +24,17 @@ import {
   Open2Request,
   ProtocolPacket,
   ServerHandshakePacket,
+  EncryptedBatchPacket,
 } from "./protocol/mod.ts";
 
-import { fromB64 } from "./saurus.ts";
+import { fromB64, toB64 } from "./saurus.ts";
 
 import {
   ResourcePackResponse,
   ResourcePackStatus,
 } from "./protocol/bedrock/resourcepacks.ts";
 import { Aes256Cfb8 } from "../../aescfb/mod.ts";
+import { rand } from "./wasm.ts";
 
 function insert(array: any[], i: number, value: any) {
   return array.splice(i, 0, value);
@@ -279,7 +280,7 @@ export class Session extends EventEmitter<SessionEvent> {
     const id = ProtocolPacket.header(buffer);
     console.log(origin(from), "packet", id);
 
-    if (id === BatchPacket().id) {
+    if (id === BatchPacket.id) {
       packet.sub = await this.handleBatch(buffer, from);
     }
 
@@ -350,42 +351,38 @@ export class Session extends EventEmitter<SessionEvent> {
   }
 
   async handleUnencryptedBatch(buffer: Buffer, from: Origin) {
-    const Batch = BatchPacket();
-    const batch = await Batch.from(buffer);
+    const batch = await BatchPacket.from(buffer);
     const packets: Uint8Array[] = [];
 
     for (const data of batch.packets) {
       packets.push(await this.handleBedrock(data, from));
     }
 
-    return await new Batch(packets).export();
+    return await new BatchPacket(packets).export();
   }
 
-  _clientReceiveBatch?: ReturnType<typeof BatchPacket>;
-  _clientSendBatch?: ReturnType<typeof BatchPacket>;
-
-  _serverReceiveBatch?: ReturnType<typeof BatchPacket>;
-  _serverSendBatch?: ReturnType<typeof BatchPacket>;
+  _clientBatch?: typeof BatchPacket;
+  _serverBatch?: typeof BatchPacket;
 
   async handleEncryptedBatch(buffer: Buffer, from: Origin) {
     const ReceiveBatch = from === "client"
-      ? this._clientReceiveBatch!!
-      : this._serverReceiveBatch!!;
+      ? this._clientBatch!!
+      : this._serverBatch!!;
 
     const SendBatch = from === "client"
-      ? this._serverSendBatch!!
-      : this._clientSendBatch!!;
+      ? this._serverBatch!!
+      : this._clientBatch!!;
 
     console.log(origin(from), "batch");
     const batch = await ReceiveBatch.from(buffer);
 
     const packets: Uint8Array[] = [];
-
     for (const data of batch.packets) {
       packets.push(await this.handleBedrock(data, from));
     }
 
-    return await new SendBatch(packets).export();
+    const sendBatch = new SendBatch(packets);
+    return await sendBatch.export();
   }
 
   async handleBedrock(data: Uint8Array, from: Origin) {
@@ -423,20 +420,7 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
-    const bsecret = fromB64(secret);
-    const iv = bsecret.slice(0, 16);
-
-    this._serverReceiveBatch = BatchPacket({
-      secret,
-      counter: { x: 0 },
-      decryptor: new Aes256Cfb8(bsecret, iv),
-    });
-
-    this._serverSendBatch = BatchPacket({
-      secret,
-      counter: { x: 0 },
-      encryptor: new Aes256Cfb8(bsecret, iv),
-    });
+    this._serverBatch = EncryptedBatchPacket(secret, "server");
 
     handshake.token.payload.salt = this._salt;
     await handshake.token.sign(keyPair);
@@ -452,7 +436,7 @@ export class Session extends EventEmitter<SessionEvent> {
     const last = login.tokens[login.tokens.length - 1];
 
     const keyPair = await genKeyPair();
-    const salt = await genSalt();
+    const salt = toB64(rand.u8(16));
 
     this._keyPair = keyPair;
     this._salt = salt;
@@ -462,20 +446,7 @@ export class Session extends EventEmitter<SessionEvent> {
 
     const secret = await diffieHellman({ privateKey, publicKey, salt });
 
-    const bsecret = fromB64(secret);
-    const iv = bsecret.slice(0, 16);
-
-    this._clientReceiveBatch = BatchPacket({
-      secret,
-      counter: { x: 0 },
-      decryptor: new Aes256Cfb8(bsecret, iv),
-    });
-
-    this._clientSendBatch = BatchPacket({
-      secret,
-      counter: { x: 0 },
-      encryptor: new Aes256Cfb8(bsecret, iv),
-    });
+    this._clientBatch = EncryptedBatchPacket(secret, "client");
 
     last.payload.identityPublicKey = keyPair.publicKey;
 

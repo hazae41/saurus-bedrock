@@ -33,7 +33,7 @@ export class Saurus extends EventEmitter<"command"> {
 
   private onerror(e: Error) {
     if (e.name === "ConnectionReset") return;
-    console.error(e);
+    console.error(e.message);
   }
 
   async read() {

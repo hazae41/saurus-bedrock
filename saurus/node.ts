@@ -47,10 +47,6 @@ export async function diffieHellman(dh: DiffieHellman) {
   return await call(process("diffiehellman"), dh) as string;
 }
 
-export async function genSalt() {
-  return await call(process("salt")) as string;
-}
-
 export async function sign(keyPair: KeyPair, data: Uint8Array) {
   return await call(process("sign"), {
     privateKey: keyPair.privateKey,
