@@ -436,7 +436,10 @@ export class Session extends EventEmitter<SessionEvent> {
     const last = login.tokens[login.tokens.length - 1];
 
     const keyPair = await genKeyPair();
-    const salt = toB64(rand.u8(16));
+
+    const bsalt = new Uint8Array(16);
+    crypto.getRandomValues(bsalt);
+    const salt = toB64(bsalt);
 
     this._keyPair = keyPair;
     this._salt = salt;
