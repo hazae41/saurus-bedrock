@@ -1,0 +1,470 @@
+lol
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:27:40 INFO] Starting Server
+[2020-08-19 20:27:40 INFO] Session ID d32cee27-c7c0-4db2-9767-3aa6d6550de1
+[2020-08-19 20:27:40 INFO] Level Name: Bedrock level
+[2020-08-19 20:27:40 INFO] Game mode: 0 Survival
+[2020-08-19 20:27:40 INFO] Difficulty: 1 EASY
+[2020-08-19 20:27:40 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:27:42 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:27:42 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:27:43 INFO] IPv4 supported, port: 57843
+[2020-08-19 20:27:43 INFO] IPv6 supported, port: 57844
+[2020-08-19 20:27:43 INFO] Server started.
+lol
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:29:01 INFO] Starting Server
+[2020-08-19 20:29:01 INFO] Session ID 98389ff2-be76-470e-8d9c-854338c16cda
+[2020-08-19 20:29:01 INFO] Level Name: Bedrock level
+[2020-08-19 20:29:01 INFO] Game mode: 0 Survival
+[2020-08-19 20:29:01 INFO] Difficulty: 1 EASY
+[2020-08-19 20:29:01 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:29:03 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:29:03 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:29:03 INFO] IPv4 supported, port: 53381
+[2020-08-19 20:29:03 INFO] IPv6 supported, port: 53382
+[2020-08-19 20:29:03 INFO] Server started.
+lol
+[2020-07-19 20:29:20 INFO] It works!
+>d
+Unknown command: d. Please check that the command exists and that you have permission to use it.
+>
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:31:15 INFO] Starting Server
+[2020-08-19 20:31:15 INFO] Level Name: Bedrock level
+[2020-08-19 20:31:15 INFO] Game mode: 0 Survival
+[2020-08-19 20:31:15 INFO] Difficulty: 1 EASY
+[2020-08-19 20:31:16 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:31:17 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:31:17 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:31:17 INFO] IPv4 supported, port: 64675
+[2020-08-19 20:31:17 INFO] IPv6 supported, port: 64676
+[2020-08-19 20:31:18 INFO] Server started.
+>test
+[2020-07-19 20:31:29 INFO] It works!
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:36:58 INFO] Starting Server
+[2020-08-19 20:36:58 INFO] Version 1.16.20.3
+[2020-08-19 20:36:58 INFO] Session ID 148a4d87-b1cd-4aa5-876a-06322a940dba
+[2020-08-19 20:36:58 INFO] Level Name: Bedrock level
+[2020-08-19 20:36:58 INFO] Game mode: 0 Survival
+[2020-08-19 20:36:58 INFO] Difficulty: 1 EASY
+[2020-08-19 20:36:59 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:37:00 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:37:00 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:37:00 INFO] IPv4 supported, port: 50422
+[2020-08-19 20:37:00 INFO] IPv6 supported, port: 50423
+[2020-08-19 20:37:01 INFO] Server started.
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:37:20 INFO] Starting Server
+[2020-08-19 20:37:20 INFO] Version 1.16.20.3
+[2020-08-19 20:37:20 INFO] Session ID 23f2b51f-8311-4529-a733-398902bf7fff
+[2020-08-19 20:37:20 INFO] Level Name: Bedrock level
+[2020-08-19 20:37:20 INFO] Game mode: 0 Survival
+[2020-08-19 20:37:20 INFO] Difficulty: 1 EASY
+[2020-08-19 20:37:20 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:37:21 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:37:21 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:37:22 INFO] IPv4 supported, port: 54329
+[2020-08-19 20:37:22 INFO] IPv6 supported, port: 54330
+[2020-08-19 20:37:22 INFO] Server started.
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:41:53 INFO] Starting Server
+[2020-08-19 20:41:53 INFO] Version 1.16.20.3
+[2020-08-19 20:41:53 INFO] Session ID 12d2fd0a-e324-46c2-b9f4-76ae318b9487
+[2020-08-19 20:41:53 INFO] Level Name: Bedrock level
+[2020-08-19 20:41:53 INFO] Game mode: 0 Survival
+[2020-08-19 20:41:53 INFO] Difficulty: 1 EASY
+[2020-08-19 20:41:53 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:41:54 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:41:54 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:41:55 INFO] IPv4 supported, port: 58853
+[2020-08-19 20:41:55 INFO] IPv6 supported, port: 58854
+[2020-08-19 20:41:55 INFO] Server started.
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:43:49 INFO] Starting Server
+[2020-08-19 20:43:49 INFO] Version 1.16.20.3
+[2020-08-19 20:43:49 INFO] Session ID f40453eb-2b91-49df-a444-504a4f69cd0c
+[2020-08-19 20:43:49 INFO] Level Name: Bedrock level
+[2020-08-19 20:43:49 INFO] Game mode: 0 Survival
+[2020-08-19 20:43:49 INFO] Difficulty: 1 EASY
+[2020-08-19 20:43:49 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:43:51 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:43:51 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:43:51 INFO] IPv4 supported, port: 60859
+[2020-08-19 20:43:51 INFO] IPv6 supported, port: 60860
+[2020-08-19 20:43:52 INFO] Server started.
+> test
+[2020-07-19 20:43:58 INFO] It works!
+[2020-08-19 20:44:24 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> test
+[2020-07-19 20:44:43 INFO] It works!
+> sto
+Unknown command: sto. Please check that the command exists and that you have permission to use it.
+> stop
+[2020-08-19 20:44:59 INFO] Server stop requested.
+[2020-08-19 20:44:59 INFO] Stopping server...
+Quit correctly
+
+
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:45:12 INFO] Starting Server
+[2020-08-19 20:45:12 INFO] Session ID e337454b-8fe2-4456-acb5-9c92521d1b49
+[2020-08-19 20:45:12 INFO] Level Name: Bedrock level
+[2020-08-19 20:45:12 INFO] Game mode: 0 Survival
+[2020-08-19 20:45:12 INFO] Difficulty: 1 EASY
+[2020-08-19 20:45:13 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:45:16 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:45:16 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:45:16 INFO] IPv4 supported, port: 50690
+[2020-08-19 20:45:16 INFO] IPv6 supported, port: 50691
+[2020-08-19 20:45:17 INFO] Server started.
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:46:32 INFO] Starting Server
+[2020-08-19 20:46:32 INFO] Session ID c3ad90b7-0230-4482-be8d-0f76f604ab8d
+[2020-08-19 20:46:32 INFO] Level Name: Bedrock level
+[2020-08-19 20:46:32 INFO] Game mode: 0 Survival
+[2020-08-19 20:46:32 INFO] Difficulty: 1 EASY
+[2020-08-19 20:46:32 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:46:35 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:46:35 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:46:35 INFO] IPv4 supported, port: 58494
+[2020-08-19 20:46:35 INFO] IPv6 supported, port: 58495
+[2020-08-19 20:46:36 INFO] Server started.
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:46:57 INFO] Starting Server
+[2020-08-19 20:46:57 INFO] Session ID 56cb0590-4f82-4586-bed0-d8e5268aa4f6
+[2020-08-19 20:46:57 INFO] Level Name: Bedrock level
+[2020-08-19 20:46:57 INFO] Game mode: 0 Survival
+[2020-08-19 20:46:57 INFO] Difficulty: 1 EASY
+[2020-08-19 20:46:58 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:47:01 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:47:01 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:47:01 INFO] IPv4 supported, port: 59948
+[2020-08-19 20:47:01 INFO] IPv6 supported, port: 59949
+[2020-08-19 20:47:03 INFO] Server started.
+[2020-08-19 20:47:08 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> test
+[2020-07-19 20:47:34 INFO] It works!
+[2020-08-19 20:53:12 INFO] Running AutoCompaction...
+NO LOG FILE! - setting up server logging...
+[2020-08-19 20:57:12 INFO] Starting Server
+[2020-08-19 20:57:12 INFO] Version 1.16.20.3
+[2020-08-19 20:57:12 INFO] Session ID 62bdf4ac-2d8a-47f4-8c9c-f70aa95b5b30
+[2020-08-19 20:57:12 INFO] Level Name: Bedrock level
+[2020-08-19 20:57:12 INFO] Game mode: 0 Survival
+[2020-08-19 20:57:12 INFO] Difficulty: 1 EASY
+[2020-08-19 20:57:12 INFO] opening worlds/Bedrock level/db
+[2020-08-19 20:57:15 INFO] IPv4 supported, port: 19132
+[2020-08-19 20:57:15 INFO] IPv6 supported, port: 19133
+[2020-08-19 20:57:16 INFO] IPv4 supported, port: 60878
+[2020-08-19 20:57:16 INFO] IPv6 supported, port: 60879
+[2020-08-19 20:57:18 INFO] Server started.
+> test
+Unknown command: test. Please check that the command exists and that you have permission to use it.
+[2020-08-19 20:57:38 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> test
+[2020-07-19 20:57:50 INFO] It works!
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 21:05:11 INFO] Starting Server
+[2020-08-19 21:05:11 INFO] Version 1.16.20.3
+[2020-08-19 21:05:11 INFO] Session ID d67983be-d602-4c8d-86fe-4af7a238af65
+[2020-08-19 21:05:11 INFO] Level Name: Bedrock level
+[2020-08-19 21:05:11 INFO] Game mode: 0 Survival
+[2020-08-19 21:05:11 INFO] Difficulty: 1 EASY
+[2020-08-19 21:05:11 INFO] opening worlds/Bedrock level/db
+[2020-08-19 21:05:13 INFO] IPv4 supported, port: 19132
+[2020-08-19 21:05:13 INFO] IPv6 supported, port: 19133
+[2020-08-19 21:05:14 INFO] IPv4 supported, port: 64085
+[2020-08-19 21:05:14 INFO] IPv6 supported, port: 64086
+[2020-08-19 21:05:15 INFO] Server started.
+[2020-08-19 21:05:20 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+[2020-08-19 21:11:24 INFO] Running AutoCompaction...
+> sto
+Unknown command: sto. Please check that the command exists and that you have permission to use it.
+> stop
+[2020-08-19 21:15:36 INFO] Server stop requested.
+[2020-08-19 21:15:36 INFO] Stopping server...
+Quit correctly
+
+
+> 
+> o
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 21:17:17 INFO] Starting Server
+[2020-08-19 21:17:17 INFO] Version 1.16.20.3
+[2020-08-19 21:17:17 INFO] Session ID 4b2c7bf1-01a5-4c66-a7b9-7eae3cc851a9
+[2020-08-19 21:17:17 INFO] Level Name: Bedrock level
+[2020-08-19 21:17:17 INFO] Game mode: 0 Survival
+[2020-08-19 21:17:17 INFO] Difficulty: 1 EASY
+[2020-08-19 21:17:17 INFO] opening worlds/Bedrock level/db
+[2020-08-19 21:17:20 INFO] IPv4 supported, port: 19132
+[2020-08-19 21:17:20 INFO] IPv6 supported, port: 19133
+[2020-08-19 21:17:20 INFO] IPv4 supported, port: 51399
+[2020-08-19 21:17:20 INFO] IPv6 supported, port: 51400
+[2020-08-19 21:17:21 INFO] Server started.
+[2020-08-19 21:17:25 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> stop
+[2020-08-19 21:19:16 INFO] Server stop requested.
+[2020-08-19 21:19:16 INFO] Stopping server...
+Quit correctly
+
+
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 21:19:21 INFO] Starting Server
+[2020-08-19 21:19:21 INFO] Session ID 32b526e4-269d-40c3-aa94-728db8a32ba7
+[2020-08-19 21:19:21 INFO] Version 1.16.20.3
+[2020-08-19 21:19:21 INFO] Level Name: Bedrock level
+[2020-08-19 21:19:21 INFO] Game mode: 0 Survival
+[2020-08-19 21:19:21 INFO] Difficulty: 1 EASY
+[2020-08-19 21:19:21 INFO] opening worlds/Bedrock level/db
+[2020-08-19 21:19:23 INFO] IPv4 supported, port: 19132
+[2020-08-19 21:19:23 INFO] IPv6 supported, port: 19133
+[2020-08-19 21:19:24 INFO] IPv4 supported, port: 63515
+[2020-08-19 21:19:24 INFO] IPv6 supported, port: 63516
+[2020-08-19 21:19:24 INFO] Server started.
+[2020-08-19 21:19:47 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+[2020-08-19 21:20:07 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-08-19 21:20:14 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> test
+[2020-07-19 21:22:14 INFO] It works!
+> sto
+Unknown command: sto. Please check that the command exists and that you have permission to use it.
+> stop
+[2020-08-19 21:32:32 INFO] Server stop requested.
+[2020-08-19 21:32:32 INFO] Stopping server...
+Quit correctly
+
+
+> 
+NO LOG FILE! - setting up server logging...
+[2020-08-19 21:33:33 INFO] Starting Server
+[2020-08-19 21:33:33 INFO] Session ID 14b4f843-e544-47eb-9241-7f7281cd4764
+[2020-08-19 21:33:33 INFO] Version 1.16.20.3
+[2020-08-19 21:33:33 INFO] Level Name: Bedrock level
+[2020-08-19 21:33:33 INFO] Game mode: 0 Survival
+[2020-08-19 21:33:33 INFO] Difficulty: 1 EASY
+[2020-08-19 21:33:33 INFO] opening worlds/Bedrock level/db
+[2020-08-19 21:33:36 INFO] IPv4 supported, port: 19132
+[2020-08-19 21:33:36 INFO] IPv6 supported, port: 19133
+[2020-08-19 21:33:36 INFO] IPv4 supported, port: 55732
+[2020-08-19 21:33:36 INFO] IPv6 supported, port: 55733
+[2020-08-19 21:33:37 INFO] Server started.
+[2020-08-19 21:33:59 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+NO LOG FILE! - setting up server logging...
+[2020-08-19 21:37:31 INFO] Starting Server
+[2020-08-19 21:37:31 INFO] Session ID ec7e41c3-083e-4226-aef6-493f4adb5f20
+[2020-08-19 21:37:31 INFO] Version 1.16.20.3
+[2020-08-19 21:37:31 INFO] Level Name: Bedrock level
+[2020-08-19 21:37:31 INFO] Game mode: 0 Survival
+[2020-08-19 21:37:31 INFO] Difficulty: 1 EASY
+[2020-08-19 21:37:32 INFO] opening worlds/Bedrock level/db
+[2020-08-19 21:37:34 INFO] IPv4 supported, port: 19132
+[2020-08-19 21:37:34 INFO] IPv6 supported, port: 19133
+[2020-08-19 21:37:34 INFO] IPv4 supported, port: 52064
+[2020-08-19 21:37:34 INFO] IPv6 supported, port: 52065
+[2020-08-19 21:37:35 INFO] Server started.
+[2020-08-19 21:38:37 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+[2020-08-19 21:39:00 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+[2020-08-19 21:39:11 INFO] Player connected: hazae41, xuid: 2535434693526619
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+No targets matched selector
+> testfor hazae41
+Found hazae41
+> title hazae41 title Welcome
+> title hazae41 subtitle to Minecraft
+Title command successfully executed
+Title command successfully executed
+> title hazae41 actionbar Code: qj6e3
+Title command successfully executed
+> title hazae41 actionbar Connected!
+Title command successfully executed
+[2020-08-19 21:43:23 INFO] Player disconnected: hazae41, xuid: 2535434693526619
+> 
