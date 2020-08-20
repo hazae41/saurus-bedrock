@@ -1,5 +1,6 @@
 import { encode, decode } from "./mod.ts";
 import { Players } from "./players.ts";
+import { Append } from "./files.ts";
 
 import { readLines } from "https://deno.land/std@0.65.0/io/bufio.ts";
 import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
@@ -27,10 +28,9 @@ export type MinecraftEvent =
 export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly process: Deno.Process<any>;
   readonly players = new Players(this);
+  readonly logs = Deno.openSync("logs.txt", Append);
 
-  constructor(
-    readonly logs?: Deno.File,
-  ) {
+  constructor() {
     super();
 
     this.process = Deno.run({
@@ -76,7 +76,6 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
 
   async log(line: string) {
     line += "\n";
-    if (!this.logs) return;
     await this.logs.write(encode(line));
   }
 
