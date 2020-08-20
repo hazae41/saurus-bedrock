@@ -1,13 +1,8 @@
+import { encode, decode } from "./mod.ts";
+import { Players } from "./players.ts";
+
 import { readLines } from "https://deno.land/std@0.65.0/io/bufio.ts";
 import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
-
-export const encode = (text: string) => new TextEncoder().encode(text);
-export const decode = (bytes: Uint8Array) => new TextDecoder().decode(bytes);
-
-export type MinecraftEvent =
-  | "log"
-  | "error"
-  | "command";
 
 export function timeOf(millis?: number) {
   const twoDigits = (n: number) => `0${n}`.slice(-2);
@@ -24,8 +19,14 @@ export function timeOf(millis?: number) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+export type MinecraftEvent =
+  | "log"
+  | "error"
+  | "command";
+
 export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly process: Deno.Process<any>;
+  readonly players = new Players(this);
 
   constructor(
     readonly command: string,
@@ -66,7 +67,7 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
     for await (const line of readLines(reader)) this.emit("command", line);
   }
 
-  private async write(line: string) {
+  async write(line: string) {
     line += "\n";
     const writer = this.process.stdin!!;
     await writer.write(encode(line));

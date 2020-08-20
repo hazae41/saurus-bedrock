@@ -1,17 +1,18 @@
+import { Minecraft } from "../saurus/minecraft.ts"
 import { Players, Player } from "../saurus/players.ts";
 
 const config = {
   title: "Welcome",
-  subtitle: "to Minecraft",
+  subtitle: "to Saurus",
 };
 
 export class JoinTitle {
   constructor(
-    readonly players: Players,
+    readonly minecraft: Minecraft,
   ) {
     const { title, subtitle } = config;
 
-    players.on(["spawn"], (player: Player) => {
+    minecraft.players.on(["spawn"], (player: Player) => {
       setTimeout(() => {
         if (!player.spawned) return;
         player.title(title, subtitle);

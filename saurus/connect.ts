@@ -1,3 +1,4 @@
+import { Minecraft } from "./minecraft.ts";
 import { Players, Player } from "./players.ts";
 import { WSHandler, WSConnection } from "./websockets.ts";
 
@@ -7,7 +8,7 @@ export class Connector {
   handler = new WSHandler(this.port);
 
   constructor(
-    readonly players: Players,
+    readonly minecraft: Minecraft,
     readonly port: number,
     readonly tls = false,
   ) {
@@ -22,12 +23,13 @@ export class Connector {
   }
 
   private async connect(conn: WSConnection) {
+    const { players } = this.minecraft;
     conn.write("Player name?");
 
     const name = await conn.read();
     if (typeof name !== "string") return;
 
-    const player = this.players.names.get(name);
+    const player = players.names.get(name);
 
     if (!player) {
       conn.write("Invalid name");

@@ -1,4 +1,5 @@
-import { Minecraft, encode, decode } from "./minecraft.ts";
+import { encode, decode } from "./mod.ts";
+import { Minecraft } from "./minecraft.ts";
 import { WSConnection } from "./websockets.ts";
 import * as Files from "./files.ts";
 
@@ -100,7 +101,7 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
   }
 
   private wait() {
-    const check = () => this.minecraft.execute(`testfor ${this.name}`);
+    const check = () => this.minecraft.write(`testfor ${this.name}`);
 
     const onlog = (line: string) => {
       if (line.includes(`Found ${this.name}`)) {
@@ -124,19 +125,19 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
   }
 
   async msg(line: string) {
-    await this.minecraft.execute(`tell ${this.name} ${line}`);
+    await this.minecraft.write(`tell ${this.name} ${line}`);
   }
 
   async title(title = "", subtitle = "") {
-    await this.minecraft.execute(`title ${this.name} title ${title}`);
-    await this.minecraft.execute(`title ${this.name} subtitle ${subtitle}`);
+    await this.minecraft.write(`title ${this.name} title ${title}`);
+    await this.minecraft.write(`title ${this.name} subtitle ${subtitle}`);
   }
 
   async actionbar(message: string) {
-    await this.minecraft.execute(`title ${this.name} actionbar ${message}`);
+    await this.minecraft.write(`title ${this.name} actionbar ${message}`);
   }
 
   async kick(reason = "") {
-    await this.minecraft.execute(`kick ${this.name} ${reason}`);
+    await this.minecraft.write(`kick ${this.name} ${reason}`);
   }
 }
