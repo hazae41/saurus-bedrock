@@ -1,6 +1,4 @@
 import { Minecraft } from "./saurus/minecraft.ts";
-import { Players, Player } from "./saurus/players.ts";
-import { WSHandler, WSConnection } from "./saurus/websockets.ts";
 import { Connector } from "./saurus/connect.ts";
 import * as Files from "./saurus/files.ts";
 
@@ -14,7 +12,7 @@ const logs = Deno.openSync("logs.txt", Files.Append);
 const command = "minecraft/bedrock_server.exe";
 const minecraft = new Minecraft(command, logs);
 
-const connector = new Connector(minecraft, 8081);
+const connector = new Connector(minecraft, 19134, /*ssl*/ true);
 
 new JoinTitle(minecraft);
 new Test(minecraft);

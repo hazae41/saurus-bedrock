@@ -2,8 +2,6 @@ import { serve, serveTLS } from "https://deno.land/std@0.65.0/http/server.ts";
 
 import {
   acceptWebSocket,
-  isWebSocketCloseEvent,
-  isWebSocketPingEvent,
   WebSocket,
 } from "https://deno.land/std@0.65.0/ws/mod.ts";
 
@@ -47,29 +45,35 @@ export class WSHandler extends EventEmitter<"accept" | "close"> {
   }
 
   private async listenTLS() {
-    const { port } = this;
-    const certFile = "./ssl.cert";
-    const keyFile = "./ssl.key";
-    const o = { port, certFile, keyFile };
-    for await (const req of serveTLS(o)) {
-      const { conn, r: bufReader, w: bufWriter, headers } = req;
+    try {
+      const { port } = this;
+      const certFile = "./ssl.cert";
+      const keyFile = "./ssl.key";
+      const o = { port, certFile, keyFile };
 
-      try {
-        const socket = await acceptWebSocket({
-          conn,
-          bufReader,
-          bufWriter,
-          headers,
-        });
+      for await (const req of serveTLS(o)) {
+        const { conn, r: bufReader, w: bufWriter, headers } = req;
 
-        const connection = new WSConnection(socket);
+        try {
+          const socket = await acceptWebSocket({
+            conn,
+            bufReader,
+            bufWriter,
+            headers,
+          });
 
-        connection.on(["close"], () => this.emit("close", connection));
+          const connection = new WSConnection(socket);
 
-        this.emit("accept", connection);
-      } catch (e) {
-        await req.respond({ status: 400 });
+          connection.on(["close"], () => this.emit("close", connection));
+
+          this.emit("accept", connection);
+        } catch (e) {
+          console.error(e);
+          await req.respond({ status: 400 });
+        }
       }
+    } catch (e) {
+      console.error(e);
     }
   }
 }
@@ -90,11 +94,7 @@ export class WSConnection extends EventEmitter<"data" | "close"> {
       }
     } catch (e) {}
 
-    if (!this.socket.isClosed) {
-      await this.socket.close();
-    }
-
-    await this.emit("close");
+    await this.close();
   }
 
   async read() {
@@ -106,13 +106,21 @@ export class WSConnection extends EventEmitter<"data" | "close"> {
       }
     } catch (e) {}
 
-    if (!this.socket.isClosed) {
-      await this.socket.close();
-    }
+    await this.close();
   }
 
   async write(data: any) {
     const text = JSON.stringify(data);
     await this.socket.send(text);
+  }
+
+  get closed() {
+    return this.socket.isClosed;
+  }
+
+  async close() {
+    if (this.closed) return;
+    await this.socket.close();
+    await this.emit("close");
   }
 }

@@ -79,8 +79,7 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
 
 export class Player extends EventEmitter<"spawn" | "leave"> {
   spawned = false;
-
-  connection?: WSConnection;
+  conn?: WSConnection;
 
   constructor(
     readonly minecraft: Minecraft,
@@ -100,8 +99,13 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
     this.wait();
   }
 
+  json() {
+    const { name, xuid } = this;
+    return { name, xuid };
+  }
+
   private wait() {
-    const check = () => this.minecraft.write(`testfor ${this.name}`);
+    const { minecraft } = this;
 
     const onlog = (line: string) => {
       if (line.includes(`Found ${this.name}`)) {
@@ -109,11 +113,14 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
       }
     };
 
-    this.minecraft.on(["log"], onlog);
-    const i = setInterval(check, 1000);
+    minecraft.on(["log"], onlog);
+
+    const i = setInterval(() => {
+      minecraft.write(`testfor ${this.name}`);
+    }, 1000);
 
     const clean = () => {
-      this.minecraft.off(["log"], onlog);
+      minecraft.off(["log"], onlog);
       clearInterval(i);
     };
 
@@ -124,20 +131,34 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
     });
   }
 
-  async msg(line: string) {
-    await this.minecraft.write(`tell ${this.name} ${line}`);
+  async tell(line: string) {
+    const { minecraft } = this;
+    await minecraft.write(`tell ${this.name} ${line}`);
   }
 
   async title(title = "", subtitle = "") {
-    await this.minecraft.write(`title ${this.name} title ${title}`);
-    await this.minecraft.write(`title ${this.name} subtitle ${subtitle}`);
+    const { minecraft } = this;
+    await minecraft.write(`title ${this.name} title ${title}`);
+    await minecraft.write(`title ${this.name} subtitle ${subtitle}`);
   }
 
   async actionbar(message: string) {
-    await this.minecraft.write(`title ${this.name} actionbar ${message}`);
+    const { minecraft } = this;
+    await minecraft.write(`title ${this.name} actionbar ${message}`);
   }
 
   async kick(reason = "") {
-    await this.minecraft.write(`kick ${this.name} ${reason}`);
+    const { minecraft } = this;
+    await minecraft.write(`kick ${this.name} ${reason}`);
+  }
+
+  async execute(command: string) {
+    const { minecraft } = this;
+    await minecraft.write(`execute ${this.name} ~ ~ ~ ${command}`);
+  }
+
+  async getpos() {
+    const { minecraft } = this;
+    await this.execute(`teleport ~0 ~0 ~0`);
   }
 }
