@@ -35,7 +35,9 @@ git clone https://github.com/hazae41/saurus
 
 - Install [Deno](https://deno.land/#installation) and [Velociraptor](https://github.com/umbopepato/velociraptor#install).
 
-- Configure `start.ts`, add/remove plugins, modify ports, rename .exe to .sh if you're on Linux.
+- Configure `start.ts`, add/remove plugins, modify ports, ...
+
+- Generate a SSL certificate with its key and put them into `ssl.cert` and `ssl.key`
 
 - Start Saurus using Velociraptor.
 

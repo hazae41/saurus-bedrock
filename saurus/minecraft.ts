@@ -29,13 +29,14 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly players = new Players(this);
 
   constructor(
-    readonly command: string,
     readonly logs?: Deno.File,
   ) {
     super();
 
     this.process = Deno.run({
-      cmd: command.split(" "),
+      cwd: "minecraft",
+      cmd: ["./bedrock_server"],
+      env: { LD_LIBRARY_PATH: "." },
       stdin: "piped",
       stdout: "piped",
       stderr: "piped",

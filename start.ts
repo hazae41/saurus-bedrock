@@ -9,9 +9,7 @@ export * from "./saurus/mod.ts";
 
 const logs = Deno.openSync("logs.txt", Files.Append);
 
-const command = "minecraft/bedrock_server.exe";
-const minecraft = new Minecraft(command, logs);
-
+const minecraft = new Minecraft(logs);
 const connector = new Connector(minecraft, 19134, /*ssl*/ true);
 
 new JoinTitle(minecraft);
