@@ -79,9 +79,10 @@ export class Connector {
       }
     }
 
+    player.conn = conn;
     await conn.write("Connected");
     player.actionbar("Connected");
-    player.conn = conn;
+    player.emit("connect");
   }
 
   private async authorize(conn: WSConnection) {

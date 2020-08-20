@@ -76,7 +76,7 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
   }
 }
 
-export class Player extends EventEmitter<"spawn" | "leave"> {
+export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
   spawned = false;
   conn?: WSConnection;
 
@@ -99,8 +99,9 @@ export class Player extends EventEmitter<"spawn" | "leave"> {
   }
 
   json() {
-    const { name, xuid } = this;
-    return { name, xuid };
+    const { name, xuid, spawned } = this;
+    const connected = Boolean(this.conn);
+    return { name, xuid, spawned, connected };
   }
 
   private wait() {
