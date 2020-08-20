@@ -1,5 +1,4 @@
 minecraft
-ssl.cert
-ssl.key
+ssl
 players.yml
 logs.txt

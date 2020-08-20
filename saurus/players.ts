@@ -53,7 +53,6 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
       this.xuids.set(xuid, player);
 
       this.offlines[xuid] = name;
-      console.log(this.offlines);
       this.write();
 
       player.on(["spawn"], () => this.emit("spawn", player));

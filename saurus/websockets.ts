@@ -1,4 +1,7 @@
-import { serve, serveTLS } from "https://deno.land/std@0.65.0/http/server.ts";
+import {
+  HTTPSOptions,
+  serveTLS,
+} from "https://deno.land/std@0.65.0/http/server.ts";
 
 import {
   acceptWebSocket,
@@ -9,49 +12,16 @@ import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
 
 export class WSHandler extends EventEmitter<"accept" | "close"> {
   constructor(
-    readonly port: number,
-    readonly tls = false,
+    readonly options: HTTPSOptions,
   ) {
     super();
 
-    if (this.tls) {
-      this.listenTLS();
-    } else {
-      this.listen();
-    }
+    this.listen();
   }
 
   private async listen() {
-    for await (const req of serve(`:${this.port}`)) {
-      const { conn, r: bufReader, w: bufWriter, headers } = req;
-
-      try {
-        const socket = await acceptWebSocket({
-          conn,
-          bufReader,
-          bufWriter,
-          headers,
-        });
-
-        const connection = new WSConnection(socket);
-
-        connection.on(["close"], () => this.emit("close", connection));
-
-        this.emit("accept", connection);
-      } catch (e) {
-        await req.respond({ status: 400 });
-      }
-    }
-  }
-
-  private async listenTLS() {
     try {
-      const { port } = this;
-      const certFile = "./ssl.cert";
-      const keyFile = "./ssl.key";
-      const o = { port, certFile, keyFile };
-
-      for await (const req of serveTLS(o)) {
+      for await (const req of serveTLS(this.options)) {
         const { conn, r: bufReader, w: bufWriter, headers } = req;
 
         try {

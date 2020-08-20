@@ -8,7 +8,12 @@ export * from "./saurus/mod.ts";
 
 const minecraft = new Minecraft();
 
-const connector = new Connector(minecraft, 19134, /*ssl*/ true);
+const connector = new Connector(minecraft, {
+  port: 19134,
+  hostname: "sunship.tk",
+  certFile: "./ssl/fullchain.pem",
+  keyFile: "./ssl/privkey.pem",
+});
 
 new JoinTitle(minecraft);
 new Test(minecraft);

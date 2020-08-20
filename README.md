@@ -23,6 +23,12 @@ When you launch Saurus, it runs the server under-the-hood and interacts with it 
 
 Players can't run commands directly, they have to use an app for interacting with the server. This allows a better experience for both players, who just have to click a button, and developers, who won't get headaches trying to explain how commands work.
 
+## Test
+
+You can test Saurus on the following servers
+
+- sunship.tk / https://connect.sunship.tk
+
 ## Getting started
 
 - Clone this repo.
@@ -35,9 +41,24 @@ git clone https://github.com/hazae41/saurus
 
 - Install [Deno](https://deno.land/#installation) and [Velociraptor](https://github.com/umbopepato/velociraptor#install).
 
-- Configure `start.ts`, add/remove plugins, modify ports, ...
+- (Linux) Add Deno to your PATH in your `~/.bashrc` file (replace "yourname" by your name).
 
-- Generate a SSL certificate with its key and put them into `ssl.cert` and `ssl.key`
+```
+export DENO_INSTALL="/home/yourname/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+```
+
+- Install Certbot and generate a SSL certificate and its private key. Then put them in a `ssl` folder.
+
+(Linux)
+```
+sudo apt-get install certbot
+sudo certbot certonly --standalone
+```
+
+- (Linux) Ensure you have the read permission on the SSL files.
+
+- Configure `start.ts`: modify the SSL files location, modify the SSL port, add/remove plugins, ...
 
 - Start Saurus using Velociraptor.
 
