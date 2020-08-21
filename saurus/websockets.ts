@@ -8,7 +8,7 @@ import {
   WebSocket,
 } from "https://deno.land/std@0.65.0/ws/mod.ts";
 
-import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
+import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
 
 export class WSHandler extends EventEmitter<"accept" | "close"> {
   constructor(
@@ -48,40 +48,43 @@ export class WSHandler extends EventEmitter<"accept" | "close"> {
   }
 }
 
-export class WSConnection extends EventEmitter<"data" | "close"> {
+export class WSConnection extends EventEmitter<"message" | "close"> {
   constructor(
     readonly socket: WebSocket,
   ) {
     super();
   }
 
-  private async listen() {
-    try {
-      for await (const text of this.socket) {
-        if (typeof text !== "string") continue;
-        const data = JSON.parse(text);
-        await this.emit("data", data);
-      }
-    } catch (e) {}
+  async* listen() {
+    for await (const text of this.socket) {
+      if (typeof text !== "string")
+        throw Error("Type error")
 
-    await this.close();
+      const data = JSON.parse(text);
+
+      if (data.type === "Error")
+        throw Error(data.content)
+
+      if (data.type === "Message")
+        yield data.content;
+    }
   }
 
   async read() {
-    try {
-      for await (const text of this.socket) {
-        if (typeof text !== "string") continue;
-        const data = JSON.parse(text);
-        return data;
-      }
-    } catch (e) {}
-
-    await this.close();
+    for await (const msg of this.listen())
+      return msg;
   }
 
-  async write(data: any) {
+  async write(content: any) {
+    const data = { type: "Message", content }
     const text = JSON.stringify(data);
     await this.socket.send(text);
+  }
+
+  async error(content: any) {
+    const data = { type: "Error", content }
+    const text = JSON.stringify(data)
+    await this.socket.send(text)
   }
 
   get closed() {

@@ -3,7 +3,7 @@ import { Minecraft } from "./minecraft.ts";
 import { WSConnection } from "./websockets.ts";
 import * as Files from "./files.ts";
 
-import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
+import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
 import * as YAML from "https://deno.land/std@0.65.0/encoding/yaml.ts";
 
 export interface OfflinePlayers {
@@ -77,6 +77,7 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
 }
 
 export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
+  online = true;
   spawned = false;
   conn?: WSConnection;
 
@@ -87,48 +88,38 @@ export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
   ) {
     super();
 
-    this.on(["spawn", "high"], () => {
+    this.on(["spawn"], () => {
       this.spawned = true;
     });
 
-    this.on(["leave", "high"], () => {
+    this.on(["leave"], () => {
       this.spawned = false;
+      this.online = false;
     });
 
-    this.wait();
+    this.waitFor();
   }
 
   json() {
-    const { name, xuid, spawned } = this;
+    const { name, xuid, spawned, online } = this;
     const connected = Boolean(this.conn);
-    return { name, xuid, spawned, connected };
+    return { name, xuid, spawned, online, connected };
   }
 
-  private wait() {
+  private async waitFor() {
     const { minecraft } = this;
 
-    const onlog = (line: string) => {
-      if (line.includes(`Found ${this.name}`)) {
-        this.emit("spawn");
-      }
-    };
+    while (true) {
+      if (!this.online) return;
 
-    minecraft.on(["log"], onlog);
+      await new Promise(r => setTimeout(r, 1000));
+      await minecraft.write(`testfor ${this.name}`);
 
-    const i = setInterval(() => {
-      minecraft.write(`testfor ${this.name}`);
-    }, 1000);
+      const [line] = await minecraft.wait(["log"])
+      if (line.includes(`Found ${this.name}`)) break;
+    }
 
-    const clean = () => {
-      minecraft.off(["log"], onlog);
-      clearInterval(i);
-    };
-
-    this.on(["leave"], clean);
-    this.on(["spawn"], () => {
-      this.off(["leave"], clean);
-      clean();
-    });
+    this.emit("spawn")
   }
 
   async tell(line: string) {

@@ -4,6 +4,7 @@ import { WSHandler, WSConnection } from "./websockets.ts";
 
 import { HTTPSOptions } from "https://deno.land/std@0.65.0/http/server.ts";
 import { Random } from "https://deno.land/x/random@v1.1.2/Random.js";
+import { isObject, isString } from "./types.ts";
 
 export class Connector {
   handler = new WSHandler(this.options);
@@ -17,16 +18,19 @@ export class Connector {
 
   private async onaccept(conn: WSConnection) {
     try {
-      await conn.write("Action?");
-      const action = await conn.read();
-      if (typeof action !== "string") return;
+      const etype = Error("Type error");
+
+      const request = await conn.read();
+
+      const action = request.action
+      if (!isString(action)) throw etype;
 
       if (action === "list") await this.list(conn);
-      if (action === "connect") await this.connect(conn);
-      if (action === "authorize") await this.authorize(conn);
+      if (action === "connect") await this.connect(conn, request);
+      if (action === "authorize") await this.authorize(conn, request);
     } catch (e) {
       if (conn.closed) throw e;
-      await conn.write(e.message);
+      await conn.error(e.message);
       await conn.close();
     }
   }
@@ -40,32 +44,26 @@ export class Connector {
     await conn.close();
   }
 
-  private async connect(conn: WSConnection) {
-    const etype = new Error("Type error");
+  private async connect(conn: WSConnection, request: any) {
+    const etype = Error("Type error");
 
     const { players } = this.minecraft;
 
-    await conn.write("Player name?");
-    const name = await conn.read();
-    if (typeof name !== "string") throw etype;
+    const name = request.name
+    if (!isString(name)) throw etype;
 
     const player = players.names.get(name);
+    if (!player) throw Error("Invalid name");
 
-    if (!player) {
-      throw new Error("Invalid name");
-    }
-
-    if (player.conn && !player.conn.closed) {
-      throw new Error("Already connected");
-    }
+    if (player.conn && !player.conn.closed)
+      throw Error("Already connected");
 
     const start = Date.now();
     const code = new Random().string(6);
     player.actionbar(`Code: ${code}`);
+    await conn.write("Code?");
 
-    while (true) {
-      await conn.write("Code?");
-      const code2 = await conn.read();
+    for await (const code2 of conn.listen()) {
       if (typeof code2 !== "string") throw etype;
 
       if (code2 === code) break;
@@ -74,48 +72,46 @@ export class Connector {
       const now = Date.now();
       const limit = 30 * 1000;
 
-      if (now - start > limit) {
-        throw new Error("Time expired");
-      }
+      if (now - start > limit)
+        throw Error("Time expired");
     }
 
     player.conn = conn;
     await conn.write("Connected");
+
     player.actionbar("Connected");
     player.emit("connect");
+
+    await this.connected(conn);
   }
 
-  private async authorize(conn: WSConnection) {
+  private async connected(conn: WSConnection) {
+    for await (const msg of conn.listen())
+      await conn.emit("message", msg)
+  }
+
+  private async authorize(conn: WSConnection, request: any) {
     const etype = new Error("Type error");
 
     const { players } = this.minecraft;
 
-    await conn.write("Player name?");
-
-    const name = await conn.read();
-    if (typeof name !== "string") throw etype;
+    const name = request.name
+    if (!isString(name)) throw etype;
 
     const player = players.names.get(name);
+    if (!player) throw new Error("Invalid name");
+    if (!player.conn) throw new Error("Not connected");
 
-    if (!player) {
-      throw new Error("Invalid name");
-    }
+    const token = request.token
+    if (!isString(token)) throw etype;
 
-    if (!player.conn) {
-      throw new Error("Not connected");
-    }
+    const request2 = { action: "authorize", token }
+    await player.conn.write(request2);
 
-    await conn.write("Token?");
-    const token = await conn.read();
-    if (typeof token !== "string") throw etype;
-
-    await player.conn.write(token);
-    const token2 = await player.conn.read();
-    if (typeof token2 !== "string") throw etype;
-
-    if (token !== token2) {
-      // await player.conn.close();
-      throw new Error("Invalid token");
+    while (true) {
+      const [response] = await player.conn.wait(["message"]);
+      if (response.action !== "authorize") continue;
+      if (response.token === token) break;
     }
 
     await conn.write("Authorized");
@@ -128,31 +124,27 @@ export class Connector {
 
     const { player } = app;
 
-    while (true) {
-      await app.conn.write("Action?");
-      const action = await app.conn.read();
-      if (typeof action !== "string") throw etype;
+    for await (const request of app.conn.listen()) {
+      const action = request.action
+      if (!isString(action)) throw etype;
 
       if (action === "getpos") {
         player.getpos();
       }
 
       if (action === "title") {
-        app.conn.write("Title?");
-        const title = await app.conn.read();
-        if (typeof title !== "string") throw etype;
+        const title = request.title
+        if (!isString(title)) throw etype;
 
-        app.conn.write("Subtitle?");
-        const subtitle = await app.conn.read();
-        if (typeof subtitle !== "string") throw etype;
+        const subtitle = request.subtitle
+        if (!isString(subtitle)) throw etype;
 
         await player.title(title, subtitle);
       }
 
       if (action === "actionbar") {
-        app.conn.write("Message?");
-        const message = await app.conn.read();
-        if (typeof message !== "string") throw etype;
+        const message = request.message
+        if (!isString(message)) throw etype;
 
         await player.actionbar(message);
       }
@@ -164,5 +156,5 @@ export class App {
   constructor(
     readonly player: Player,
     readonly conn: WSConnection,
-  ) {}
+  ) { }
 }

@@ -3,7 +3,7 @@ import { Players } from "./players.ts";
 import { Append } from "./files.ts";
 
 import { readLines } from "https://deno.land/std@0.65.0/io/bufio.ts";
-import { EventEmitter } from "https://deno.land/x/mutevents@1.0/mod.ts";
+import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
 
 export function timeOf(millis?: number) {
   const twoDigits = (n: number) => `0${n}`.slice(-2);
@@ -23,19 +23,24 @@ export function timeOf(millis?: number) {
 export type MinecraftEvent =
   | "log"
   | "error"
-  | "command";
+  | "command"
+  | "start"
+  | "stop";
 
 export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly process: Deno.Process<any>;
   readonly players = new Players(this);
   readonly logs = Deno.openSync("logs.txt", Append);
 
-  constructor() {
+  constructor(
+    readonly cwd = "minecraft",
+    readonly cmd = "./bedrock_server",
+  ) {
     super();
 
     this.process = Deno.run({
-      cwd: "minecraft",
-      cmd: ["./bedrock_server"],
+      cwd: cwd,
+      cmd: cmd.split(" "),
       env: { LD_LIBRARY_PATH: "." },
       stdin: "piped",
       stdout: "piped",
@@ -45,27 +50,49 @@ export class Minecraft extends EventEmitter<MinecraftEvent> {
     this.stdout();
     this.stderr();
     this.stdin();
+
+    this.on(["log", "after"], this.onlog.bind(this));
+    this.on(["error", "after"], this.onerror.bind(this));
+    this.on(["command", "after"], this.oncommand.bind(this))
+  }
+
+  private async onlog(line: string) {
+    this.log(line)
+    console.log(line)
+
+    if (line.includes("Server started.")) this.emit("start");
+  }
+
+  private async onerror(line: string) {
+    this.log(line)
+    console.error(line)
+  }
+
+  private async oncommand(line: string) {
+    this.write(line);
   }
 
   private async stdout() {
     const reader = this.process.stdout!!;
-    this.on(["log", "low"], (line: string) => console.log(line));
-    this.on(["log", "low"], (line: string) => this.log(line));
-    for await (const line of readLines(reader)) this.emit("log", line);
+    for await (const line of readLines(reader))
+      this.emit("log", line);
+
+    this.emit("stop");
+    Deno.exit()
   }
 
   private async stderr() {
     const reader = this.process.stderr!!;
-    this.on(["error", "low"], (line: string) => console.error(line));
-    this.on(["error", "low"], (line: string) => this.log(line));
-    for await (const line of readLines(reader)) this.emit("error", line);
+    for await (const line of readLines(reader))
+      this.emit("error", line);
   }
 
   private async stdin() {
     const reader = Deno.stdin;
-    this.on(["command", "low"], (line: string) => this.write(line));
-    this.on(["command"], (line: string) => this.log(`> ${line}`));
-    for await (const line of readLines(reader)) this.emit("command", line);
+    for await (const line of readLines(reader)) {
+      this.log(`> ${line}`)
+      this.emit("command", line);
+    }
   }
 
   async write(line: string) {
