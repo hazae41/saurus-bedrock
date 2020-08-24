@@ -1,6 +1,4 @@
-# SaurusMC
-
-Less plugins, more Minecraft.
+![](https://i.imgur.com/2QxlKBE.png)
 
 Get the best Minecraft experience, mixing useful plugins with the official Minecraft Bedrock server software under-the-hood. 
 
