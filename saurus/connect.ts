@@ -100,7 +100,9 @@ export class Connector {
     player.conn = conn;
     this.codes.delete(code)
     this.players.delete(player)
-    await conn.write("Connected");
+
+    const { name, xuid } = player;
+    await conn.write({ name, xuid });
 
     player.actionbar("Connected");
     player.emit("connect");
