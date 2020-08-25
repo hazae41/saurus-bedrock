@@ -55,7 +55,7 @@ export class WSConnection extends EventEmitter<"message"> {
 
   async* listen() {
     for await (const e of this.socket) {
-      if (isWebSocketPingEvent(e)) return;
+      if (isWebSocketPingEvent(e)) continue;
       if (isWebSocketCloseEvent(e)) return;
       if (typeof e !== "string") return;
 
