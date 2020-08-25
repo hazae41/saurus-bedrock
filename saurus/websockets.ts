@@ -6,11 +6,13 @@ import {
 import {
   acceptWebSocket,
   WebSocket,
+  isWebSocketPingEvent,
+  isWebSocketCloseEvent
 } from "https://deno.land/std@0.65.0/ws/mod.ts";
 
 import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
 
-export class WSHandler extends EventEmitter<"accept" | "close"> {
+export class WSHandler extends EventEmitter<"accept"> {
   constructor(
     readonly options: HTTPSOptions,
   ) {
@@ -33,12 +35,8 @@ export class WSHandler extends EventEmitter<"accept" | "close"> {
           });
 
           const connection = new WSConnection(socket);
-
-          connection.on(["close"], () => this.emit("close", connection));
-
           this.emit("accept", connection);
         } catch (e) {
-          console.error(e);
           await req.respond({ status: 400 });
         }
       }
@@ -48,7 +46,7 @@ export class WSHandler extends EventEmitter<"accept" | "close"> {
   }
 }
 
-export class WSConnection extends EventEmitter<"message" | "close"> {
+export class WSConnection extends EventEmitter<"message"> {
   constructor(
     readonly socket: WebSocket,
   ) {
@@ -56,17 +54,13 @@ export class WSConnection extends EventEmitter<"message" | "close"> {
   }
 
   async* listen() {
-    for await (const text of this.socket) {
-      if (typeof text !== "string")
-        throw Error("Type error")
+    for await (const e of this.socket) {
+      if (isWebSocketPingEvent(e)) return;
+      if (isWebSocketCloseEvent(e)) return;
+      if (typeof e !== "string") return;
 
-      const data = JSON.parse(text);
-
-      if (data.type === "Error")
-        throw Error(data.content)
-
-      if (data.type === "Message")
-        yield data.content;
+      const data = JSON.parse(e);
+      yield data;
     }
   }
 
@@ -75,25 +69,17 @@ export class WSConnection extends EventEmitter<"message" | "close"> {
       return msg;
   }
 
-  async write(content: any) {
-    const data = { type: "Message", content }
+  async write(data: any) {
     const text = JSON.stringify(data);
     await this.socket.send(text);
-  }
-
-  async error(content: any) {
-    const data = { type: "Error", content }
-    const text = JSON.stringify(data)
-    await this.socket.send(text)
   }
 
   get closed() {
     return this.socket.isClosed;
   }
 
-  async close() {
+  async close(reason = "") {
     if (this.closed) return;
-    await this.socket.close();
-    await this.emit("close");
+    await this.socket.close(1000, reason);
   }
 }
