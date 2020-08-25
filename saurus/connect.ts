@@ -115,7 +115,7 @@ export class Connector {
     for await (const msg of conn.listen())
       await conn.emit("message", msg)
 
-    player.kick("Disconnected")
+    player.kick("Please reconnect")
   }
 
   private async authorize(conn: WSConnection, request: any) {
