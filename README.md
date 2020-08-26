@@ -25,7 +25,7 @@ Players can't run commands directly, they have to use an app for interacting wit
 
 You can test Saurus on the following servers
 
-- sunship.tk / https://connect.sunship.tk
+- sunship.tk:19132 or sunship.tk:19133 / https://connect.sunship.tk
 
 ## Getting started
 
