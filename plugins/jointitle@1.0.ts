@@ -1,5 +1,4 @@
-import { Minecraft } from "../saurus/minecraft.ts"
-import { Players, Player } from "../saurus/players.ts";
+import { Minecraft, Player } from "../start.ts"
 
 const config = {
   title: "Welcome",
@@ -15,7 +14,7 @@ export class JoinTitle {
     minecraft.players.on(["spawn"], (player: Player) => {
       setTimeout(() => {
         if (!player.spawned) return;
-        player.title(title, subtitle);
+        player.title(title, subtitle, 20);
       }, 2000);
     });
   }

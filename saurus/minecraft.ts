@@ -1,6 +1,5 @@
 import { encode, decode } from "./mod.ts";
 import { Players } from "./players.ts";
-import { Append } from "./files.ts";
 
 import { readLines } from "https://deno.land/std@0.65.0/io/bufio.ts";
 import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
@@ -26,6 +25,13 @@ export type MinecraftEvent =
   | "command"
   | "start"
   | "stop";
+
+const Append: Deno.OpenOptions = {
+  read: true,
+  write: true,
+  create: true,
+  append: true,
+};
 
 export class Minecraft extends EventEmitter<MinecraftEvent> {
   readonly process: Deno.Process<any>;

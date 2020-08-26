@@ -1,4 +1,4 @@
-import { Minecraft } from "../saurus/minecraft.ts";
+import { Minecraft } from "../start.ts";
 
 export class Test {
   constructor(

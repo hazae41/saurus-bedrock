@@ -4,6 +4,7 @@ import { WSHandler, WSConnection } from "./websockets.ts";
 
 import { HTTPSOptions } from "https://deno.land/std@0.65.0/http/server.ts";
 import { Random } from "https://deno.land/x/random@v1.1.2/Random.js";
+import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts"
 import { isObject, isString } from "./types.ts";
 
 export interface Code {
@@ -83,9 +84,7 @@ export class Connector {
 
   private async list(conn: WSConnection) {
     const { minecraft } = this;
-    const { names } = minecraft.players;
-    const players = Array.from(names.values());
-    const list = players.map((it: Player) => it.json());
+    const list = await minecraft.players.list()
     await conn.write(list);
   }
 
@@ -125,8 +124,8 @@ export class Connector {
     if (!isString(name)) return;
 
     const player = players.names.get(name);
-    if (!player) throw new Error("Invalid name");
-    if (!player.conn) throw new Error("Not connected");
+    if (!player) throw Error("Invalid name");
+    if (!player.conn) throw Error("Not connected");
 
     const token = request.token
     if (!isString(token)) return;
@@ -140,45 +139,63 @@ export class Connector {
       if (response.token === token) break;
     }
 
-    await conn.write("Authorized");
+    const { xuid } = player;
+    await conn.write({ name, xuid });
+
     const app = new App(player, conn);
     await this.authorized(app);
   }
 
   private async authorized(app: App) {
-    const { player } = app;
-
-    for await (const request of app.conn.listen()) {
-      const action = request.action
-      if (!isString(action)) return;
-
-      if (action === "getpos") {
-        player.getpos();
-      }
-
-      if (action === "title") {
-        const title = request.title
-        if (!isString(title)) return;
-
-        const subtitle = request.subtitle
-        if (!isString(subtitle)) return;
-
-        await player.title(title, subtitle);
-      }
-
-      if (action === "actionbar") {
-        const message = request.message
-        if (!isString(message)) return;
-
-        await player.actionbar(message);
-      }
-    }
+    await app.player.emit("authorize", app);
+    for await (const request of app.conn.listen())
+      await app.conn.emit("message", request)
   }
 }
 
-export class App {
+export class App extends EventEmitter<string> {
   constructor(
     readonly player: Player,
     readonly conn: WSConnection,
-  ) { }
+  ) {
+    super()
+
+    this.conn.on(["message"], this.onmessage.bind(this))
+  }
+
+  private async onmessage(request: any) {
+    const { player, conn } = this;
+
+    const { action, ...params } = request;
+    if (!isString(action)) return;
+
+    if (action === "list") {
+      const { minecraft } = this.player;
+      const list = await minecraft.players.list()
+      await conn.write(list)
+      return;
+    }
+
+    if (action === "title") {
+      const title = params.title
+      if (!isString(title)) return;
+
+      const subtitle = params.subtitle
+      if (!isString(subtitle)) return;
+
+      await player.title(title, subtitle);
+      return;
+    }
+
+    if (action === "actionbar") {
+      const message = params.message
+      if (!isString(message)) return;
+
+      await player.actionbar(message);
+      return;
+    }
+
+    // Custom event
+    this.emit(action, params)
+  }
 }

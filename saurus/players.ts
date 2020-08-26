@@ -1,20 +1,19 @@
-import { encode, decode } from "./mod.ts";
+import { encode, decode, FS } from "./mod.ts";
 import { Minecraft } from "./minecraft.ts";
 import { WSConnection } from "./websockets.ts";
-import * as Files from "./files.ts";
 
 import { EventEmitter } from "https://deno.land/x/mutevents@2.2/mod.ts";
 import * as YAML from "https://deno.land/std@0.65.0/encoding/yaml.ts";
+import { App } from "./connector.ts";
 
 export interface OfflinePlayers {
   [x: number]: string;
 }
 
-export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
+export class Players extends EventEmitter<"join" | "spawn" | "connect" | "authorize" | "leave"> {
   readonly names = new Map<string, Player>();
   readonly xuids = new Map<number, Player>();
 
-  readonly file = Deno.openSync("players.yml", Files.Normal);
   offlines: OfflinePlayers = {};
 
   constructor(
@@ -22,23 +21,36 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
   ) {
     super();
 
-    this.read();
+    this.load();
 
     minecraft.on(["log"], this.onlog.bind(this));
+  }
+
+  async list() {
+    const { names } = this;
+
+    const promises = Array.from(names.values())
+      .filter((it: Player) => it.spawned)
+      .map((it: Player) => it.json());
+
+    const list = await Promise.all(promises)
+
+    return list
   }
 
   nameOf(...xuids: number[]) {
     return xuids.map((xuid) => this.offlines[xuid]);
   }
 
-  private async read() {
-    const text = await Deno.readTextFile("./players.yml");
+  private async load() {
+    if (!FS.existsSync("players.yml")) Deno.createSync("players.yml")
+    const text = await Deno.readTextFile("players.yml");
     this.offlines = (YAML.parse(text) || {}) as OfflinePlayers;
   }
 
-  private async write() {
+  private async save() {
     const text = YAML.stringify(this.offlines);
-    await Deno.writeTextFile("./players.yml", text);
+    await Deno.writeTextFile("players.yml", text);
   }
 
   private async onlog(line: string) {
@@ -53,9 +65,11 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
       this.xuids.set(xuid, player);
 
       this.offlines[xuid] = name;
-      this.write();
+      this.save();
 
       player.on(["spawn"], () => this.emit("spawn", player));
+      player.on(["connect"], () => this.emit("connect", player))
+      player.on(["authorize"], (app: App) => this.emit("authorize", app))
 
       await this.emit("join", player);
     }
@@ -76,9 +90,10 @@ export class Players extends EventEmitter<"join" | "spawn" | "leave"> {
   }
 }
 
-export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
+export class Player extends EventEmitter<"spawn" | "connect" | "authorize" | "json" | "leave"> {
   online = true;
   spawned = false;
+
   conn?: WSConnection;
 
   constructor(
@@ -100,10 +115,15 @@ export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
     this.waitFor();
   }
 
-  json() {
-    const { name, xuid, spawned, online } = this;
-    const connected = Boolean(this.conn);
-    return { name, xuid, spawned, online, connected };
+  async json() {
+    const { name, xuid, connected } = this;
+    let data = { name, xuid, connected };
+    [data] = await this.emit("json", data)
+    return data;
+  }
+
+  get connected() {
+    return this.conn !== undefined;
   }
 
   private async waitFor() {
@@ -127,29 +147,34 @@ export class Player extends EventEmitter<"spawn" | "connect" | "leave"> {
     await minecraft.write(`tell ${this.name} ${line}`);
   }
 
-  async title(title = "", subtitle = "") {
-    const { minecraft } = this;
-    await minecraft.write(`title ${this.name} title ${title}`);
-    await minecraft.write(`title ${this.name} subtitle ${subtitle}`);
+  async title(
+    title = "",
+    subtitle = "",
+    duration = 100
+  ) {
+    const { minecraft, name } = this;
+    await minecraft.write(`title ${name} times 10 ${duration} 70`)
+    await minecraft.write(`title ${name} title ${title}`);
+    await minecraft.write(`title ${name} subtitle ${subtitle}`);
+    await minecraft.write(`title ${name} reset`)
   }
 
   async actionbar(message: string) {
-    const { minecraft } = this;
-    await minecraft.write(`title ${this.name} actionbar ${message}`);
+    const { minecraft, name } = this;
+    await minecraft.write(`title ${name} actionbar ${message}`);
   }
 
   async kick(reason = "") {
-    const { minecraft } = this;
-    await minecraft.write(`kick ${this.name} ${reason}`);
+    const { minecraft, name } = this;
+    await minecraft.write(`kick ${name} ${reason}`);
   }
 
   async execute(command: string) {
-    const { minecraft } = this;
-    await minecraft.write(`execute ${this.name} ~ ~ ~ ${command}`);
+    const { minecraft, name } = this;
+    await minecraft.write(`execute ${name} ~ ~ ~ ${command}`);
   }
 
   async getpos() {
-    const { minecraft } = this;
     await this.execute(`teleport ~0 ~0 ~0`);
   }
 }
